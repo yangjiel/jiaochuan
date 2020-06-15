@@ -1,45 +1,37 @@
 package com.jiaochuan.hazakura.entity.User;
 
+import com.jiaochuan.hazakura.entity.AbstractEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Table(name="auth_user")
 @Entity
 @Data
-@RequiredArgsConstructor
-public class UserEntity {
-    @Id
-    @Column(name = "id", columnDefinition = "MEDIUMINT")
-    public Integer id;
-
-    @Column(name = "username", length = 16)
-    @NonNull
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserEntity extends AbstractEntity {
+    @Column(name = "username", columnDefinition = "VARCHAR(16)", nullable = false)
     public String username;
 
-    @Column(name = "password", columnDefinition = "CHAR(60)")
-    @NonNull
+    @Column(name = "password", columnDefinition = "CHAR(60)", nullable = false)
     public String password;
 
-    @Column(name = "first_name", columnDefinition = "NVARCHAR(4)")
-    @NonNull
+    @Column(name = "first_name", columnDefinition = "NVARCHAR(4)", nullable = false)
     public String first_name;
 
-    @Column(name = "last_name", columnDefinition = "NVARCHAR(16)")
-    @NonNull
+    @Column(name = "last_name", columnDefinition = "NVARCHAR(16)", nullable = false)
     public String last_name;
 
-    @Column(name = "role", columnDefinition = "TINYINT")
-    @NonNull
-    public Integer role;
+    @Column(name = "role", columnDefinition = "VARCHAR(100)", nullable = false)
+    @Enumerated(EnumType.STRING)
+    public Role role;
 
-    @Column(name = "cell", length = 11)
-    @NonNull
+    @Column(name = "cell", columnDefinition = "CHAR(11)", nullable = false)
     public String cell;
 
-    @Column(name = "email", length = 64)
-    @NonNull
+    @Column(name = "email", columnDefinition = "VARCHAR(64)", nullable = false)
     public String email;
 }

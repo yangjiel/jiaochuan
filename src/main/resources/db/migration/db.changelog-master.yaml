@@ -1,3 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: db/changelog/version20200613_workOrderCreation.yaml

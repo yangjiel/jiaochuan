@@ -1,6 +1,6 @@
 package com.jiaochuan.hazakura.entity.WorkOrder;
 
-import com.jiaochuan.hazakura.entity.GPS.GPS;
+import com.jiaochuan.hazakura.entity.AbstractEntity;
 import com.jiaochuan.hazakura.entity.User.UserEntity;
 import lombok.Data;
 import lombok.NonNull;
@@ -13,11 +13,7 @@ import java.time.Instant;
 @Entity
 @Data
 @RequiredArgsConstructor
-public class WorkOrderEntity {
-    @Id
-    @Column(name = "id", columnDefinition = "MEDIUMINT")
-    public Integer id;
-
+public class WorkOrderEntity extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
     @NonNull

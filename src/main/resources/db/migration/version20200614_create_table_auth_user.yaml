@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 57246b20-fa1a-4581-8119-624253c0f5e3
+      author: pj.t@outlook.com
+      changes:
+        - sql: |
+            CREATE TABLE auth_user (
+                id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(16) NOT NULL,
+                password CHAR(60) NOT NULL,
+                first_name NVARCHAR(4) NOT NULL,
+                last_name NVARCHAR(16) NOT NULL,
+                role VARCHAR(100) NOT NULL,
+                cell CHAR(11) NOT NULL,
+                email VARCHAR(64) NOT NULL,
+
+                CONSTRAINT UK_auth_user_username UNIQUE (username ASC)
+            );
+          rollback: |
+            DROP TABLE auth_user;
