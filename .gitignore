@@ -85,3 +85,6 @@ buildNumber.properties
 
 # Eclipse files
 .settings
+.classpath
+.factorypath
+.project
