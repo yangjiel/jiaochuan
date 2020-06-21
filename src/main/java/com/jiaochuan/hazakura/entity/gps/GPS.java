@@ -1,4 +1,4 @@
-package com.jiaochuan.hazakura.entity.GPS;
+package com.jiaochuan.hazakura.entity.gps;
 
 public class GPS {
     public Double latitude;

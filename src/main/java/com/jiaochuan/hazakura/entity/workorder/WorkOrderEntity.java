@@ -1,7 +1,7 @@
-package com.jiaochuan.hazakura.entity.WorkOrder;
+package com.jiaochuan.hazakura.entity.workorder;
 
 import com.jiaochuan.hazakura.entity.AbstractEntity;
-import com.jiaochuan.hazakura.entity.User.UserEntity;
+import com.jiaochuan.hazakura.entity.user.UserEntity;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -32,8 +32,6 @@ public class WorkOrderEntity extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     public UserEntity worker;
-
-    //public GPS gps;
 
     @Column(name = "evaluation_score", columnDefinition = "TINYINT")
     public Byte evaluationScore;
