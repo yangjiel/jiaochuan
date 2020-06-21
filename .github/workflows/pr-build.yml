@@ -19,6 +19,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+      with:
+        # Disable shallow clone to suppress warning for Sonar scan
+        fetch-depth: 0
 
     - name: Set up JDK
       uses: actions/setup-java@v1
