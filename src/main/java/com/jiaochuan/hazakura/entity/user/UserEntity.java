@@ -20,10 +20,10 @@ public class UserEntity extends AbstractEntity {
     public String password;
 
     @Column(name = "first_name", columnDefinition = "NVARCHAR(4)", nullable = false)
-    public String first_name;
+    public String firstName;
 
     @Column(name = "last_name", columnDefinition = "NVARCHAR(16)", nullable = false)
-    public String last_name;
+    public String lastName;
 
     @Column(name = "role", columnDefinition = "VARCHAR(100)", nullable = false)
     @Enumerated(EnumType.STRING)
