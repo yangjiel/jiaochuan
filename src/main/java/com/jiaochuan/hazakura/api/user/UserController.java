@@ -1,4 +1,4 @@
-package com.jiaochuan.hazakura.api.User;
+package com.jiaochuan.hazakura.api.user;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,4 +1,4 @@
-package com.jiaochuan.hazakura.api.WorkOrder;
+package com.jiaochuan.hazakura.api.workorder;
 
 import org.springframework.web.bind.annotation.RestController;
 

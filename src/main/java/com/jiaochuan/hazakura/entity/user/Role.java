@@ -1,4 +1,4 @@
-package com.jiaochuan.hazakura.entity.User;
+package com.jiaochuan.hazakura.entity.user;
 
 public enum Role {
     STAFF_CUSTOMER_SERVICE("客服人员"),

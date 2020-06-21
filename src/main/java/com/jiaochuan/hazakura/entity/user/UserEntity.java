@@ -1,4 +1,4 @@
-package com.jiaochuan.hazakura.entity.User;
+package com.jiaochuan.hazakura.entity.user;
 
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import lombok.AllArgsConstructor;

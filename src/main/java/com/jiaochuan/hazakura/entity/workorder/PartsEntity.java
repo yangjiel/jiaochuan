@@ -1,4 +1,4 @@
-package com.jiaochuan.hazakura.entity.WorkOrder;
+package com.jiaochuan.hazakura.entity.workorder;
 
 import lombok.Data;
 import lombok.NonNull;
