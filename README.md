@@ -1,8 +1,8 @@
 # jiaochuan
 
 ## Copyright
-Copyright (C) Jason Liu & Peter Tan 2020 - All Rights Reserved
-Unauthorized copying of this project or using this project is strictly prohibited.
+Copyright (C) Jason Liu & Peter Tan 2020 - All Rights Reserved.
+Unauthorized using this project commercially in any form is strictly prohibited.
 Written by Jason Liu <jasonliuengr@gmail.com>, June 2020.
 
 ## Maintainer
