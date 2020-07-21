@@ -41,6 +41,9 @@ public class UserEntity extends AbstractEntity implements UserDetails {
     @Column(name = "email", columnDefinition = "VARCHAR(64)", nullable = false)
     public String email;
 
+    @Column(name = "birthday", columnDefinition = "DATE", nullable = false)
+    public Instance birthday;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();

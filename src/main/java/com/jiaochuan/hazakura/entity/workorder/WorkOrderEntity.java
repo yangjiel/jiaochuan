@@ -19,15 +19,12 @@ public class WorkOrderEntity extends AbstractEntity {
     @NonNull
     public UserEntity user;
 
-    @Column(name = "submitted_date", columnDefinition = "TIMESTAMP")
+    @Column(name = "reported_date", columnDefinition = "TIMESTAMP")
     @NonNull
-    public Instant submittedDate;
+    public Instant reportedDate;
 
-    @Column(name = "approved_date", columnDefinition = "TIMESTAMP")
-    public Instant approvedDate;
-
-    @Column(name = "serve_date", columnDefinition = "TIMESTAMP")
-    public Instant serveDate;
+    @Column(name = "address", columnDefinition = "NVARCHAR")
+    public String address;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
