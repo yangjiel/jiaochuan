@@ -21,14 +21,14 @@ public class UserService {
         // Check if required fields are not empty
         try {
             for (Field field : userEntity.getClass().getDeclaredFields()) {
-                if (field.trySetAccessible()) {
-                    if (field.getType() == String.class && StringUtils.isBlank((String) field.get(userEntity))) {
-                        throw new UserException("必填项" + field.getName() + "不能为空。");
-                    } else if (field.get(userEntity) == null) {
-                        throw new UserException("必填项" + field.getName() + "不能为空。");
-                    }
-                } else {
+                if (!field.trySetAccessible()) {
                     throw new AppException("创建用户时无法取得UserEntity的反射访问权限，其成员变量无法通过反射访问。");
+                }
+
+                if (field.getType() == String.class && StringUtils.isBlank((String) field.get(userEntity))) {
+                    throw new UserException("必填项" + field.getName() + "不能为空。");
+                } else if (field.get(userEntity) == null) {
+                    throw new UserException("必填项" + field.getName() + "不能为空。");
                 }
             }
         } catch(IllegalAccessException e) {
