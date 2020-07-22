@@ -19,17 +19,28 @@ public class WorkOrderEntity extends AbstractEntity {
     @NonNull
     public UserEntity user;
 
-    @Column(name = "reported_date", columnDefinition = "TIMESTAMP")
+    @ManyToOne
+    @JoinColumn(name = "worker_id", referencedColumnName = "id", insertable = false, updatable = false)
     @NonNull
-    public Instant reportedDate;
+    public UserEntity worker;
+
+    @Column(name = "equitment_id", columnDefinition = "INTEGER")
+    @NonNull
+    public Instant equitment;
+
+    @Column(name = "service_date", columnDefinition = "TIMESTAMP")
+    @NonNull
+    public Instant serviceDate;
 
     @Column(name = "address", columnDefinition = "NVARCHAR")
     public String address;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    public UserEntity worker;
+    @Column(name = "result", columnDefinition = "NVARCHAR")
+    public String result;
 
-    @Column(name = "evaluation_score", columnDefinition = "TINYINT")
-    public Byte evaluationScore;
+    @Column(name = "result_description", columnDefinition = "NVARCHAR")
+    public String resultDescription;
+
+    @Column(name = "service_item", columnDefinition = "NVARCHAR")
+    public String serviceItem;
 }

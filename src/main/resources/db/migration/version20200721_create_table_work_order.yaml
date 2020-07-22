@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2fcf3e74-8896-4c8e-89bd-92d9550927d7
+      author: jasonliuengr@gmail.com
+      changes:
+        - sql: |
+            CREATE TABLE work_order (
+                id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                user_id INTEGER NOT NULL,
+                worker_id INTEGER NOT NULL,
+                equitment_id INTEGER NOT NULL,
+                address NVARCHAR(64) NOT NULL,
+                service_date DATE NOT NULL,
+                result NVARCHAR(16),
+                result_description NVARCHAR(256),
+                service_item
+                FOREIGN KEY (user_id) REFERENCE USER(id),
+                FOREIGN KEY (worker_id) REFERENCE USER(id),
+                CONSTRAINT UK_auth_user_username UNIQUE (username ASC)
+            );
+          rollback: |
+            DROP TABLE work_order;
