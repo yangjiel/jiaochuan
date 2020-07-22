@@ -8,12 +8,16 @@ import com.jiaochuan.hazakura.jpa.User.UserRepository;
 import liquibase.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
@@ -53,6 +57,9 @@ public class UserService {
             throw new UserException("密码长度不能大于16位字符。");
         }
 
+        // Hash password
+        userEntity.setPassword(BCrypt.hashpw(userEntity.getPassword(), BCrypt.gensalt()));
+
         // Check format for cell phone and email
         if (userEntity.getCell().length() > 11) {
             throw new UserException("手机号码长度不能多于11位。");
@@ -62,5 +69,16 @@ public class UserService {
         }
 
         userRepository.save(userEntity);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity userEntity = userRepository.findByUsername(username);
+
+        if (userEntity == null) {
+            throw new UsernameNotFoundException("用户名不存在。");
+        }
+
+        return userEntity;
     }
 }
