@@ -13,10 +13,9 @@ databaseChangeLog:
                 service_date DATE NOT NULL,
                 result NVARCHAR(16),
                 result_description NVARCHAR(256),
-                service_item
-                FOREIGN KEY (user_id) REFERENCE USER(id),
-                FOREIGN KEY (worker_id) REFERENCE USER(id),
-                CONSTRAINT UK_auth_user_username UNIQUE (username ASC)
+                service_item NVARCHAR(256),
+                FOREIGN KEY (user_id) REFERENCES user(id),
+                FOREIGN KEY (worker_id) REFERENCES user(id)
             );
           rollback: |
             DROP TABLE work_order;
