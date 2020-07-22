@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.time.Instant;
 
 @Table(name="user")
 @Entity
@@ -42,7 +43,7 @@ public class UserEntity extends AbstractEntity implements UserDetails {
     public String email;
 
     @Column(name = "birthday", columnDefinition = "DATE", nullable = false)
-    public Instance birthday;
+    public Instant birthday;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
