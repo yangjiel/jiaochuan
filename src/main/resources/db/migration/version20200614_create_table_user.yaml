@@ -4,7 +4,7 @@ databaseChangeLog:
       author: pj.t@outlook.com
       changes:
         - sql: |
-            CREATE TABLE auth_user (
+            CREATE TABLE user (
                 id INTEGER AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(16) NOT NULL,
                 password CHAR(60) NOT NULL,
@@ -13,8 +13,8 @@ databaseChangeLog:
                 role VARCHAR(100) NOT NULL,
                 cell CHAR(11) NOT NULL,
                 email VARCHAR(64) NOT NULL,
-
-                CONSTRAINT UK_auth_user_username UNIQUE (username ASC)
+                birthday DATE NOT NULL,
+                CONSTRAINT UK_user_username UNIQUE (username ASC)
             );
           rollback: |
-            DROP TABLE auth_user;
+            DROP TABLE user;

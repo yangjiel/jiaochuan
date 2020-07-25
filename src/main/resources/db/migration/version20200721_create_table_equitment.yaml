@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 3606dee2-c066-4ddb-90af-b48743b8c4aa
+      author: jasonliuengr@gmail.com
+      changes:
+        - sql: |
+            CREATE TABLE equitment (
+                id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                device_name NVARCHAR(64) NOT NULL,
+                device_model NVARCHAR(32)
+            );
+          rollback: |
+            DROP TABLE equitment;

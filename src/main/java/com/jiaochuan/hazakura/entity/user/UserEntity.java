@@ -1,18 +1,28 @@
 package com.jiaochuan.hazakura.entity.user;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.time.Instant;
 
-@Table(name="auth_user")
+@Table(name="user")
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity extends AbstractEntity {
+public class UserEntity extends AbstractEntity implements UserDetails {
     @Column(name = "username", columnDefinition = "VARCHAR(16)", nullable = false)
     public String username;
 
@@ -34,4 +44,35 @@ public class UserEntity extends AbstractEntity {
 
     @Column(name = "email", columnDefinition = "VARCHAR(64)", nullable = false)
     public String email;
+
+    @Column(name = "birthday", columnDefinition = "DATE", nullable = false)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    public LocalDate birthday;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
+        grantedAuthorityList.add(new SimpleGrantedAuthority("USER"));
+        return grantedAuthorityList;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }
