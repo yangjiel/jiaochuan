@@ -1,5 +1,7 @@
 package com.jiaochuan.hazakura.entity.user;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -43,7 +46,8 @@ public class UserEntity extends AbstractEntity implements UserDetails {
     public String email;
 
     @Column(name = "birthday", columnDefinition = "DATE", nullable = false)
-    public Instant birthday;
+    @JsonDeserialize(using = LocalDateDeserializer.class)
+    public LocalDate birthday;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

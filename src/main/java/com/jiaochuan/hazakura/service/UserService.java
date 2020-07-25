@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -18,6 +19,9 @@ import java.lang.reflect.Field;
 public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public void createUser(UserEntity userEntity) throws AppException, UserException {
         // Check if required fields are not empty
@@ -45,7 +49,7 @@ public class UserService implements UserDetailsService {
 
         // Check if password is within constraint
         String password = userEntity.getPassword();
-        if (StringUtils.isAlphanumericSpace(password)) {
+        if (!StringUtils.isAlphanumericSpace(password)) {
             throw new UserException("密码中存在特殊字符，请检查输入。");
         }
         if (password.length() < 8) {
@@ -56,7 +60,7 @@ public class UserService implements UserDetailsService {
         }
 
         // Hash password
-        userEntity.setPassword(BCrypt.hashpw(userEntity.getPassword(), BCrypt.gensalt()));
+        userEntity.setPassword(passwordEncoder.encode(password));
 
         // Check format for cell phone and email
         if (userEntity.getCell().length() > 11) {
