@@ -14,21 +14,26 @@ import java.time.Instant;
 @Data
 @RequiredArgsConstructor
 public class ActionEntity extends AbstractEntity {
-    @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", referencedColumnName = "id",
+                insertable = false, updatable = false, nullable = false)
     @NonNull
     public UserEntity user;
 
-    @Column(name = "type", columnDefinition = "NVARCHAR(100)")
+    @Column(name = "type", columnDefinition = "NVARCHAR(100)", nullable = false)
     @Enumerated(EnumType.STRING)
     @NonNull
-    public String type;
+    public ActionType type;
 
     @Column(name = "status", columnDefinition = "BOOLEAN")
     @NonNull
     public Boolean status;
 
-    @Column(name = "date", columnDefinition = "TIMESTAMP")
+    @Column(name = "date", columnDefinition = "TIMESTAMP", nullable = false)
     @NonNull
     public Instant date;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "work_order_id", referencedColumnName = "id", nullable = false)
+    public WorkOrderEntity workOrder;
 }

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.List;
 
 @Table(name="work_order")
 @Entity
@@ -15,12 +16,14 @@ import java.time.Instant;
 @RequiredArgsConstructor
 public class WorkOrderEntity extends AbstractEntity {
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id",
+            insertable = false, updatable = false, nullable = false)
     @NonNull
     public UserEntity user;
 
     @ManyToOne
-    @JoinColumn(name = "worker_id", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "worker_id", referencedColumnName = "id",
+            insertable = false, updatable = false, nullable = false)
     @NonNull
     public UserEntity worker;
 
@@ -43,4 +46,7 @@ public class WorkOrderEntity extends AbstractEntity {
 
     @Column(name = "service_item", columnDefinition = "NVARCHAR")
     public String serviceItem;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "workOrder")
+    public List<ActionEntity> actions;
 }
