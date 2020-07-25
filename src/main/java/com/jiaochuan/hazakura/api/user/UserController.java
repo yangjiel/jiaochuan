@@ -64,4 +64,18 @@ public class UserController {
 
         return ResponseEntity.ok("登录成功！");
     }
+
+    @PostMapping(path = "/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        SecurityContext sc = SecurityContextHolder.getContext();
+        sc.setAuthentication(null);
+        SecurityContextHolder.clearContext();
+
+        return ResponseEntity.ok("退出成功！");
+    }
 }
