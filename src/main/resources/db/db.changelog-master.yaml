@@ -5,3 +5,6 @@ databaseChangeLog:
   - include:
       file:
         classpath:db/migration/version20200721_create_table_work_order.yaml
+  - include:
+      file:
+        classpath:db/migration/version20200725_create_table_action.yaml

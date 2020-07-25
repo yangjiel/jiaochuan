@@ -29,5 +29,4 @@ public class PartsEntity {
     @Column(name = "manufacture", length = 16)
     public String manufacture;
 
-
 }
