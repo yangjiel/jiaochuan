@@ -1,5 +1,6 @@
 package com.jiaochuan.hazakura.api.user;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.exception.UserException;
@@ -8,16 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api/v1/user")
+@RestController
+@RequestMapping("/api/v1/user")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping(path = "/", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<String> createUser(UserEntity userEntity) {
+    @PostMapping(consumes = "application/json", produces = "application/json")
+    public ResponseEntity<String> createUser(@RequestBody String jsonRequest) {
         try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            UserEntity userEntity = objectMapper.convertValue(jsonRequest, UserEntity.class);
             userService.createUser(userEntity);
             return ResponseEntity.ok().build();
         } catch (AppException e) {
