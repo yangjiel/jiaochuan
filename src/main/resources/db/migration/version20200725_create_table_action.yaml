@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1c58224f-b18f-48b8-adab-efb3578e478d
+      author: jasonliuengr@gmail.com
+      changes:
+        - sql: |
+            CREATE TABLE action (
+                id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                user_id INTEGER NOT NULL,
+                type VARCHAR(100) NOT NULL,
+                status BOOLEAN NOT NULL,
+                date TIMESTAMP NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES user(id)
+            );
+          rollback: |
+            DROP TABLE action;

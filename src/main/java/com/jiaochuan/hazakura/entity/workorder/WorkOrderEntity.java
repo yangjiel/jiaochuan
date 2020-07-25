@@ -28,7 +28,7 @@ public class WorkOrderEntity extends AbstractEntity {
     @NonNull
     public Instant equitment;
 
-    @Column(name = "service_date", columnDefinition = "TIMESTAMP")
+    @Column(name = "service_date", columnDefinition = "DATE")
     @NonNull
     public Instant serviceDate;
 
