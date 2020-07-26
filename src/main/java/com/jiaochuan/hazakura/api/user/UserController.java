@@ -46,23 +46,28 @@ public class UserController {
     }
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<LoginResponseDto> login(@RequestParam String username, @RequestParam String password) {
+        UserEntity userEntity = null;
         try {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
             Authentication auth = authManager.authenticate(authToken);
             SecurityContext sc = SecurityContextHolder.getContext();
             sc.setAuthentication(auth);
+            userEntity = (UserEntity) userService.loadUserByUsername(username);
         } catch (BadCredentialsException e) {
+            LoginResponseDto dto = new LoginResponseDto("登录失败，请检查用户名或密码。", null);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body("登录失败，请检查用户名或密码。");
+                    .body(dto);
         } catch (Exception e) {
+            LoginResponseDto dto = new LoginResponseDto("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage(), null);
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage());
+                    .body(dto);
         }
 
-        return ResponseEntity.ok("登录成功！");
+        LoginResponseDto dto = new LoginResponseDto("登录成功！", userEntity);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping(path = "/logout")
