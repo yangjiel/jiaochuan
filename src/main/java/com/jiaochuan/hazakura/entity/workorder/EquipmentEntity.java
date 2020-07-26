@@ -27,6 +27,6 @@ public class EquipmentEntity {
     @Column(name = "manufacture", length = 16)
     public String manufacture;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "equipments")
     public List<PartListEntity> partList;
 }
