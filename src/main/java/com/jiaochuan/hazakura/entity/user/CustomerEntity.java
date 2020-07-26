@@ -23,17 +23,17 @@ import java.util.List;
 @AllArgsConstructor
 public class CustomerEntity extends AbstractEntity {
     @Column(name = "user_name", columnDefinition = "VARCHAR(16)", nullable = false)
-    public String username;
+    private String username;
 
     @Column(name = "contact_name", columnDefinition = "CHAR(60)", nullable = false)
-    public String contactName;
+    private String contactName;
 
     @Column(name = "cell", columnDefinition = "CHAR(11)", nullable = false)
-    public String cell;
+    private String cell;
 
     @Column(name = "email", columnDefinition = "VARCHAR(64)")
-    public String email;
+    private String email;
 
     @Column(name = "company_address", columnDefinition = "NVARCHAR(16)", nullable = false)
-    public String companyAddress;
+    private String companyAddress;
 }
