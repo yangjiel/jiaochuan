@@ -8,7 +8,7 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
-@Table(name="EquipmentService")
+@Table(name="equipment")
 @Entity
 @Data
 @RequiredArgsConstructor
