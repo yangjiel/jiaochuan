@@ -1,17 +1,12 @@
 package com.jiaochuan.hazakura.api.user;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,7 +14,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Tag(name = "UserController")
 
@@ -184,8 +177,7 @@ public class UserController {
             sc.setAuthentication(auth);
 
             UserEntity userEntity = (UserEntity) userService.loadUserByUsername(username);
-            UserDto dtoUser = objectMapper.convertValue(userEntity, UserDto.class);
-            return ResponseEntity.ok(new LoginResponseDto("登录成功！", dtoUser));
+            return ResponseEntity.ok(new LoginResponseDto("登录成功！", userEntity));
         } catch (BadCredentialsException e) {
             LoginResponseDto dto = new LoginResponseDto("登录失败，请检查用户名或密码。", null);
             return ResponseEntity
@@ -347,8 +339,7 @@ public class UserController {
 
         try {
             List<UserEntity> usersList = userService.getUsers(page, size);
-            List<UserDto> usersDtoList = objectMapper.convertValue(usersList, new TypeReference<>() {});
-            return ResponseEntity.ok(new UserResponseDto("成功！", usersDtoList));
+            return ResponseEntity.ok(new UserResponseDto("成功！", usersList));
         } catch (UserException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)

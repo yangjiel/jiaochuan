@@ -1,5 +1,7 @@
 package com.jiaochuan.hazakura.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
@@ -25,6 +27,7 @@ public class UserEntity extends AbstractEntity implements UserDetails {
     @Column(name = "username", columnDefinition = "VARCHAR(16)", nullable = false)
     private String username;
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password", columnDefinition = "CHAR(60)", nullable = false)
     private String password;
 
@@ -48,6 +51,7 @@ public class UserEntity extends AbstractEntity implements UserDetails {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate birthday;
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
@@ -55,21 +59,25 @@ public class UserEntity extends AbstractEntity implements UserDetails {
         return grantedAuthorityList;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;
