@@ -26,7 +26,7 @@ public class CustomerEntity extends AbstractEntity {
     public String username;
 
     @Column(name = "contact_name", columnDefinition = "CHAR(60)", nullable = false)
-    public String password;
+    public String contactName;
 
     @Column(name = "cell", columnDefinition = "CHAR(11)", nullable = false)
     public String cell;
@@ -35,5 +35,5 @@ public class CustomerEntity extends AbstractEntity {
     public String email;
 
     @Column(name = "company_address", columnDefinition = "NVARCHAR(16)", nullable = false)
-    public String company_address;
+    public String companyAddress;
 }
