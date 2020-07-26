@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 02fdffcc-fc0f-44c5-b693-e7d6b11508aa
+      author: jasonliuengr@gmail.com
+      changes:
+        - sql: |
+            CREATE TABLE part_list (
+                id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                worker_id INTEGER NOT NULL,
+                work_order_id INTEGER NOT NULL,
+                `usage` NVARCHAR(200),
+                FOREIGN KEY (worker_id) REFERENCES user(id),
+                FOREIGN KEY (work_order_id) REFERENCES work_order(id)
+            );
+          rollback: |
+            DROP TABLE part_list;

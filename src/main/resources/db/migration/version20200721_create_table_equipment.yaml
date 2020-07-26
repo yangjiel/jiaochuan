@@ -4,10 +4,10 @@ databaseChangeLog:
       author: jasonliuengr@gmail.com
       changes:
         - sql: |
-            CREATE TABLE equitment (
+            CREATE TABLE equipment (
                 id INTEGER AUTO_INCREMENT PRIMARY KEY,
                 device_name NVARCHAR(64) NOT NULL,
                 device_model NVARCHAR(32)
             );
           rollback: |
-            DROP TABLE equitment;
+            DROP TABLE equipment;
