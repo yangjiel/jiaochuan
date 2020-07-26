@@ -6,6 +6,8 @@ import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.User.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -81,5 +84,12 @@ public class UserService implements UserDetailsService {
         }
 
         return userEntity;
+    }
+
+    public List<UserEntity> getUsers(int page, int size) throws UserException {
+        if (page < 0 || size < 0) {
+            throw new UserException("分页设置不能小于0。");
+        }
+        return userRepository.findAll(PageRequest.of(page, size)).getContent();
     }
 }

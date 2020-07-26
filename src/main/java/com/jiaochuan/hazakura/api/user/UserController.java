@@ -1,9 +1,14 @@
 package com.jiaochuan.hazakura.api.user;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -14,6 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +33,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Tag(name = "UserController")
 
@@ -38,6 +47,9 @@ public class UserController {
 
     @Autowired
     private AuthenticationManager authManager;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "JSON形式的UserEntity",
@@ -89,7 +101,6 @@ public class UserController {
     )
     public ResponseEntity<String> createUser(@RequestBody String jsonRequest) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             userService.createUser(objectMapper.readValue(jsonRequest, UserEntity.class));
             return ResponseEntity.ok().build();
         } catch (UserException e) {
@@ -165,14 +176,16 @@ public class UserController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<LoginResponseDto> login(@RequestBody String username, @RequestBody String password) {
-        UserEntity userEntity = null;
+    public ResponseEntity<LoginResponseDto> login(@RequestParam String username, @RequestParam String password) {
         try {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
             Authentication auth = authManager.authenticate(authToken);
             SecurityContext sc = SecurityContextHolder.getContext();
             sc.setAuthentication(auth);
-            userEntity = (UserEntity) userService.loadUserByUsername(username);
+
+            UserEntity userEntity = (UserEntity) userService.loadUserByUsername(username);
+            UserDto dtoUser = objectMapper.convertValue(userEntity, UserDto.class);
+            return ResponseEntity.ok(new LoginResponseDto("登录成功！", dtoUser));
         } catch (BadCredentialsException e) {
             LoginResponseDto dto = new LoginResponseDto("登录失败，请检查用户名或密码。", null);
             return ResponseEntity
@@ -184,9 +197,6 @@ public class UserController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(dto);
         }
-
-        LoginResponseDto dto = new LoginResponseDto("登录成功！", userEntity);
-        return ResponseEntity.ok(dto);
     }
 
 
@@ -219,4 +229,136 @@ public class UserController {
 
         return ResponseEntity.ok("退出成功！");
     }
+
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "返回系统里所有的user role。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(value = "" +
+                                    "[\n" +
+                                    "    {\n" +
+                                    "        \"roleId\": \"STAFF_CUSTOMER_SERVICE\", \n" +
+                                    "        \"roleName\": \"客服人员\"\n" +
+                                    "    }, \n" +
+                                    "    ...\n" +
+                                    "]"
+                                    )
+                            }
+                    )
+            )
+    })
+    @GetMapping(
+            path = "/all-roles",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<RoleResponseDto>> getAllRoles() {
+        List<RoleResponseDto> responseList = new ArrayList<>();
+        for (Role role : Role.values()) {
+            responseList.add(new RoleResponseDto(role.name(), role.roleDescription));
+        }
+        return ResponseEntity.ok(responseList);
+    }
+
+    @Parameters(value = {
+            @Parameter(
+                    name = "page",
+                    required = false,
+                    description = "此参数用于说明第几个分页，如果没有传进来，默认是page = 0。"
+            ),
+            @Parameter(
+                    name = "size",
+                    required = false,
+                    description = "此参数用于说明一个分页里面有多少个数据，如果没有传进来，size = 500。"
+            )
+    })
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "成功，response body将返回已经分页的用户信息。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = LoginResponseDto.class),
+                            examples = {
+                                    @ExampleObject(value =
+                                    "{\n" +
+                                    "    \"status\": \"成功！\",\n" +
+                                    "    \"users\": [{\n" +
+                                    "        \"username\": \"sam\",\n" +
+                                    "        \"password\": \"Initial1\",\n" +
+                                    "        \"firstName\": \"三\",\n" +
+                                    "        \"lastName\": \"张\",\n" +
+                                    "        \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                    "        \"cell\": \"13106660000\",\n" +
+                                    "        \"email\": \"user@example.com\",\n" +
+                                    "        \"birthday\": \"1900-01-01\"\n" +
+                                    "    }\n" +
+                                    "    ...\n" +
+                                    "    ]\n" +
+                                    "}")
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "请求出错，例如传进来的分页参数page或size < 0。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = LoginResponseDto.class),
+                            examples = {
+                                    @ExampleObject(value =
+                                    "{\n" +
+                                    "    \"status\": \"登录失败，请检查用户名或密码。\",\n" +
+                                    "    \"users\": null" +
+                                    "}")
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = LoginResponseDto.class),
+                            examples = {
+                                    @ExampleObject(value =
+                                    "{\n" +
+                                    "    \"status\": \"服务器出现错误，请与管理员联系。内部错误：RuntimeException ...\",\n" +
+                                    "    \"users\": null" +
+                                    "}")
+                            }
+                    )
+            )
+    })
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserResponseDto> getUsers(
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) Integer size
+    ) {
+        if (page == null) {
+            page = 0;
+        }
+        if (size == null) {
+            size = 500;
+        }
+
+        try {
+            List<UserEntity> usersList = userService.getUsers(page, size);
+            List<UserDto> usersDtoList = objectMapper.convertValue(usersList, new TypeReference<>() {});
+            return ResponseEntity.ok(new UserResponseDto("成功！", usersDtoList));
+        } catch (UserException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new UserResponseDto(e.getMessage(), null));
+        } catch (Exception e) {
+            UserResponseDto dto = new UserResponseDto("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage(), null);
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(dto);
+        }
+    }
+
 }

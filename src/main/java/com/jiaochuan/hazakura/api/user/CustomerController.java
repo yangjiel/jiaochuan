@@ -18,10 +18,12 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> createCustomer(@RequestBody String jsonRequest) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             CustomerEntity customerEntity = objectMapper.convertValue(jsonRequest, CustomerEntity.class);
             customerService.createCustomer(customerEntity);
             return ResponseEntity.ok().build();

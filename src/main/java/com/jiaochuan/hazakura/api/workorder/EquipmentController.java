@@ -18,10 +18,12 @@ public class EquipmentController {
     @Autowired
     private EquipmentService equipmentService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> createEquipment(@RequestBody String jsonRequest) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             EquipmentEntity equipmentEntity = objectMapper.convertValue(jsonRequest, EquipmentEntity.class);
             equipmentService.createEquipment(equipmentEntity);
             return ResponseEntity.ok().build();
