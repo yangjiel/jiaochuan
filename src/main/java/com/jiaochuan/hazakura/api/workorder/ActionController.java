@@ -18,10 +18,12 @@ public class ActionController {
     @Autowired
     private ActionService actionService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> createAction(@RequestBody String jsonRequest) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             ActionEntity actionEntity = objectMapper.convertValue(jsonRequest, ActionEntity.class);
             actionService.createAction(actionEntity);
             return ResponseEntity.ok().build();

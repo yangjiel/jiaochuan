@@ -18,10 +18,12 @@ public class WorkOrderController {
     @Autowired
     private WorkOrderService workOrderService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> createWorkOrder(@RequestBody String jsonRequest) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             WorkOrderEntity workOrderEntity = objectMapper.convertValue(jsonRequest, WorkOrderEntity.class);
             workOrderService.createWorkOrder(workOrderEntity);
             return ResponseEntity.ok().build();

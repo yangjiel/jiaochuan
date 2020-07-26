@@ -23,35 +23,35 @@ import java.util.List;
 @AllArgsConstructor
 public class UserEntity extends AbstractEntity implements UserDetails {
     @Column(name = "username", columnDefinition = "VARCHAR(16)", nullable = false)
-    public String username;
+    private String username;
 
     @Column(name = "password", columnDefinition = "CHAR(60)", nullable = false)
-    public String password;
+    private String password;
 
     @Column(name = "first_name", columnDefinition = "NVARCHAR(4)", nullable = false)
-    public String firstName;
+    private String firstName;
 
     @Column(name = "last_name", columnDefinition = "NVARCHAR(16)", nullable = false)
-    public String lastName;
+    private String lastName;
 
     @Column(name = "role", columnDefinition = "VARCHAR(100)", nullable = false)
     @Enumerated(EnumType.STRING)
-    public Role role;
+    private Role role;
 
     @Column(name = "cell", columnDefinition = "CHAR(11)", nullable = false)
-    public String cell;
+    private String cell;
 
     @Column(name = "email", columnDefinition = "VARCHAR(64)", nullable = false)
-    public String email;
+    private String email;
 
     @Column(name = "birthday", columnDefinition = "DATE", nullable = false)
     @JsonDeserialize(using = LocalDateDeserializer.class)
-    public LocalDate birthday;
+    private LocalDate birthday;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> grantedAuthorityList = new ArrayList<>();
-        grantedAuthorityList.add(new SimpleGrantedAuthority("USER"));
+        grantedAuthorityList.add(new SimpleGrantedAuthority(role.name()));
         return grantedAuthorityList;
     }
 

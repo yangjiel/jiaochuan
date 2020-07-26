@@ -18,10 +18,12 @@ public class PartListController {
     @Autowired
     private PartListService partListService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> createPartList(@RequestBody String jsonRequest) {
         try {
-            ObjectMapper objectMapper = new ObjectMapper();
             PartListEntity partListEntity = objectMapper.convertValue(jsonRequest, PartListEntity.class);
             partListService.createPartList(partListEntity);
             return ResponseEntity.ok().build();
