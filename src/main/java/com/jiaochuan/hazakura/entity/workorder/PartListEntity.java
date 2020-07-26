@@ -19,20 +19,20 @@ public class PartListEntity extends AbstractEntity {
     @JoinColumn(name = "workder_id", referencedColumnName = "id",
             insertable = false, updatable = false, nullable = false)
     @NonNull
-    public UserEntity workder;
+    private UserEntity workder;
 
     @ManyToOne
     @JoinColumn(name = "work_order_id", referencedColumnName = "id",
             insertable = false, updatable = false, nullable = false)
     @NonNull
-    public WorkOrderEntity workOrder;
+    private WorkOrderEntity workOrder;
 
     @Column(name = "usage", columnDefinition = "NVARCHAR(200)")
-    public String usage;
+    private String usage;
 
     @ManyToMany
     @JoinTable(name = "xrf_part_list_equipment",
     joinColumns = { @JoinColumn(name = "part_list_id") },
     inverseJoinColumns = { @JoinColumn(name = "equipment_id") })
-    public List<EquipmentEntity> equipments;
+    private List<EquipmentEntity> equipments;
 }
