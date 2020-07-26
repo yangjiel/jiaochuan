@@ -1,0 +1,16 @@
+databaseChangeLog:
+  - changeSet:
+      id: 690bd704-c9b5-4876-8f2f-4348c7ddd7e6
+      author: jasonliuengr@gmail.com
+      changes:
+        - sql: |
+            CREATE TABLE customer (
+                id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                user_name NVARCHAR(20) NOT NULL,
+                contact_name NVARCHAR(6) NOT NULL,
+                cell CHAR(11) NOT NULL,
+                email VARCHAR(64),
+                company_address NVARCHAR(100) NOT NULL
+            );
+          rollback: |
+            DROP TABLE customer;

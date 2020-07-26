@@ -6,15 +6,14 @@ databaseChangeLog:
         - sql: |
             CREATE TABLE work_order (
                 id INTEGER AUTO_INCREMENT PRIMARY KEY,
-                user_id INTEGER NOT NULL,
+                customer_id INTEGER NOT NULL,
                 worker_id INTEGER NOT NULL,
-                equitment_id INTEGER,
                 address NVARCHAR(64) NOT NULL,
                 service_date DATE,
                 result NVARCHAR(16),
                 result_description NVARCHAR(256),
                 service_item NVARCHAR(256),
-                FOREIGN KEY (user_id) REFERENCES user(id),
+                FOREIGN KEY (customer_id) REFERENCES customer(id),
                 FOREIGN KEY (worker_id) REFERENCES user(id)
             );
           rollback: |

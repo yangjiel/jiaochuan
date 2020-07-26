@@ -1,6 +1,7 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
 import com.jiaochuan.hazakura.entity.AbstractEntity;
+import com.jiaochuan.hazakura.entity.user.CustomerEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import lombok.Data;
 import lombok.NonNull;
@@ -16,10 +17,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkOrderEntity extends AbstractEntity {
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id",
+    @JoinColumn(name = "customer_id", referencedColumnName = "id",
             insertable = false, updatable = false, nullable = false)
     @NonNull
-    public UserEntity user;
+    public CustomerEntity customer;
 
     @ManyToOne
     @JoinColumn(name = "worker_id", referencedColumnName = "id",
@@ -27,9 +28,9 @@ public class WorkOrderEntity extends AbstractEntity {
     @NonNull
     public UserEntity worker;
 
-    @Column(name = "equitment_id", columnDefinition = "INTEGER")
+    @Column(name = "equipment_id", columnDefinition = "INTEGER")
     @NonNull
-    public Instant equitment;
+    public Instant equipment;
 
     @Column(name = "service_date", columnDefinition = "DATE")
     @NonNull

@@ -4,16 +4,14 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
-@Table(name="auth_user")
+@Table(name="equipment")
 @Entity
 @Data
 @RequiredArgsConstructor
-public class PartsEntity {
+public class EquipmentEntity {
     @Id
     @Column(name = "id", columnDefinition = "INTEGER")
     public Integer id;
@@ -29,4 +27,6 @@ public class PartsEntity {
     @Column(name = "manufacture", length = 16)
     public String manufacture;
 
+    @ManyToMany(mappedBy = "equipments")
+    public List<PartListEntity> partList;
 }

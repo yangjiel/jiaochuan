@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -63,8 +62,8 @@ public class UserService implements UserDetailsService {
         userEntity.setPassword(passwordEncoder.encode(password));
 
         // Check format for cell phone and email
-        if (userEntity.getCell().length() > 11) {
-            throw new UserException("手机号码长度不能多于11位。");
+        if (userEntity.getCell().length() != 11) {
+            throw new UserException("手机号码长度不能多于或少于11位。");
         }
         if (!userEntity.getEmail().contains("@")) {
             throw new UserException("电子邮箱格式不正确。");
