@@ -1,5 +1,6 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
+import com.jiaochuan.hazakura.entity.AbstractEntity;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -7,24 +8,20 @@ import lombok.RequiredArgsConstructor;
 import javax.persistence.*;
 import java.util.List;
 
-@Table(name="equipment")
+@Table(name="EquipmentService")
 @Entity
 @Data
 @RequiredArgsConstructor
-public class EquipmentEntity {
-    @Id
-    @Column(name = "id", columnDefinition = "INTEGER")
-    public Integer id;
-
-    @Column(name = "name", length = 16)
+public class EquipmentEntity extends AbstractEntity {
+    @Column(name = "device_name", columnDefinition = "NVARCHAR(64)", nullable = false)
     @NonNull
-    public String name;
+    public String deviceName;
 
-    @Column(name = "model", length = 16)
+    @Column(name = "device_model", columnDefinition = "NVARCHAR(32)")
     @NonNull
-    public String model;
+    public String deviceModel;
 
-    @Column(name = "manufacture", length = 16)
+    @Column(name = "manufacture", columnDefinition = "NVARCHAR(100)")
     public String manufacture;
 
     @ManyToMany(mappedBy = "equipments")
