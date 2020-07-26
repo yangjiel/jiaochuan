@@ -29,6 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/login").permitAll()
+                .antMatchers("/swagger-ui/**", "/webjars/**", "/v3/api-docs/**").permitAll() // Swagger
                 .anyRequest()
                 .authenticated();
 

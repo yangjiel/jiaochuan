@@ -5,3 +5,5 @@ server:
   servlet:
     session:
       timeout: 2h
+springdoc:
+  packages-to-scan: com.jiaochuan.hazakura
