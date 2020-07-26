@@ -86,18 +86,6 @@ public class UserController {
     }
 
 
-    @Parameters(value = {
-            @Parameter(
-                    name = "username",
-                    required = true,
-                    content = @Content(mediaType = "application/x-www-form-urlencoded")
-            ),
-            @Parameter(
-                    name = "password",
-                    required = true,
-                    content = @Content(mediaType = "application/x-www-form-urlencoded")
-            )
-    })
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -133,8 +121,7 @@ public class UserController {
                                     @ExampleObject(value =
                                     "{\n" +
                                     "    \"status\": \"登录失败，请检查用户名或密码。\",\n" +
-                                    "    \"user\": {\n" +
-                                    "    }\n" +
+                                    "    \"user\": null" +
                                     "}")
                             }
                     )
@@ -149,8 +136,7 @@ public class UserController {
                                     @ExampleObject(value =
                                     "{\n" +
                                     "    \"status\": \"服务器出现错误，请与管理员联系。内部错误：RuntimeException ...\",\n" +
-                                    "    \"user\": {\n" +
-                                    "    }\n" +
+                                    "    \"user\": null" +
                                     "}")
                             }
                     )
@@ -161,7 +147,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<LoginResponseDto> login(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<LoginResponseDto> login(@RequestBody String username, @RequestBody String password) {
         UserEntity userEntity = null;
         try {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
