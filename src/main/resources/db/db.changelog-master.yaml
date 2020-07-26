@@ -4,7 +4,19 @@ databaseChangeLog:
         classpath:db/migration/version20200614_create_table_user.yaml
   - include:
       file:
+        classpath:db/migration/version20200725_create_table_customer.yaml
+  - include:
+      file:
         classpath:db/migration/version20200721_create_table_work_order.yaml
   - include:
       file:
+        classpath:db/migration/version20200721_create_table_equipment.yaml
+  - include:
+      file:
         classpath:db/migration/version20200725_create_table_action.yaml
+  - include:
+      file:
+        classpath:db/migration/version20200725_create_table_part_list.yaml
+  - include:
+      file:
+        classpath:db/migration/version20200725_create_table_xrf_part_list_equipment.yaml
