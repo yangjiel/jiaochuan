@@ -4,6 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.UserService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +28,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@Tag(name = "UserController")
+
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserController {
@@ -28,7 +39,36 @@ public class UserController {
     @Autowired
     private AuthenticationManager authManager;
 
-    @PostMapping(path = "/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+
+    @Parameters(value = {
+            @Parameter(
+                    name = "jsonRequest",
+                    required = true,
+                    content = @Content(
+                            schema = @Schema(implementation = UserEntity.class),
+                            mediaType = "application/json"
+                    )
+            )
+    })
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "注册成功，response body将返回\"注册成功！\"。"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "用户输入错误，例如：必填项没有填写、用户名已被使用、密码有特殊字符等。"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。"
+            )
+    })
+    @PostMapping(
+            path = "/register",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.TEXT_PLAIN_VALUE
+    )
     public ResponseEntity<String> createUser(@RequestBody String jsonRequest) {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -45,7 +85,82 @@ public class UserController {
         }
     }
 
-    @PostMapping(path = "/login", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+
+    @Parameters(value = {
+            @Parameter(
+                    name = "username",
+                    required = true,
+                    content = @Content(mediaType = "application/x-www-form-urlencoded")
+            ),
+            @Parameter(
+                    name = "password",
+                    required = true,
+                    content = @Content(mediaType = "application/x-www-form-urlencoded")
+            )
+    })
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "登录成功，response body将返回已经登录的用户的信息。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = LoginResponseDto.class),
+                            examples = {
+                                    @ExampleObject(value =
+                                    "{\n" +
+                                    "    \"status\": \"登录成功！\",\n" +
+                                    "    \"user\": {\n" +
+                                    "        \"username\": \"sam\",\n" +
+                                    "        \"password\": \"Initial1\",\n" +
+                                    "        \"firstName\": \"三\",\n" +
+                                    "        \"lastName\": \"张\",\n" +
+                                    "        \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                    "        \"cell\": \"13106660000\",\n" +
+                                    "        \"email\": \"user@example.com\",\n" +
+                                    "        \"birthday\": \"1900-01-01\"\n" +
+                                    "    }\n" +
+                                    "}")
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "登录失败，用户名或密码错误，或用户不存在。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = LoginResponseDto.class),
+                            examples = {
+                                    @ExampleObject(value =
+                                    "{\n" +
+                                    "    \"status\": \"登录失败，请检查用户名或密码。\",\n" +
+                                    "    \"user\": {\n" +
+                                    "    }\n" +
+                                    "}")
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = LoginResponseDto.class),
+                            examples = {
+                                    @ExampleObject(value =
+                                    "{\n" +
+                                    "    \"status\": \"服务器出现错误，请与管理员联系。内部错误：RuntimeException ...\",\n" +
+                                    "    \"user\": {\n" +
+                                    "    }\n" +
+                                    "}")
+                            }
+                    )
+            )
+    })
+    @PostMapping(
+            path = "/login",
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
     public ResponseEntity<LoginResponseDto> login(@RequestParam String username, @RequestParam String password) {
         UserEntity userEntity = null;
         try {
@@ -70,7 +185,18 @@ public class UserController {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping(path = "/logout")
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "退出成功，response body将返回\"退出成功！\"。",
+                    content = @Content
+            )
+    })
+    @PostMapping(
+            path = "/logout",
+            produces = MediaType.TEXT_PLAIN_VALUE
+    )
     public ResponseEntity<String> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
