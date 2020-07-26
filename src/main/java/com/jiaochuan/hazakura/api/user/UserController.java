@@ -39,17 +39,26 @@ public class UserController {
     @Autowired
     private AuthenticationManager authManager;
 
-
-    @Parameters(value = {
-            @Parameter(
-                    name = "jsonRequest",
-                    required = true,
-                    content = @Content(
-                            schema = @Schema(implementation = UserEntity.class),
-                            mediaType = "application/json"
-                    )
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "JSON形式的UserEntity",
+            content = @Content(
+                    schema = @Schema(implementation = String.class),
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(value =
+                            "{\n" +
+                            "    \"username\": \"sam\",\n" +
+                            "    \"password\": \"Initial1\",\n" +
+                            "    \"firstName\": \"三\",\n" +
+                            "    \"lastName\": \"张\",\n" +
+                            "    \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                            "    \"cell\": \"13106660000\",\n" +
+                            "    \"email\": \"user@example.com\",\n" +
+                            "    \"birthday\": \"1900-01-01\"\n" +
+                            "}")
+                    }
             )
-    })
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -61,7 +70,16 @@ public class UserController {
             ),
             @ApiResponse(
                     responseCode = "500",
-                    description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。"
+                    description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
+                    content = @Content(
+                            mediaType = "text/plain",
+                            schema = @Schema(implementation = String.class),
+                            examples = {
+                                    @ExampleObject(value = "注册成功！"),
+                                    @ExampleObject(value = "用户名不存在。"),
+                                    @ExampleObject(value = "服务器出现错误，请与管理员联系。内部错误：RuntimeException ...")
+                            }
+                    )
             )
     })
     @PostMapping(
@@ -176,7 +194,13 @@ public class UserController {
             @ApiResponse(
                     responseCode = "200",
                     description = "退出成功，response body将返回\"退出成功！\"。",
-                    content = @Content
+                    content = @Content(
+                            mediaType = "text/plain",
+                            schema = @Schema(implementation = String.class),
+                            examples = {
+                                    @ExampleObject(value = "退出成功！")
+                            }
+                    )
             )
     })
     @PostMapping(
