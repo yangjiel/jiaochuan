@@ -15,15 +15,15 @@ import java.util.List;
 public class EquipmentEntity extends AbstractEntity {
     @Column(name = "device_name", columnDefinition = "NVARCHAR(64)", nullable = false)
     @NonNull
-    public String deviceName;
+    private String deviceName;
 
     @Column(name = "device_model", columnDefinition = "NVARCHAR(32)")
     @NonNull
-    public String deviceModel;
+    private String deviceModel;
 
     @Column(name = "manufacture", columnDefinition = "NVARCHAR(100)")
-    public String manufacture;
+    private String manufacture;
 
     @ManyToMany(mappedBy = "equipments")
-    public List<PartListEntity> partList;
+    private List<PartListEntity> partList;
 }

@@ -20,34 +20,34 @@ public class WorkOrderEntity extends AbstractEntity {
     @JoinColumn(name = "customer_id", referencedColumnName = "id",
             insertable = false, updatable = false, nullable = false)
     @NonNull
-    public CustomerEntity customer;
+    private CustomerEntity customer;
 
     @ManyToOne
     @JoinColumn(name = "worker_id", referencedColumnName = "id",
             insertable = false, updatable = false, nullable = false)
     @NonNull
-    public UserEntity worker;
+    private UserEntity worker;
 
     @Column(name = "equipment_id", columnDefinition = "INTEGER")
     @NonNull
-    public Instant equipment;
+    private Instant equipment;
 
     @Column(name = "service_date", columnDefinition = "DATE")
     @NonNull
-    public Instant serviceDate;
+    private Instant serviceDate;
 
     @Column(name = "address", columnDefinition = "NVARCHAR")
-    public String address;
+    private String address;
 
     @Column(name = "result", columnDefinition = "NVARCHAR")
-    public String result;
+    private String result;
 
     @Column(name = "result_description", columnDefinition = "NVARCHAR")
-    public String resultDescription;
+    private String resultDescription;
 
     @Column(name = "service_item", columnDefinition = "NVARCHAR")
-    public String serviceItem;
+    private String serviceItem;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "workOrder")
-    public List<ActionEntity> actions;
+    private List<ActionEntity> actions;
 }
