@@ -120,8 +120,6 @@ public class UserController {
                                     "{\n" +
                                     "    \"status\": \"登录成功！\",\n" +
                                     "    \"user\": {\n" +
-                                    "        \"username\": \"sam\",\n" +
-                                    "        \"password\": \"Initial1\",\n" +
                                     "        \"firstName\": \"三\",\n" +
                                     "        \"lastName\": \"张\",\n" +
                                     "        \"role\": \"ENGINEER_AFTER_SALES\",\n" +
@@ -279,8 +277,6 @@ public class UserController {
                                     "{\n" +
                                     "    \"status\": \"成功！\",\n" +
                                     "    \"users\": [{\n" +
-                                    "        \"username\": \"sam\",\n" +
-                                    "        \"password\": \"Initial1\",\n" +
                                     "        \"firstName\": \"三\",\n" +
                                     "        \"lastName\": \"张\",\n" +
                                     "        \"role\": \"ENGINEER_AFTER_SALES\",\n" +
