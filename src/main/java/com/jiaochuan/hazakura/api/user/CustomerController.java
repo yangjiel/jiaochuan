@@ -28,7 +28,48 @@ public class CustomerController {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "JSON形式的CustomerEntity",
+            content = @Content(
+                    schema = @Schema(implementation = String.class),
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(value =
+                                    "{\n" +
+                                            "    \"userName\": \"四川电器集团\",\n" +
+                                            "    \"contactName\": \"l刘晓东\",\n" +
+                                            "    \"cell\": \"13813249988\",\n" +
+                                            "    \"email\": \"null\",\n" +
+                                            "    \"companyAddress\": \"四川省成都市高新西区金月路45号高鑫产业园\"\n" +
+                                            "}")
+                    }
+            )
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "登记成功，返回200"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "用户输入错误，例如：必填项没有填写、手机号码有特殊字符等。"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
+                    content = @Content(
+                            mediaType = "text/plain",
+                            schema = @Schema(implementation = String.class),
+                            examples = {
+                                    @ExampleObject(value = "服务器出现错误，请与管理员联系。内部错误：RuntimeException ...")
+                            }
+                    )
+            )
+    })
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.TEXT_PLAIN_VALUE
+    )
     public ResponseEntity<String> createCustomer(@RequestBody String jsonRequest) {
         try {
             CustomerEntity customerEntity = objectMapper.convertValue(jsonRequest, CustomerEntity.class);
@@ -68,11 +109,11 @@ public class CustomerController {
                                     @ExampleObject(value =
                                             "{\n" +
                                                     "    \"customers\": [{\n" +
-                                                    "        \"user_name\": \"四川电器集团\",\n" +
-                                                    "        \"contact_name\": \"刘晓东\",\n" +
+                                                    "        \"userName\": \"四川电器集团\",\n" +
+                                                    "        \"contactName\": \"刘晓东\",\n" +
                                                     "        \"cell\": \"13106660000\",\n" +
                                                     "        \"email\": \"user@example.com\",\n" +
-                                                    "        \"company_address\": \"四川省成都市高新四区金月璐45号高鑫产业园\"\n" +
+                                                    "        \"companyAddress\": \"四川省成都市高新四区金月璐45号高鑫产业园\"\n" +
                                                     "    }\n" +
                                                     "    ...\n" +
                                                     "    ]\n" +
@@ -89,8 +130,7 @@ public class CustomerController {
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
-                                                    "    \"status\": \"登录失败，请检查用户名或密码。\",\n" +
-                                                    "    \"users\": null" +
+                                                    "    \"customers\": null" +
                                                     "}")
                             }
                     )
@@ -104,8 +144,7 @@ public class CustomerController {
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
-                                                    "    \"status\": \"服务器出现错误，请与管理员联系。内部错误：RuntimeException ...\",\n" +
-                                                    "    \"users\": null" +
+                                                    "    \"customers\": null" +
                                                     "}")
                             }
                     )

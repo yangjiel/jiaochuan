@@ -26,6 +26,9 @@ public class PartListEntity extends AbstractEntity {
     @NonNull
     private WorkOrderEntity workOrder;
 
+    @Column(name = "count", columnDefinition = "INTEGER")
+    private Integer count;
+
     @Column(name = "usage", columnDefinition = "NVARCHAR(200)")
     private String usage;
 

@@ -29,7 +29,50 @@ public class WorkOrderController {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "JSON形式的WorkOrderEntity",
+            content = @Content(
+                    schema = @Schema(implementation = String.class),
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(value =
+                                    "{\n" +
+                                            "    \"userId\": \"2\",\n" +
+                                            "    \"workerId\": \"1\",\n" +
+                                            "    \"adress\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
+                                            "    \"serviceDate\": \"2020-04-30\",\n" +
+                                            "    \"result\": \"null,\n" +
+                                            "    \"resultDescription\": \"null,\n" +
+                                            "    \"serviceItem\": \"null,\n" +
+                                            "}")
+                    }
+            )
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "登记成功，返回200"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "用户输入错误，例如：必填项没有填写、客户id有特殊字符等。"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
+                    content = @Content(
+                            mediaType = "text/plain",
+                            schema = @Schema(implementation = String.class),
+                            examples = {
+                                    @ExampleObject(value = "服务器出现错误，请与管理员联系。内部错误：RuntimeException ...")
+                            }
+                    )
+            )
+    })
+    @PostMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.TEXT_PLAIN_VALUE
+    )
     public ResponseEntity<String> createWorkOrder(@RequestBody String jsonRequest) {
         try {
             WorkOrderEntity workOrderEntity = objectMapper.convertValue(jsonRequest, WorkOrderEntity.class);
@@ -68,14 +111,14 @@ public class WorkOrderController {
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
-                                                    "    \"work_orders\": [{\n" +
+                                                    "    \"workOrders\": [{\n" +
                                                     "        \"customer_id\": \"1\",\n" +
-                                                    "        \"worker_id\": \"2\",\n" +
+                                                    "        \"workerId\": \"2\",\n" +
                                                     "        \"address\": \"广州\",\n" +
-                                                    "        \"service_date\": \"2020/07/30\",\n" +
+                                                    "        \"serviceDate\": \"2020/07/30\",\n" +
                                                     "        \"result\": \"Done\",\n" +
-                                                    "        \"result_decription\": \"null\",\n" +
-                                                    "        \"service_item\": \"cleaning\",\n" +
+                                                    "        \"resultDecription\": \"null\",\n" +
+                                                    "        \"serviceItem\": \"cleaning\",\n" +
                                                     "    }\n" +
                                                     "    ...\n" +
                                                     "    ]\n" +
@@ -92,7 +135,7 @@ public class WorkOrderController {
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
-                                                    "    \"users\": null" +
+                                                    "    \"workOrders\": null" +
                                                     "}")
                             }
                     )
@@ -106,7 +149,7 @@ public class WorkOrderController {
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
-                                                    "    \"users\": null" +
+                                                    "    \"workOrders\": null" +
                                                     "}")
                             }
                     )
