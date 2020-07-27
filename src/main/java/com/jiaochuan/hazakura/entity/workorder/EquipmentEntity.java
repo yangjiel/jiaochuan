@@ -25,5 +25,5 @@ public class EquipmentEntity extends AbstractEntity {
     private String manufacture;
 
     @OneToMany(mappedBy = "equipment")
-    private PartListEquipmentEntity partListEquipment;
+    private List<PartListEquipmentEntity> partListEquipment;
 }
