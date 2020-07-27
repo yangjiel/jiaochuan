@@ -24,6 +24,6 @@ public class EquipmentEntity extends AbstractEntity {
     @Column(name = "manufacture", columnDefinition = "NVARCHAR(100)")
     private String manufacture;
 
-    @ManyToMany(mappedBy = "equipments")
-    private List<PartListEntity> partList;
+    @OneToMany(mappedBy = "equipment")
+    private PartListEquipmentEntity partListEquipment;
 }

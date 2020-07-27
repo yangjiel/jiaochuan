@@ -7,7 +7,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Table(name="part_list")
 @Entity
@@ -15,10 +14,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PartListEntity extends AbstractEntity {
     @ManyToOne
-    @JoinColumn(name = "workder_id", referencedColumnName = "id",
+    @JoinColumn(name = "worker_id", referencedColumnName = "id",
             insertable = false, updatable = false, nullable = false)
     @NonNull
-    private UserEntity workder;
+    private UserEntity worker;
 
     @ManyToOne
     @JoinColumn(name = "work_order_id", referencedColumnName = "id",
@@ -26,15 +25,9 @@ public class PartListEntity extends AbstractEntity {
     @NonNull
     private WorkOrderEntity workOrder;
 
-    @Column(name = "count", columnDefinition = "INTEGER")
-    private Integer count;
-
     @Column(name = "usage", columnDefinition = "NVARCHAR(200)")
     private String usage;
 
-    @ManyToMany
-    @JoinTable(name = "xrf_part_list_equipment",
-    joinColumns = { @JoinColumn(name = "part_list_id") },
-    inverseJoinColumns = { @JoinColumn(name = "equipment_id") })
-    private List<EquipmentEntity> equipments;
+    @OneToMany(mappedBy = "partList")
+    private PartListEquipmentEntity partListEquipment;
 }
