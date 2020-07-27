@@ -60,10 +60,10 @@ public class CustomerController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "成功，response body将返回已经分页的用户信息。",
+                    description = "成功，response body将返回已经分页的客户信息。",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = LoginResponseDto.class),
+                            schema = @Schema(implementation = List.class),
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
@@ -85,7 +85,7 @@ public class CustomerController {
                     description = "请求出错，例如传进来的分页参数page或size < 0。",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = LoginResponseDto.class),
+                            schema = @Schema(implementation = List.class),
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
@@ -100,7 +100,7 @@ public class CustomerController {
                     description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = LoginResponseDto.class),
+                            schema = @Schema(implementation = List.class),
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
@@ -112,7 +112,7 @@ public class CustomerController {
             )
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CustomerEntity>> getUsers(
+    public ResponseEntity<List<CustomerEntity>> getCustomers(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size
     ) {
