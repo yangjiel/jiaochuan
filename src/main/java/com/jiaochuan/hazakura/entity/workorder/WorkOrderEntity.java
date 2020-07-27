@@ -28,10 +28,6 @@ public class WorkOrderEntity extends AbstractEntity {
     @NonNull
     private UserEntity worker;
 
-    @Column(name = "equipment_id", columnDefinition = "INTEGER")
-    @NonNull
-    private Instant equipment;
-
     @Column(name = "service_date", columnDefinition = "DATE")
     @NonNull
     private Instant serviceDate;
