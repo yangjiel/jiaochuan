@@ -1,12 +1,11 @@
 package com.jiaochuan.hazakura.service;
 
-import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
+import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.User.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

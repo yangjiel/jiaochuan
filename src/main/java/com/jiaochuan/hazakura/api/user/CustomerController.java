@@ -2,9 +2,7 @@ package com.jiaochuan.hazakura.api.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiaochuan.hazakura.entity.user.CustomerEntity;
-import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.exception.AppException;
-import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.CustomerService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;

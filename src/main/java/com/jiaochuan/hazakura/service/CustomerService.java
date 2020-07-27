@@ -1,7 +1,6 @@
 package com.jiaochuan.hazakura.service;
 
 import com.jiaochuan.hazakura.entity.user.CustomerEntity;
-import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.jpa.User.CustomerRepository;
 import org.apache.commons.lang3.StringUtils;

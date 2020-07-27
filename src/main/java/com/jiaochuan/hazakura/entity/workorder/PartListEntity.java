@@ -7,7 +7,6 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-import java.time.Instant;
 import java.util.List;
 
 @Table(name="part_list")
