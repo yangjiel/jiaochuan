@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiaochuan.hazakura.api.user.LoginResponseDto;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.AppException;
+import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.WorkOrderService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -73,19 +74,18 @@ public class WorkOrderController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
-    public ResponseEntity<String> createWorkOrder(@RequestBody String jsonRequest) {
+    public ResponseEntity<String> createWorkOrder(@RequestBody WorkOrderCreateRequestDto dto) {
         try {
-            WorkOrderEntity workOrderEntity = objectMapper.convertValue(jsonRequest, WorkOrderEntity.class);
-            workOrderService.createWorkOrder(workOrderEntity);
+            workOrderService.createWorkOrder(dto);
             return ResponseEntity.ok().build();
-        } catch (AppException e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage());
-        } catch (Exception e) {
+        } catch (UserException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage());
         }
     }
 
@@ -170,7 +170,7 @@ public class WorkOrderController {
         try {
             List<WorkOrderEntity> workOrderList = workOrderService.getWorkOrders(page, size);
             return ResponseEntity.ok(workOrderList);
-        } catch (AppException e) {
+        } catch (UserException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(null);

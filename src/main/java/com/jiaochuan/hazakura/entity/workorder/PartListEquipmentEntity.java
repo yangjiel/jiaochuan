@@ -1,6 +1,7 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
 import com.jiaochuan.hazakura.entity.AbstractEntity;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class PartListEquipmentEntity extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "part_list_id", referencedColumnName = "id",

@@ -7,6 +7,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Table(name="part_list")
 @Entity
@@ -29,5 +30,5 @@ public class PartListEntity extends AbstractEntity {
     private String usage;
 
     @OneToMany(mappedBy = "partList")
-    private PartListEquipmentEntity partListEquipment;
+    private List<PartListEquipmentEntity> partListEquipments;
 }
