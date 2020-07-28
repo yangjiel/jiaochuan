@@ -83,7 +83,7 @@ public class WorkOrderService {
 
         WorkOrderEntity workOrderEntity = new WorkOrderEntity(customerEntity, workerEntity, dto.getServiceDate());
         workOrderEntity.setAddress(dto.getAddress());
-
+        workOrderRepository.save(workOrderEntity);
         PartListEntity partListEntity = createPartList(workerEntity, workOrderEntity, dto.getEquipments());
 
         List<PartListEntity> partLists = new ArrayList<>();
@@ -104,16 +104,18 @@ public class WorkOrderService {
 
         PartListEntity partListEntity = new PartListEntity(workerEntity, workOrderEntity);
         List<PartListEquipmentEntity> xrfList = new ArrayList<>();
-        for (Pair<Long, Integer> equipmentPair : equipments) {
-            Long equipmentId = equipmentPair.getFirst();
-            Integer count = equipmentPair.getSecond();
-            EquipmentEntity equipmentEntity = equipmentRepository.findById(equipmentId).orElse(null);
-            if (equipmentEntity == null) {
-                throw new UserException(String.format("ID为%s的设备不存在。", equipmentId));
+        if (equipments != null) {
+            for (Pair<Long, Integer> equipmentPair : equipments) {
+                Long equipmentId = equipmentPair.getFirst();
+                Integer count = equipmentPair.getSecond();
+                EquipmentEntity equipmentEntity = equipmentRepository.findById(equipmentId).orElse(null);
+                if (equipmentEntity == null) {
+                    throw new UserException(String.format("ID为%s的设备不存在。", equipmentId));
+                }
+                PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipmentEntity, count);
+                partListEquipmentRepository.save(xrf);
+                xrfList.add(xrf);
             }
-            PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipmentEntity, count);
-            partListEquipmentRepository.save(xrf);
-            xrfList.add(xrf);
         }
         partListEntity.setPartListEquipments(xrfList);
         partListRepository.save(partListEntity);

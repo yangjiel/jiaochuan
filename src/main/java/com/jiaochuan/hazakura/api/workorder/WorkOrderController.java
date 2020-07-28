@@ -40,7 +40,7 @@ public class WorkOrderController {
                                     "{\n" +
                                             "    \"userId\": \"2\",\n" +
                                             "    \"workerId\": \"1\",\n" +
-                                            "    \"adress\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
+                                            "    \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
                                             "    \"serviceDate\": \"2020-04-30\",\n" +
                                             "    \"result\": \"null,\n" +
                                             "    \"resultDescription\": \"null,\n" +

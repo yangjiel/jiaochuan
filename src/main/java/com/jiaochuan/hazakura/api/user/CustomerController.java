@@ -72,7 +72,7 @@ public class CustomerController {
     )
     public ResponseEntity<String> createCustomer(@RequestBody String jsonRequest) {
         try {
-            CustomerEntity customerEntity = objectMapper.convertValue(jsonRequest, CustomerEntity.class);
+            CustomerEntity customerEntity = objectMapper.readValue(jsonRequest, CustomerEntity.class);
             customerService.createCustomer(customerEntity);
             return ResponseEntity.ok().build();
         } catch (AppException e) {

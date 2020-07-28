@@ -69,7 +69,7 @@ public class EquipmentController {
     )
     public ResponseEntity<String> createEquipment(@RequestBody String jsonRequest) {
         try {
-            EquipmentEntity equipmentEntity = objectMapper.convertValue(jsonRequest, EquipmentEntity.class);
+            EquipmentEntity equipmentEntity = objectMapper.readValue(jsonRequest, EquipmentEntity.class);
             equipmentService.createEquipment(equipmentEntity);
             return ResponseEntity.ok().build();
         } catch (AppException e) {

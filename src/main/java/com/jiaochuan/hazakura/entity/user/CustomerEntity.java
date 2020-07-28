@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 public class CustomerEntity extends AbstractEntity {
     @Column(name = "user_name", columnDefinition = "VARCHAR(16)", nullable = false)
-    private String username;
+    private String userName;
 
     @Column(name = "contact_name", columnDefinition = "CHAR(60)", nullable = false)
     private String contactName;

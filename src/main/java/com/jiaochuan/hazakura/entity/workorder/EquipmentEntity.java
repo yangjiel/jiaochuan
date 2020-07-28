@@ -1,9 +1,7 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
 import com.jiaochuan.hazakura.entity.AbstractEntity;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,6 +10,8 @@ import java.util.List;
 @Entity
 @Data
 @RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class EquipmentEntity extends AbstractEntity {
     @Column(name = "device_name", columnDefinition = "NVARCHAR(64)", nullable = false)
     @NonNull
