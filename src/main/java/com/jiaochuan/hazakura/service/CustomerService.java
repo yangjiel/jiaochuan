@@ -5,9 +5,11 @@ import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.jpa.User.CustomerRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 @Service
 public class CustomerService {
@@ -47,5 +49,12 @@ public class CustomerService {
         }
 
         customerRepository.save(customerEntity);
+    }
+
+    public List<CustomerEntity> getCustomers(int page, int size) throws Exception {
+        if (page < 0 || size < 0) {
+            throw new Exception("分页设置不能小于0。");
+        }
+        return customerRepository.findAll(PageRequest.of(page, size)).getContent();
     }
 }

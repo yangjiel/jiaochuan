@@ -1,20 +1,13 @@
 package com.jiaochuan.hazakura.entity.user;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @Table(name="customer")
 @Entity
@@ -23,7 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 public class CustomerEntity extends AbstractEntity {
     @Column(name = "user_name", columnDefinition = "VARCHAR(16)", nullable = false)
-    private String username;
+    private String userName;
 
     @Column(name = "contact_name", columnDefinition = "CHAR(60)", nullable = false)
     private String contactName;

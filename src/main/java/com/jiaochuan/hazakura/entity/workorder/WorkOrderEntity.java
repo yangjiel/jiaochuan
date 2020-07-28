@@ -4,16 +4,18 @@ import com.jiaochuan.hazakura.entity.AbstractEntity;
 import com.jiaochuan.hazakura.entity.user.CustomerEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 @Table(name="work_order")
 @Entity
 @Data
+@NoArgsConstructor
 @RequiredArgsConstructor
 public class WorkOrderEntity extends AbstractEntity {
     @ManyToOne
@@ -28,13 +30,9 @@ public class WorkOrderEntity extends AbstractEntity {
     @NonNull
     private UserEntity worker;
 
-    @Column(name = "equipment_id", columnDefinition = "INTEGER")
-    @NonNull
-    private Instant equipment;
-
     @Column(name = "service_date", columnDefinition = "DATE")
     @NonNull
-    private Instant serviceDate;
+    private LocalDate serviceDate;
 
     @Column(name = "address", columnDefinition = "NVARCHAR")
     private String address;
@@ -50,4 +48,7 @@ public class WorkOrderEntity extends AbstractEntity {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "workOrder")
     private List<ActionEntity> actions;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "workOrder")
+    private List<PartListEntity> partLists;
 }
