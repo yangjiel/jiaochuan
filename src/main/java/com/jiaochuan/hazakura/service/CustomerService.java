@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -16,6 +17,7 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Transactional
     public void createCustomer(CustomerEntity customerEntity) throws AppException, Exception {
         // Check if required fields are not empty
         try {

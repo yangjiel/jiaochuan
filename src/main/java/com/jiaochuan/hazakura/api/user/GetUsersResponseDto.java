@@ -8,7 +8,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class UserResponseDto {
+public class GetUsersResponseDto {
     String status;
     List<UserEntity> users;
 }

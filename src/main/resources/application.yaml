@@ -1,6 +1,10 @@
 spring:
   liquibase:
     change-log: classpath:db/db.changelog-master.yaml
+  jpa:
+    properties:
+      hibernate:
+        globally_quoted_identifiers: true
 server:
   servlet:
     session:

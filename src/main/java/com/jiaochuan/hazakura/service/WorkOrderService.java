@@ -1,6 +1,7 @@
 package com.jiaochuan.hazakura.service;
 
-import com.jiaochuan.hazakura.api.workorder.WorkOrderCreateRequestDto;
+import com.jiaochuan.hazakura.api.workorder.EquipmentDto;
+import com.jiaochuan.hazakura.api.workorder.PostWorkOrderDto;
 import com.jiaochuan.hazakura.entity.user.CustomerEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.EquipmentEntity;
@@ -18,8 +19,8 @@ import com.jiaochuan.hazakura.jpa.WorkOrder.WorkOrderRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -46,7 +47,8 @@ public class WorkOrderService {
     @Autowired
     private PartListEquipmentRepository partListEquipmentRepository;
 
-    public void createWorkOrder(WorkOrderCreateRequestDto dto) throws AppException, UserException {
+    @Transactional
+    public void createWorkOrder(PostWorkOrderDto dto) throws AppException, UserException {
         // Check if required fields are not empty
         Set<String> mandatoryFieldsSet = Set.of("customerId", "workerId", "serviceDate", "address");
 
@@ -83,7 +85,6 @@ public class WorkOrderService {
 
         WorkOrderEntity workOrderEntity = new WorkOrderEntity(customerEntity, workerEntity, dto.getServiceDate());
         workOrderEntity.setAddress(dto.getAddress());
-        workOrderRepository.save(workOrderEntity);
         PartListEntity partListEntity = createPartList(workerEntity, workOrderEntity, dto.getEquipments());
 
         List<PartListEntity> partLists = new ArrayList<>();
@@ -99,20 +100,21 @@ public class WorkOrderService {
         return workOrderRepository.findAll(PageRequest.of(page, size)).getContent();
     }
 
+    @Transactional
     public PartListEntity createPartList(UserEntity workerEntity, WorkOrderEntity workOrderEntity,
-                               List<Pair<Long, Integer>> equipments) throws UserException {
+                               List<EquipmentDto> equipments) throws UserException {
 
         PartListEntity partListEntity = new PartListEntity(workerEntity, workOrderEntity);
         List<PartListEquipmentEntity> xrfList = new ArrayList<>();
         if (equipments != null) {
-            for (Pair<Long, Integer> equipmentPair : equipments) {
-                Long equipmentId = equipmentPair.getFirst();
-                Integer count = equipmentPair.getSecond();
+            for (EquipmentDto equipmentPair : equipments) {
+                Long equipmentId = equipmentPair.getEquipmentId();
+                Integer quantity = equipmentPair.getQuantity();
                 EquipmentEntity equipmentEntity = equipmentRepository.findById(equipmentId).orElse(null);
                 if (equipmentEntity == null) {
                     throw new UserException(String.format("ID为%s的设备不存在。", equipmentId));
                 }
-                PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipmentEntity, count);
+                PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipmentEntity, quantity);
                 partListEquipmentRepository.save(xrf);
                 xrfList.add(xrf);
             }

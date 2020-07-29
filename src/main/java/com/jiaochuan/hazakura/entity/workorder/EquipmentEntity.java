@@ -1,14 +1,22 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @Table(name="equipment")
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 @NoArgsConstructor
 @AllArgsConstructor
@@ -25,5 +33,6 @@ public class EquipmentEntity extends AbstractEntity {
     private String manufacture;
 
     @OneToMany(mappedBy = "equipment")
+    @JsonBackReference
     private List<PartListEquipmentEntity> partListEquipment;
 }
