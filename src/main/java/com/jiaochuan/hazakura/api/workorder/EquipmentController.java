@@ -1,6 +1,7 @@
 package com.jiaochuan.hazakura.api.workorder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jiaochuan.hazakura.api.user.LoginResponseDto;
 import com.jiaochuan.hazakura.entity.workorder.EquipmentEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
 import com.jiaochuan.hazakura.exception.AppException;
@@ -45,11 +46,38 @@ public class EquipmentController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "登记成功，返回200"
+                    description = "登记成功，返回200",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = LoginResponseDto.class),
+                            examples = {
+                                    @ExampleObject(value =
+                                            "{\n" +
+                                                    "    \"status\": \"登录成功！\",\n" +
+                                                    "    \"equipment\": {\n" +
+                                                    "        \"id\": \"1\",\n" +
+                                                    "        \"deviceName\": \"数控机床轴承\",\n" +
+                                                    "        \"deviceModel\": \"8*8\",\n" +
+                                                    "        \"manufacture\": \"四川轴承有限公司\",\n" +
+                                                    "    }\n" +
+                                                    "}")
+                            }
+                    )
             ),
             @ApiResponse(
                     responseCode = "400",
-                    description = "用户输入错误，例如：必填项没有填写、客户id有特殊字符等。"
+                    description = "用户输入错误，例如：必填项没有填写、客户id有特殊字符等。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = LoginResponseDto.class),
+                            examples = {
+                                    @ExampleObject(value =
+                                            "{\n" +
+                                                    "    \"status\": \"服务器出现错误，请与管理员联系。内部错误：\",\n" +
+                                                    "    \"equipment\": null" +
+                                                    "}")
+                            }
+                    )
             ),
             @ApiResponse(
                     responseCode = "500",
@@ -58,7 +86,11 @@ public class EquipmentController {
                             mediaType = "text/plain",
                             schema = @Schema(implementation = String.class),
                             examples = {
-                                    @ExampleObject(value = "服务器出现错误，请与管理员联系。内部错误：RuntimeException ...")
+                                    @ExampleObject(value =
+                                            "{\n" +
+                                                    "    \"status\": \"Error Message\",\n" +
+                                                    "    \"equipment\": null" +
+                                                    "}")
                             }
                     )
             )
@@ -67,19 +99,20 @@ public class EquipmentController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
-    public ResponseEntity<String> createEquipment(@RequestBody String jsonRequest) {
+    public ResponseEntity<GetEquipmentResponseDto> createEquipment(@RequestBody String jsonRequest) {
         try {
             EquipmentEntity equipmentEntity = objectMapper.readValue(jsonRequest, EquipmentEntity.class);
             equipmentService.createEquipment(equipmentEntity);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(new GetEquipmentResponseDto("Created", equipmentEntity));
         } catch (AppException e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage());
+                    .body(new GetEquipmentResponseDto(
+                            "服务器出现错误，请与管理员联系。内部错误：" + e.getMessage(), null));
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(e.getMessage());
+                    .body(new GetEquipmentResponseDto(e.getMessage(), null));
         }
     }
 
