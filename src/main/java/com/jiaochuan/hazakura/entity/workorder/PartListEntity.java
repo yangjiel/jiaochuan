@@ -2,6 +2,7 @@ package com.jiaochuan.hazakura.entity.workorder;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
@@ -32,5 +33,6 @@ public class PartListEntity extends AbstractEntity {
     private String usage;
 
     @OneToMany(mappedBy = "partList")
+    @JsonManagedReference
     private List<PartListEquipmentEntity> partListEquipments;
 }
