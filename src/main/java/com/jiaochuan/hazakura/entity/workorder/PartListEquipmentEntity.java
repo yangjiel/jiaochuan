@@ -1,8 +1,11 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
@@ -10,15 +13,15 @@ import javax.persistence.*;
 @Table(name="xrf_part_list_equipment")
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class PartListEquipmentEntity extends AbstractEntity {
-    @ManyToOne
-    @JoinColumn(name = "part_list_id", referencedColumnName = "id",
-            insertable = false, updatable = false, nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "part_list_id", referencedColumnName = "id", nullable = false)
     private PartListEntity partList;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "equipment_id", referencedColumnName = "id", nullable = false)
     private EquipmentEntity equipment;
 

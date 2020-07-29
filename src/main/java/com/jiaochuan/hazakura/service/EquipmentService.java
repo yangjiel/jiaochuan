@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -17,6 +18,7 @@ public class EquipmentService {
     @Autowired
     private EquipmentRepository equipmentRepository;
 
+    @Transactional
     public void createEquipment(EquipmentEntity equipmentEntity) throws AppException, Exception {
         // Check if required fields are not empty
         try {

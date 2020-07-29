@@ -1,12 +1,12 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import com.jiaochuan.hazakura.entity.user.CustomerEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,18 +15,17 @@ import java.util.List;
 @Table(name="work_order")
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @RequiredArgsConstructor
 public class WorkOrderEntity extends AbstractEntity {
-    @ManyToOne
-    @JoinColumn(name = "customer_id", referencedColumnName = "id",
-            insertable = false, updatable = false, nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
     @NonNull
     private CustomerEntity customer;
 
-    @ManyToOne
-    @JoinColumn(name = "worker_id", referencedColumnName = "id",
-            insertable = false, updatable = false, nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "worker_id", referencedColumnName = "id", nullable = false)
     @NonNull
     private UserEntity worker;
 
@@ -46,9 +45,10 @@ public class WorkOrderEntity extends AbstractEntity {
     @Column(name = "service_item", columnDefinition = "NVARCHAR")
     private String serviceItem;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "workOrder")
+    @OneToMany(orphanRemoval = true, mappedBy = "workOrder")
     private List<ActionEntity> actions;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "workOrder")
+    @OneToMany(orphanRemoval = true, mappedBy = "workOrder")
+    @JsonManagedReference
     private List<PartListEntity> partLists;
 }

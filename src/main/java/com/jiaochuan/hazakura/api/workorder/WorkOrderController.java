@@ -1,9 +1,8 @@
 package com.jiaochuan.hazakura.api.workorder;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jiaochuan.hazakura.api.user.LoginResponseDto;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
-import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.WorkOrderService;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -74,7 +73,7 @@ public class WorkOrderController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
-    public ResponseEntity<String> createWorkOrder(@RequestBody WorkOrderCreateRequestDto dto) {
+    public ResponseEntity<String> createWorkOrder(@RequestBody PostWorkOrderDto dto) {
         try {
             workOrderService.createWorkOrder(dto);
             return ResponseEntity.ok().build();

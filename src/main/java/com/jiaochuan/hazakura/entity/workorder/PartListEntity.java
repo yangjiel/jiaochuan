@@ -1,10 +1,11 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,18 +13,19 @@ import java.util.List;
 @Table(name="part_list")
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
+@NoArgsConstructor
 public class PartListEntity extends AbstractEntity {
-    @ManyToOne
-    @JoinColumn(name = "worker_id", referencedColumnName = "id",
-            insertable = false, updatable = false, nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "worker_id", referencedColumnName = "id", nullable = false)
     @NonNull
     private UserEntity worker;
 
-    @ManyToOne
-    @JoinColumn(name = "work_order_id", referencedColumnName = "id",
-            insertable = false, updatable = false, nullable = false)
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "work_order_id", referencedColumnName = "id", nullable = false)
     @NonNull
+    @JsonBackReference
     private WorkOrderEntity workOrder;
 
     @Column(name = "usage", columnDefinition = "NVARCHAR(200)")

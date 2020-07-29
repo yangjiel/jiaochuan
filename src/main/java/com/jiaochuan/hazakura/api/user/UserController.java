@@ -245,10 +245,10 @@ public class UserController {
             path = "/all-roles",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<List<RoleResponseDto>> getAllRoles() {
-        List<RoleResponseDto> responseList = new ArrayList<>();
+    public ResponseEntity<List<GetRolesResponseDto>> getAllRoles() {
+        List<GetRolesResponseDto> responseList = new ArrayList<>();
         for (Role role : Role.values()) {
-            responseList.add(new RoleResponseDto(role.name(), role.roleDescription));
+            responseList.add(new GetRolesResponseDto(role.name(), role.roleDescription));
         }
         return ResponseEntity.ok(responseList);
     }
@@ -322,7 +322,7 @@ public class UserController {
             )
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserResponseDto> getUsers(
+    public ResponseEntity<GetUsersResponseDto> getUsers(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size
     ) {
@@ -335,13 +335,13 @@ public class UserController {
 
         try {
             List<UserEntity> usersList = userService.getUsers(page, size);
-            return ResponseEntity.ok(new UserResponseDto("成功！", usersList));
+            return ResponseEntity.ok(new GetUsersResponseDto("成功！", usersList));
         } catch (UserException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new UserResponseDto(e.getMessage(), null));
+                    .body(new GetUsersResponseDto(e.getMessage(), null));
         } catch (Exception e) {
-            UserResponseDto dto = new UserResponseDto("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage(), null);
+            GetUsersResponseDto dto = new GetUsersResponseDto("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage(), null);
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(dto);

@@ -1,10 +1,10 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
-import lombok.Data;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -12,11 +12,12 @@ import java.time.Instant;
 @Table(name="action")
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
+@NoArgsConstructor
 public class ActionEntity extends AbstractEntity {
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id",
-                insertable = false, updatable = false, nullable = false)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     @NonNull
     private UserEntity user;
 
