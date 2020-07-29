@@ -37,7 +37,7 @@ public class CustomerController {
                             @ExampleObject(value =
                                     "{\n" +
                                             "    \"userName\": \"四川电器集团\",\n" +
-                                            "    \"contactName\": \"l刘晓东\",\n" +
+                                            "    \"contactName\": \"刘晓东\",\n" +
                                             "    \"cell\": \"13813249988\",\n" +
                                             "    \"email\": \"null\",\n" +
                                             "    \"companyAddress\": \"四川省成都市高新西区金月路45号高鑫产业园\"\n" +
