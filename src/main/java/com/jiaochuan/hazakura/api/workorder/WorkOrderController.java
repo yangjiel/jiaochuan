@@ -48,8 +48,12 @@ public class WorkOrderController {
                                             "        {\n" +
                                             "            \"equipmentId\": \"1\",\n" +
                                             "            \"quantity\": \"10\" \n" +
-                                            "        } " +
-                                            "    ] " +
+                                            "        }, \n" +
+                                            "        {\n" +
+                                            "            \"equipmentId\": \"1\",\n" +
+                                            "            \"quantity\": \"10\" \n" +
+                                            "        } \n" +
+                                            "    ] \n" +
                                             "}")
                     }
             )
@@ -116,23 +120,70 @@ public class WorkOrderController {
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
-                                                    "    \"workOrders\": [{\n" +
-                                                    "        \"customer_id\": \"1\",\n" +
-                                                    "        \"workerId\": \"2\",\n" +
-                                                    "        \"address\": \"广州\",\n" +
-                                                    "        \"serviceDate\": \"2020/07/30\",\n" +
-                                                    "        \"result\": \"Done\",\n" +
-                                                    "        \"resultDecription\": \"null\",\n" +
-                                                    "        \"serviceItem\": \"cleaning\",\n" +
-                                                    "        \"equipments\": [ \n" +
-                                                    "            {\n" +
-                                                    "                \"equipmentId\": \"1\",\n" +
-                                                    "                \"quantity\": \"10\" \n" +
-                                                    "            } " +
-                                                    "        ] " +
-                                                    "    }\n" +
-                                                    "    ...\n" +
+                                                    "    \"id\": \"3\",\n" +
+                                                    "    \"customer\": {\n" +
+                                                    "        \"id\": \"1\",\n" +
+                                                    "        \"userName\": \"四川电器集团\",\n" +
+                                                    "        \"contactName\": \"刘晓东\",\n" +
+                                                    "        \"cell\": \"13813249988\",\n" +
+                                                    "        \"email\": \"abc@example.com\",\n" +
+                                                    "        \"companyAddress\": \"四川省成都市高新西区金月路45号高鑫产业园\" \n" +
+                                                    "    },\n" +
+                                                    "    \"worker\": {\n" +
+                                                    "        \"id\": \"1\",\n" +
+                                                    "        \"username\": \"petertan\",\n" +
+                                                    "        \"firstName\": \"四\",\n" +
+                                                    "        \"lastName\": \"张\",\n" +
+                                                    "        \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                                    "        \"cell\": \"13106660000\",\n" +
+                                                    "        \"email\": \"pj.t@outlook.com\",\n" +
+                                                    "        \"birthday\": \"1900-01-01\"\n" +
+                                                    "    },\n" +
+                                                    "    \"serviceDate\": \"2020-04-30\",\n" +
+                                                    "    \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
+                                                    "    \"result\": null,\n" +
+                                                    "    \"resultDescription\": null,\n" +
+                                                    "    \"serviceItem\": null,\n" +
+                                                    "    \"actions\": [],\n" +
+                                                    "    \"partLists\": [\n" +
+                                                    "        {\n" +
+                                                    "            \"id\": \"2\",\n" +
+                                                    "            \"worker\": {\n" +
+                                                    "                \"id\": \"1\",\n" +
+                                                    "                \"username\": \"petertan\",\n" +
+                                                    "                \"firstName\": \"四\",\n" +
+                                                    "                \"lastName\": \"张\",\n" +
+                                                    "                \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                                    "                \"cell\": \"13106660000\",\n" +
+                                                    "                \"email\": \"pj.t@outlook.com\",\n" +
+                                                    "                \"birthday\": \"1900-01-01\"\n" +
+                                                    "            },\n" +
+                                                    "            \"usage\": null,\n" +
+                                                    "            \"partListEquipments\": [\n" +
+                                                    "                {\n" +
+                                                    "                    \"id\": \"1\",\n" +
+                                                    "                    \"equipment\": {\n" +
+                                                    "                        \"id\": \"1\",\n" +
+                                                    "                        \"deviceName\": \"数控机床轴承\",\n" +
+                                                    "                        \"deviceModel\": \"10*10\",\n" +
+                                                    "                        \"manufacture\": null\n" +
+                                                    "                    },\n" +
+                                                    "                    \"quantity\": \"10\"\n" +
+                                                    "                },\n" +
+                                                    "                {\n" +
+                                                    "                    \"id\": \"2\",\n" +
+                                                    "                    \"equipment\": {\n" +
+                                                    "                        \"id\": \"2\",\n" +
+                                                    "                        \"deviceName\": \"数控机床轴承\",\n" +
+                                                    "                        \"deviceModel\": \"8*8\",\n" +
+                                                    "                        \"manufacture\": null\n" +
+                                                    "                    },\n" +
+                                                    "                    \"quantity\": \"5\"\n" +
+                                                    "                }\n" +
+                                                    "            ]\n" +
+                                                    "        }\n" +
                                                     "    ]\n" +
+                                                    "    ...\n" +
                                                     "}")
                             }
                     )
