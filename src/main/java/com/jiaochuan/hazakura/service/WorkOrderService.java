@@ -107,12 +107,12 @@ public class WorkOrderService {
         if (equipments != null) {
             for (Pair<Long, Integer> equipmentPair : equipments) {
                 Long equipmentId = equipmentPair.getFirst();
-                Integer count = equipmentPair.getSecond();
+                Integer quantity = equipmentPair.getSecond();
                 EquipmentEntity equipmentEntity = equipmentRepository.findById(equipmentId).orElse(null);
                 if (equipmentEntity == null) {
                     throw new UserException(String.format("ID为%s的设备不存在。", equipmentId));
                 }
-                PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipmentEntity, count);
+                PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipmentEntity, quantity);
                 partListEquipmentRepository.save(xrf);
                 xrfList.add(xrf);
             }

@@ -22,6 +22,6 @@ public class PartListEquipmentEntity extends AbstractEntity {
     @JoinColumn(name = "equipment_id", referencedColumnName = "id", nullable = false)
     private EquipmentEntity equipment;
 
-    @Column(name = "count")
-    private Integer count;
+    @Column(name = "quantity")
+    private Integer quantity;
 }
