@@ -44,6 +44,12 @@ public class WorkOrderController {
                                             "    \"result\": \"null,\n" +
                                             "    \"resultDescription\": \"null,\n" +
                                             "    \"serviceItem\": \"null,\n" +
+                                            "    \"equipments\": [ \n" +
+                                            "        {\n" +
+                                            "            \"equipmentId\": \"1\",\n" +
+                                            "            \"quantity\": \"10\" \n" +
+                                            "        } " +
+                                            "    ] " +
                                             "}")
                     }
             )
@@ -118,6 +124,12 @@ public class WorkOrderController {
                                                     "        \"result\": \"Done\",\n" +
                                                     "        \"resultDecription\": \"null\",\n" +
                                                     "        \"serviceItem\": \"cleaning\",\n" +
+                                                    "        \"equipments\": [ \n" +
+                                                    "            {\n" +
+                                                    "                \"equipmentId\": \"1\",\n" +
+                                                    "                \"quantity\": \"10\" \n" +
+                                                    "            } " +
+                                                    "        ] " +
                                                     "    }\n" +
                                                     "    ...\n" +
                                                     "    ]\n" +
