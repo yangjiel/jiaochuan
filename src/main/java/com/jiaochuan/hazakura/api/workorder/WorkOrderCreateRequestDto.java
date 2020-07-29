@@ -12,11 +12,5 @@ public class WorkOrderCreateRequestDto {
     private Long workerId;
     private LocalDate serviceDate;
     private String address;
-    private List<EquipmentDto> equipments;
-
-    @Data
-    public static class EquipmentDto {
-        Long equipmentId;
-        Integer quantity;
-    }
+    private List<EquipmentRequestDto> equipments;
 }

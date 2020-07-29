@@ -1,5 +1,6 @@
 package com.jiaochuan.hazakura.service;
 
+import com.jiaochuan.hazakura.api.workorder.EquipmentRequestDto;
 import com.jiaochuan.hazakura.api.workorder.WorkOrderCreateRequestDto;
 import com.jiaochuan.hazakura.entity.user.CustomerEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
@@ -100,14 +101,14 @@ public class WorkOrderService {
     }
 
     public PartListEntity createPartList(UserEntity workerEntity, WorkOrderEntity workOrderEntity,
-                               List<Pair<Long, Integer>> equipments) throws UserException {
+                               List<EquipmentRequestDto> equipments) throws UserException {
 
         PartListEntity partListEntity = new PartListEntity(workerEntity, workOrderEntity);
         List<PartListEquipmentEntity> xrfList = new ArrayList<>();
         if (equipments != null) {
-            for (Pair<Long, Integer> equipmentPair : equipments) {
-                Long equipmentId = equipmentPair.getFirst();
-                Integer quantity = equipmentPair.getSecond();
+            for (EquipmentRequestDto equipmentPair : equipments) {
+                Long equipmentId = equipmentPair.getEquipmentId();
+                Integer quantity = equipmentPair.getQuantity();
                 EquipmentEntity equipmentEntity = equipmentRepository.findById(equipmentId).orElse(null);
                 if (equipmentEntity == null) {
                     throw new UserException(String.format("ID为%s的设备不存在。", equipmentId));
