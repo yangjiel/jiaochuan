@@ -27,6 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             .and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/api/v1/user/test").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/login").permitAll()
                 .antMatchers("/swagger-ui/**", "/webjars/**", "/v3/api-docs/**").permitAll() // Swagger

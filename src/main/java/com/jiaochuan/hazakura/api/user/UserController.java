@@ -44,6 +44,28 @@ public class UserController {
     @Autowired
     private ObjectMapper objectMapper;
 
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "调用成功，response body将返回\"调用成功！\"。",
+                    content = @Content(
+                            mediaType = "text/plain",
+                            schema = @Schema(implementation = String.class),
+                            examples = {
+                                    @ExampleObject(value = "调用成功！")
+                            }
+                    )
+            )
+    })
+    @GetMapping(
+            path = "/test",
+            produces = MediaType.TEXT_PLAIN_VALUE
+    )
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("调用成功！");
+    }
+
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
             description = "JSON形式的UserEntity",
             content = @Content(
