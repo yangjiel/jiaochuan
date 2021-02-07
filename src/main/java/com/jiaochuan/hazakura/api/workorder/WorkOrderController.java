@@ -110,6 +110,13 @@ public class WorkOrderController {
                     description = "此参数用于说明一个分页里面有多少个数据，如果没有传进来，size = 500。"
             )
     })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "JSON形式的Page, Size",
+            content = @Content(
+                    schema = @Schema(implementation = String.class),
+                    mediaType = "application/x-www-form-urlencoded"
+            )
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",

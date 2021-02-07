@@ -55,6 +55,17 @@ public class CustomerController {
                     description = "用户输入错误，例如：必填项没有填写、手机号码有特殊字符等。"
             ),
             @ApiResponse(
+                    responseCode = "403",
+                    description = "没有访问权限，用户没登录，登录状态已过期或者该用户无权访问。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "Forbidden")
+                            }
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
                     content = @Content(
@@ -98,6 +109,13 @@ public class CustomerController {
                     description = "此参数用于说明一个分页里面有多少个数据，如果没有传进来，size = 500。"
             )
     })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "JSON形式的Page, Size",
+            content = @Content(
+                    schema = @Schema(implementation = String.class),
+                    mediaType = "application/x-www-form-urlencoded"
+            )
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -132,6 +150,17 @@ public class CustomerController {
                                             "{\n" +
                                                     "    \"customers\": null" +
                                                     "}")
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "没有访问权限，用户没登录，登录状态已过期或者该用户无权访问。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "Forbidden")
                             }
                     )
             ),

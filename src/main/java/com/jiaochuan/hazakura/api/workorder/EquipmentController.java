@@ -80,6 +80,17 @@ public class EquipmentController {
                     )
             ),
             @ApiResponse(
+                    responseCode = "403",
+                    description = "没有访问权限，用户没登录，登录状态已过期或者该用户无权访问。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "Forbidden")
+                            }
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
                     content = @Content(
