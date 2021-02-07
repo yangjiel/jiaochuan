@@ -128,7 +128,7 @@ public class WorkOrderController {
                                     @ExampleObject(value =
                                             "{\n" +
                                                     "    \"id\": \"3\",\n" +
-                                                    "    \"customer\": {\n" +
+                                                    "    \"client\": {\n" +
                                                     "        \"id\": \"1\",\n" +
                                                     "        \"userName\": \"四川电器集团\",\n" +
                                                     "        \"contactName\": \"刘晓东\",\n" +

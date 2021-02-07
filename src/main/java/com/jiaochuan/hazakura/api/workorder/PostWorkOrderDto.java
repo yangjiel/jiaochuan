@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class PostWorkOrderDto {
-    private Long customerId;
+    private Long clientId;
     private Long workerId;
     private LocalDate serviceDate;
     private String address;

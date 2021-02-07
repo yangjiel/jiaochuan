@@ -281,7 +281,7 @@ public class UserController {
                                     @ExampleObject(value = "" +
                                     "[\n" +
                                     "    {\n" +
-                                    "        \"roleId\": \"STAFF_CUSTOMER_SERVICE\", \n" +
+                                    "        \"roleId\": \"STAFF_CLIENT_SERVICE\", \n" +
                                     "        \"roleName\": \"客服人员\"\n" +
                                     "    }, \n" +
                                     "    ...\n" +
