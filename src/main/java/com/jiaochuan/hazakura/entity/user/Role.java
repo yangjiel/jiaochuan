@@ -1,7 +1,7 @@
 package com.jiaochuan.hazakura.entity.user;
 
 public enum Role {
-    STAFF_CUSTOMER_SERVICE("客服人员"),
+    STAFF_CLIENT_SERVICE("客服人员"),
     STAFF_PROCUREMENT("采购人员"),
     STAFF_QUALITY_CONTROL("质检人员"),
     STAFF_INVENTORY("库管人员"),

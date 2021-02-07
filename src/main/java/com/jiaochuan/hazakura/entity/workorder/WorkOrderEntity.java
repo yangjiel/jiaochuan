@@ -1,10 +1,8 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
-import com.jiaochuan.hazakura.entity.user.CustomerEntity;
+import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import lombok.*;
 
@@ -20,9 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WorkOrderEntity extends AbstractEntity {
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "client_id", referencedColumnName = "id", nullable = false)
     @NonNull
-    private CustomerEntity customer;
+    private ClientEntity client;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "worker_id", referencedColumnName = "id", nullable = false)

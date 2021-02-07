@@ -2,7 +2,7 @@ package com.jiaochuan.hazakura.service;
 
 import com.jiaochuan.hazakura.api.workorder.EquipmentDto;
 import com.jiaochuan.hazakura.api.workorder.PostWorkOrderDto;
-import com.jiaochuan.hazakura.entity.user.CustomerEntity;
+import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.EquipmentEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
@@ -10,7 +10,7 @@ import com.jiaochuan.hazakura.entity.workorder.PartListEquipmentEntity;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
-import com.jiaochuan.hazakura.jpa.User.CustomerRepository;
+import com.jiaochuan.hazakura.jpa.User.ClientRepository;
 import com.jiaochuan.hazakura.jpa.User.UserRepository;
 import com.jiaochuan.hazakura.jpa.WorkOrder.EquipmentRepository;
 import com.jiaochuan.hazakura.jpa.WorkOrder.PartListEquipmentRepository;
@@ -33,7 +33,7 @@ public class WorkOrderService {
     private WorkOrderRepository workOrderRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private ClientRepository clientRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -50,7 +50,7 @@ public class WorkOrderService {
     @Transactional
     public void createWorkOrder(PostWorkOrderDto dto) throws AppException, UserException {
         // Check if required fields are not empty
-        Set<String> mandatoryFieldsSet = Set.of("customerId", "workerId", "serviceDate", "address");
+        Set<String> mandatoryFieldsSet = Set.of("clientId", "workerId", "serviceDate", "address");
 
         try {
             for (Field field : dto.getClass().getDeclaredFields()) {
@@ -73,17 +73,17 @@ public class WorkOrderService {
             throw new AppException("创建工单时无法取得WorkOrderEntity的反射访问权限，其成员变量无法通过反射访问。");
         }
 
-        CustomerEntity customerEntity = customerRepository.findById(dto.getCustomerId()).orElse(null);
-        if (customerEntity == null) {
-            throw new UserException(String.format("ID为%s的客户不存在。", dto.getCustomerId()));
+        ClientEntity clientEntity = clientRepository.findById(dto.getClientId()).orElse(null);
+        if (clientEntity == null) {
+            throw new UserException(String.format("ID为%s的客户不存在。", dto.getClientId()));
         }
 
         UserEntity workerEntity = userRepository.findById(dto.getWorkerId()).orElse(null);
         if (workerEntity == null) {
-            throw new UserException(String.format("ID为%s的用户不存在。", dto.getCustomerId()));
+            throw new UserException(String.format("ID为%s的用户不存在。", dto.getClientId()));
         }
 
-        WorkOrderEntity workOrderEntity = new WorkOrderEntity(customerEntity, workerEntity, dto.getServiceDate());
+        WorkOrderEntity workOrderEntity = new WorkOrderEntity(clientEntity, workerEntity, dto.getServiceDate());
         workOrderEntity.setAddress(dto.getAddress());
         PartListEntity partListEntity = createPartList(workerEntity, workOrderEntity, dto.getEquipments());
 

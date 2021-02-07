@@ -4,7 +4,7 @@ databaseChangeLog:
       author: jasonliuengr@gmail.com
       changes:
         - sql: |
-            CREATE TABLE customer (
+            CREATE TABLE client (
                 id INTEGER AUTO_INCREMENT PRIMARY KEY,
                 user_name NVARCHAR(20) NOT NULL,
                 contact_name NVARCHAR(6) NOT NULL,
@@ -13,4 +13,4 @@ databaseChangeLog:
                 company_address NVARCHAR(100) NOT NULL
             );
           rollback: |
-            DROP TABLE customer;
+            DROP TABLE client;

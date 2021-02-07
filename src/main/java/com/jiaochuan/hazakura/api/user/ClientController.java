@@ -1,9 +1,9 @@
 package com.jiaochuan.hazakura.api.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jiaochuan.hazakura.entity.user.CustomerEntity;
+import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.exception.AppException;
-import com.jiaochuan.hazakura.service.CustomerService;
+import com.jiaochuan.hazakura.service.ClientService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -20,16 +20,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/customer")
-public class CustomerController {
+@RequestMapping("/api/v1/client")
+public class ClientController {
     @Autowired
-    private CustomerService customerService;
+    private ClientService clientService;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "JSON形式的CustomerEntity",
+            description = "JSON形式的ClientEntity",
             content = @Content(
                     schema = @Schema(implementation = String.class),
                     mediaType = "application/json",
@@ -55,6 +55,17 @@ public class CustomerController {
                     description = "用户输入错误，例如：必填项没有填写、手机号码有特殊字符等。"
             ),
             @ApiResponse(
+                    responseCode = "403",
+                    description = "没有访问权限，用户没登录，登录状态已过期或者该用户无权访问。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "Forbidden")
+                            }
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
                     content = @Content(
@@ -70,10 +81,10 @@ public class CustomerController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
-    public ResponseEntity<String> createCustomer(@RequestBody String jsonRequest) {
+    public ResponseEntity<String> createClient(@RequestBody String jsonRequest) {
         try {
-            CustomerEntity customerEntity = objectMapper.readValue(jsonRequest, CustomerEntity.class);
-            customerService.createCustomer(customerEntity);
+            ClientEntity clientEntity = objectMapper.readValue(jsonRequest, ClientEntity.class);
+            clientService.createClient(clientEntity);
             return ResponseEntity.ok().build();
         } catch (AppException e) {
             return ResponseEntity
@@ -98,6 +109,13 @@ public class CustomerController {
                     description = "此参数用于说明一个分页里面有多少个数据，如果没有传进来，size = 500。"
             )
     })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "JSON形式的Page, Size",
+            content = @Content(
+                    schema = @Schema(implementation = String.class),
+                    mediaType = "application/x-www-form-urlencoded"
+            )
+    )
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
@@ -108,7 +126,7 @@ public class CustomerController {
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
-                                                    "    \"customers\": [{\n" +
+                                                    "    \"clients\": [{\n" +
                                                     "        \"userName\": \"四川电器集团\",\n" +
                                                     "        \"contactName\": \"刘晓东\",\n" +
                                                     "        \"cell\": \"13106660000\",\n" +
@@ -130,8 +148,19 @@ public class CustomerController {
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
-                                                    "    \"customers\": null" +
+                                                    "    \"clients\": null" +
                                                     "}")
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "没有访问权限，用户没登录，登录状态已过期或者该用户无权访问。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "Forbidden")
                             }
                     )
             ),
@@ -144,14 +173,14 @@ public class CustomerController {
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
-                                                    "    \"customers\": null" +
+                                                    "    \"clients\": null" +
                                                     "}")
                             }
                     )
             )
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<CustomerEntity>> getCustomers(
+    public ResponseEntity<List<ClientEntity>> getClients(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size
     ) {
@@ -163,8 +192,8 @@ public class CustomerController {
         }
 
         try {
-            List<CustomerEntity> customersList = customerService.getCustomers(page, size);
-            return ResponseEntity.ok(customersList);
+            List<ClientEntity> clientsList = clientService.getClients(page, size);
+            return ResponseEntity.ok(clientsList);
         } catch (AppException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)

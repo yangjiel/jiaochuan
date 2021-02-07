@@ -13,13 +13,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Table(name="customer")
+@Table(name="client")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerEntity extends AbstractEntity {
+public class ClientEntity extends AbstractEntity {
     @Column(name = "user_name", columnDefinition = "VARCHAR(16)", nullable = false)
     private String userName;
 
