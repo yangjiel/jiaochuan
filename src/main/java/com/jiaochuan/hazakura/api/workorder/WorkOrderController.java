@@ -1,7 +1,9 @@
 package com.jiaochuan.hazakura.api.workorder;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jiaochuan.hazakura.entity.user.ClientEntity;
+import com.jiaochuan.hazakura.entity.user.Role;
+import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.WorkOrderService;
@@ -16,8 +18,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -37,7 +43,7 @@ public class WorkOrderController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
-                                            "    \"userId\": \"2\",\n" +
+                                            "    \"clientId\": \"2\",\n" +
                                             "    \"workerId\": \"1\",\n" +
                                             "    \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
                                             "    \"serviceDate\": \"2020-04-30\",\n" +
@@ -108,6 +114,30 @@ public class WorkOrderController {
                     name = "size",
                     required = false,
                     description = "此参数用于说明一个分页里面有多少个数据，如果没有传进来，size = 500。"
+            ),
+            @Parameter(
+                    name = "client",
+                    required = false,
+                    schema = @Schema(type = "String"),
+                    description = "查询关于该客户id的工单。"
+            ),
+            @Parameter(
+                    name = "worker",
+                    required = false,
+                    schema = @Schema(type = "String"),
+                    description = "查询关于该员工id的工单。"
+            ),
+            @Parameter(
+                    name = "date",
+                    required = false,
+                    schema = @Schema(type = "String"),
+                    description = "查询该日期的工单。"
+            ),
+            @Parameter(
+                    name = "result",
+                    required = false,
+                    schema = @Schema(type = "String"),
+                    description = "查询该状态的工单。"
             )
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -225,10 +255,18 @@ public class WorkOrderController {
             )
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @RolesAllowed({Role.Constants.STAFF_CLIENT_SERVICE,
+            Role.Constants.MANAGER_AFTER_SALES,
+            Role.Constants.ENGINEER_AFTER_SALES})
     public ResponseEntity<List<WorkOrderEntity>> getWorkOrders(
+            @AuthenticationPrincipal UserEntity user,
             @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size
-    ) {
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) ClientEntity client,
+            @RequestParam(required = false) UserEntity worker,
+            @RequestParam(required = false) LocalDate date,
+            @RequestParam(required = false) String result
+            ) {
         if (page == null) {
             page = 0;
         }
@@ -236,9 +274,16 @@ public class WorkOrderController {
             size = 500;
         }
 
+        Collection<?> grantedAuthorityList = user.getAuthorities();
+
         try {
-            List<WorkOrderEntity> workOrderList = workOrderService.getWorkOrders(page, size);
-            return ResponseEntity.ok(workOrderList);
+            if (grantedAuthorityList.contains(Role.Constants.MANAGER_AFTER_SALES)) {
+                List<WorkOrderEntity> workOrderList = workOrderService.getWorkOrders(page, size, client, worker, date, result);
+                return ResponseEntity.ok(workOrderList);
+            } else {
+                List<WorkOrderEntity> workOrderList = workOrderService.getWorkOrders(page, size, client, user, date, result);
+                return ResponseEntity.ok(workOrderList);
+            }
         } catch (UserException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
