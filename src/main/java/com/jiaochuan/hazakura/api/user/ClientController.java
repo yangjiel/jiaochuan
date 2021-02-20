@@ -66,6 +66,17 @@ public class ClientController {
                     )
             ),
             @ApiResponse(
+                    responseCode = "422",
+                    description = "客户已存在，无法创新新客户。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "客户已存在！")
+                            }
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
                     content = @Content(
@@ -82,6 +93,80 @@ public class ClientController {
             produces = MediaType.TEXT_PLAIN_VALUE
     )
     public ResponseEntity<String> createClient(@RequestBody String jsonRequest) {
+        try {
+            ClientEntity clientEntity = objectMapper.readValue(jsonRequest, ClientEntity.class);
+            if (!clientService.checkClient(clientEntity.getUserName(), clientEntity.getCell())) {
+                return ResponseEntity
+                        .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                        .body("该客户已存在！");
+            }
+            clientService.createClient(clientEntity);
+            return ResponseEntity.ok().build();
+        } catch (AppException e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+    }
+
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "JSON形式的ClientEntity",
+            content = @Content(
+                    schema = @Schema(implementation = String.class),
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(value =
+                                    "{\n" +
+                                            "    \"userName\": \"四川电器集团\",\n" +
+                                            "    \"contactName\": \"刘晓东\",\n" +
+                                            "    \"cell\": \"13813249988\",\n" +
+                                            "    \"email\": \"null\",\n" +
+                                            "    \"companyAddress\": \"四川省成都市高新西区金月路45号高鑫产业园\"\n" +
+                                            "}")
+                    }
+            )
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "登记成功，返回200"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "用户输入错误，例如：必填项没有填写、手机号码有特殊字符等。"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "没有访问权限，用户没登录，登录状态已过期或者该用户无权访问。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "Forbidden")
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
+                    content = @Content(
+                            mediaType = "text/plain",
+                            schema = @Schema(implementation = String.class),
+                            examples = {
+                                    @ExampleObject(value = "服务器出现错误，请与管理员联系。内部错误：RuntimeException ...")
+                            }
+                    )
+            )
+    })
+    @PatchMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.TEXT_PLAIN_VALUE
+    )
+    public ResponseEntity<String> updateClient(@RequestBody String jsonRequest) {
         try {
             ClientEntity clientEntity = objectMapper.readValue(jsonRequest, ClientEntity.class);
             clientService.createClient(clientEntity);

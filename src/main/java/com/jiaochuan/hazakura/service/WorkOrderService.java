@@ -22,7 +22,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.lang.reflect.Field;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -46,6 +52,9 @@ public class WorkOrderService {
 
     @Autowired
     private PartListEquipmentRepository partListEquipmentRepository;
+
+    @Autowired
+    private EntityManager em;
 
     @Transactional
     public void createWorkOrder(PostWorkOrderDto dto) throws AppException, UserException {
@@ -93,11 +102,31 @@ public class WorkOrderService {
         workOrderRepository.save(workOrderEntity);
     }
 
-    public List<WorkOrderEntity> getWorkOrders(int page, int size) throws UserException {
+    public List<WorkOrderEntity> getWorkOrders(int page, int size, ClientEntity client, UserEntity worker, LocalDate date, String result) throws UserException {
         if (page < 0 || size < 0) {
             throw new UserException("分页设置不能小于0。");
         }
-        return workOrderRepository.findAll(PageRequest.of(page, size)).getContent();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<WorkOrderEntity> cq = cb.createQuery(WorkOrderEntity.class);
+
+        Root<WorkOrderEntity> workOrder = cq.from(WorkOrderEntity.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (client != null) {
+            predicates.add(cb.equal(workOrder.get("client_id"), client));
+        }
+        if (worker != null) {
+            predicates.add(cb.equal(workOrder.get("worker_id"), worker));
+        }
+        if (date != null) {
+            predicates.add(cb.equal(workOrder.get("service_date"), date));
+        }
+        if (result != null) {
+            predicates.add(cb.like(workOrder.get("result"), "%" + result + "%"));
+        }
+        cq.where(predicates.toArray(new Predicate[0]));
+
+        return em.createQuery(cq).getResultList();
     }
 
     @Transactional

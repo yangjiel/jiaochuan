@@ -53,6 +53,10 @@ public class ClientService {
         clientRepository.save(clientEntity);
     }
 
+    public boolean checkClient(String username, String cell) {
+        return clientRepository.findByUserName(username) != null || clientRepository.findByCell(cell) != null;
+    }
+
     public List<ClientEntity> getClients(int page, int size) throws Exception {
         if (page < 0 || size < 0) {
             throw new Exception("分页设置不能小于0。");
