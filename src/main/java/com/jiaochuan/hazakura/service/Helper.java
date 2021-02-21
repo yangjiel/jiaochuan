@@ -36,7 +36,7 @@ class Helper {
                 }
 
                 Column col = field.getAnnotation(Column.class);
-                if (col != null && col.nullable() && (
+                if (col != null && !col.nullable() && (
                         (field.getType() == String.class &&
                                 StringUtils.isBlank((String) field.get(entity))
                         ) ||
