@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 @Service
@@ -28,21 +27,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public void createUser(UserEntity userEntity) throws AppException, UserException {
         // Check if required fields are not empty
-        try {
-            for (Field field : userEntity.getClass().getDeclaredFields()) {
-                if (!field.trySetAccessible()) {
-                    throw new AppException("创建用户时无法取得UserEntity的反射访问权限，其成员变量无法通过反射访问。");
-                }
-
-                if (field.getType() == String.class && StringUtils.isBlank((String) field.get(userEntity))) {
-                    throw new UserException("必填项" + field.getName() + "不能为空。");
-                } else if (field.get(userEntity) == null) {
-                    throw new UserException("必填项" + field.getName() + "不能为空。");
-                }
-            }
-        } catch(IllegalAccessException e) {
-            throw new AppException("创建用户时无法取得UserEntity的反射访问权限，其成员变量无法通过反射访问。");
-        }
+        Helper.checkFields(UserEntity.class, userEntity);
 
 
         // Check if username has been taken

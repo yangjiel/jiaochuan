@@ -89,6 +89,10 @@ public class WorkOrderController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
+    @RolesAllowed({Role.Constants.STAFF_CLIENT_SERVICE,
+            Role.Constants.MANAGER_AFTER_SALES,
+            Role.Constants.ENGINEER_AFTER_SALES,
+            Role.Constants.VICE_PRESIDENT})
     public ResponseEntity<String> createWorkOrder(@RequestBody PostWorkOrderDto dto) {
         try {
             workOrderService.createWorkOrder(dto);
@@ -257,7 +261,8 @@ public class WorkOrderController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @RolesAllowed({Role.Constants.STAFF_CLIENT_SERVICE,
             Role.Constants.MANAGER_AFTER_SALES,
-            Role.Constants.ENGINEER_AFTER_SALES})
+            Role.Constants.ENGINEER_AFTER_SALES,
+            Role.Constants.VICE_PRESIDENT})
     public ResponseEntity<List<WorkOrderEntity>> getWorkOrders(
             @AuthenticationPrincipal UserEntity user,
             @RequestParam(required = false) Integer page,
