@@ -154,7 +154,8 @@ public class WorkOrderController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "成功，response body将返回已经分页的工单信息。",
+                    description = "成功，response body将返回已经分页的工单信息。" +
+                            "注意，只有销售主管和副总可以浏览所有记录，销售员工只能查阅自己提交的工单",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = List.class),
