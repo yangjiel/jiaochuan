@@ -34,8 +34,8 @@ public class WorkOrderEntity extends AbstractEntity {
     @Column(name = "address", columnDefinition = "NVARCHAR")
     private String address;
 
-    @Column(name = "result", columnDefinition = "NVARCHAR")
-    private String result;
+    @Column(name = "status", columnDefinition = "NVARCHAR")
+    private String status;
 
     @Column(name = "result_description", columnDefinition = "NVARCHAR")
     private String resultDescription;

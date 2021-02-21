@@ -78,7 +78,7 @@ public class WorkOrderService {
         workOrderRepository.save(workOrderEntity);
     }
 
-    public List<WorkOrderEntity> getWorkOrders(int page, int size, ClientEntity client, UserEntity worker, LocalDate date, String result) throws UserException {
+    public List<WorkOrderEntity> getWorkOrders(int page, int size, ClientEntity client, UserEntity worker, LocalDate date, String status) throws UserException {
         if (page < 0 || size < 0) {
             throw new UserException("分页设置不能小于0。");
         }
@@ -89,16 +89,16 @@ public class WorkOrderService {
         List<Predicate> predicates = new ArrayList<>();
 
         if (client != null) {
-            predicates.add(cb.equal(workOrder.get("client_id"), client));
+            predicates.add(cb.equal(workOrder.get("client"), client));
         }
         if (worker != null) {
-            predicates.add(cb.equal(workOrder.get("worker_id"), worker));
+            predicates.add(cb.equal(workOrder.get("worker"), worker));
         }
         if (date != null) {
-            predicates.add(cb.equal(workOrder.get("service_date"), date));
+            predicates.add(cb.equal(workOrder.get("serviceDate"), date));
         }
-        if (result != null) {
-            predicates.add(cb.like(workOrder.get("result"), "%" + result + "%"));
+        if (status != null) {
+            predicates.add(cb.like(workOrder.get("status"), "%" + status + "%"));
         }
         cq.where(predicates.toArray(new Predicate[0]));
 
@@ -107,7 +107,7 @@ public class WorkOrderService {
 
     @Transactional
     public PartListEntity createPartList(UserEntity workerEntity, WorkOrderEntity workOrderEntity,
-                               List<EquipmentDto> equipments) throws UserException {
+                               List<EquipmentDto> equipments) {
 
         PartListEntity partListEntity = new PartListEntity(workerEntity, workOrderEntity);
         List<PartListEquipmentEntity> xrfList = new ArrayList<>();

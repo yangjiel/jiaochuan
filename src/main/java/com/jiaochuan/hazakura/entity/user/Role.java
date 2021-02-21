@@ -19,6 +19,7 @@ public enum Role {
     VICE_PRESIDENT("副总裁");
 
     public static class Constants {
+        private Constants() {}
         public static final String STAFF_CLIENT_SERVICE = "STAFF_CLIENT_SERVICE";
         public static final String STAFF_PROCUREMENT = "STAFF_PROCUREMENT";
         public static final String STAFF_QUALITY_CONTROL = "STAFF_QUALITY_CONTROL";

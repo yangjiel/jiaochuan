@@ -10,6 +10,8 @@ import java.util.Set;
 
 class Helper {
 
+    private Helper() {}
+
     static void checkFields(Class<?> clazz, Object entity) throws AppException, UserException {
         checkFields(clazz, entity, null);
     }
@@ -33,19 +35,14 @@ class Helper {
                     continue;
                 }
 
-                boolean isNullable = false;
-
                 Column col = field.getAnnotation(Column.class);
-                if (col != null) {
-                    isNullable = col.nullable();
-                }
-
-                if (!isNullable) {
-                    if (field.getType() == String.class && StringUtils.isBlank((String) field.get(entity))) {
-                        throw new UserException(String.format("必填项%s不能为空。", field.getName()));
-                    } else if (field.get(entity) == null) {
-                        throw new UserException(String.format("必填项%s不能为空。", field.getName()));
-                    }
+                if (col != null && col.nullable() && (
+                        (field.getType() == String.class &&
+                                StringUtils.isBlank((String) field.get(entity))
+                        ) ||
+                        field.get(entity) == null)
+                ) {
+                    throw new UserException(String.format("必填项%s不能为空。", field.getName()));
                 }
             }
         } catch(IllegalAccessException e) {

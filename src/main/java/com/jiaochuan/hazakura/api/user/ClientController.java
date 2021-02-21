@@ -41,6 +41,7 @@ public class ClientController {
                                             "    \"cell\": \"13813249988\",\n" +
                                             "    \"email\": \"null\",\n" +
                                             "    \"companyAddress\": \"四川省成都市高新西区金月路45号高鑫产业园\"\n" +
+                                            "    \"notes\":\"D5数控机床购买及安装\"\n" +
                                             "}")
                     }
             )

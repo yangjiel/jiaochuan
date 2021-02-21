@@ -29,6 +29,9 @@ public class ClientEntity extends AbstractEntity {
     @Column(name = "email", columnDefinition = "VARCHAR(64)")
     private String email;
 
-    @Column(name = "company_address", columnDefinition = "NVARCHAR(16)", nullable = false)
+    @Column(name = "company_address", columnDefinition = "NVARCHAR(100)", nullable = false)
     private String companyAddress;
+
+    @Column(name = "notes", columnDefinition = "NVARCHAR(100)")
+    private String notes;
 }
