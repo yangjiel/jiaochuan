@@ -14,9 +14,12 @@ public enum Role {
     DIRECTOR_AFTER_SALES("售后主任"),
     DIRECTOR_TECHNICAL("技术总监"),
 
-    ENGINEER_AFTER_SALES("售后工程师");
+    ENGINEER_AFTER_SALES("售后工程师"),
+
+    VICE_PRESIDENT("副总裁");
 
     public static class Constants {
+        private Constants() {}
         public static final String STAFF_CLIENT_SERVICE = "STAFF_CLIENT_SERVICE";
         public static final String STAFF_PROCUREMENT = "STAFF_PROCUREMENT";
         public static final String STAFF_QUALITY_CONTROL = "STAFF_QUALITY_CONTROL";
@@ -31,6 +34,8 @@ public enum Role {
         public static final String DIRECTOR_TECHNICAL = "DIRECTOR_TECHNICAL";
 
         public static final String ENGINEER_AFTER_SALES = "ENGINEER_AFTER_SALES";
+
+        public static final String VICE_PRESIDENT = "VICE_PRESIDENT";
     }
 
 

@@ -27,15 +27,15 @@ public class WorkOrderEntity extends AbstractEntity {
     @NonNull
     private UserEntity worker;
 
-    @Column(name = "service_date", columnDefinition = "DATE")
+    @Column(name = "service_date", columnDefinition = "DATE", nullable = false)
     @NonNull
     private LocalDate serviceDate;
 
     @Column(name = "address", columnDefinition = "NVARCHAR")
     private String address;
 
-    @Column(name = "result", columnDefinition = "NVARCHAR")
-    private String result;
+    @Column(name = "status", columnDefinition = "NVARCHAR")
+    private String status;
 
     @Column(name = "result_description", columnDefinition = "NVARCHAR")
     private String resultDescription;

@@ -41,6 +41,7 @@ public class ClientController {
                                             "    \"cell\": \"13813249988\",\n" +
                                             "    \"email\": \"null\",\n" +
                                             "    \"companyAddress\": \"四川省成都市高新西区金月路45号高鑫产业园\"\n" +
+                                            "    \"notes\":\"D5数控机床购买及安装\"\n" +
                                             "}")
                     }
             )
@@ -72,7 +73,7 @@ public class ClientController {
                             mediaType = "application/json",
                             schema = @Schema(implementation = List.class),
                             examples = {
-                                    @ExampleObject(value = "客户已存在！")
+                                    @ExampleObject(value = "该客户名已存在！或 该客户手机号码已存在！")
                             }
                     )
             ),
@@ -95,10 +96,14 @@ public class ClientController {
     public ResponseEntity<String> createClient(@RequestBody String jsonRequest) {
         try {
             ClientEntity clientEntity = objectMapper.readValue(jsonRequest, ClientEntity.class);
-            if (!clientService.checkClient(clientEntity.getUserName(), clientEntity.getCell())) {
+            if (clientService.checkClientName(clientEntity.getUserName())) {
                 return ResponseEntity
                         .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                        .body("该客户已存在！");
+                        .body("该客户名已存在！");
+            } else if (clientService.checkClientCell(clientEntity.getCell())) {
+                return ResponseEntity
+                        .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                        .body("该客户手机号码已存在！");
             }
             clientService.createClient(clientEntity);
             return ResponseEntity.ok().build();

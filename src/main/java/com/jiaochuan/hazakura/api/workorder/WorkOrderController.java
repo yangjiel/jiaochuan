@@ -43,20 +43,20 @@ public class WorkOrderController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
-                                            "    \"clientId\": \"2\",\n" +
+                                            "    \"clientId\": \"1\",\n" +
                                             "    \"workerId\": \"1\",\n" +
                                             "    \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
                                             "    \"serviceDate\": \"2020-04-30\",\n" +
-                                            "    \"result\": \"null,\n" +
-                                            "    \"resultDescription\": \"null,\n" +
-                                            "    \"serviceItem\": \"null,\n" +
+                                            "    \"status\": \"\",\n" +
+                                            "    \"resultDescription\": \"\",\n" +
+                                            "    \"serviceItem\": \"\",\n" +
                                             "    \"equipments\": [ \n" +
                                             "        {\n" +
-                                            "            \"equipmentId\": \"1\",\n" +
+                                            "            \"equipment\": \"机床\",\n" +
                                             "            \"quantity\": \"10\" \n" +
                                             "        }, \n" +
                                             "        {\n" +
-                                            "            \"equipmentId\": \"1\",\n" +
+                                            "            \"equipment\": \"电钻\",\n" +
                                             "            \"quantity\": \"10\" \n" +
                                             "        } \n" +
                                             "    ] \n" +
@@ -89,6 +89,10 @@ public class WorkOrderController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
+    @RolesAllowed({Role.Constants.STAFF_CLIENT_SERVICE,
+            Role.Constants.MANAGER_AFTER_SALES,
+            Role.Constants.ENGINEER_AFTER_SALES,
+            Role.Constants.VICE_PRESIDENT})
     public ResponseEntity<String> createWorkOrder(@RequestBody PostWorkOrderDto dto) {
         try {
             workOrderService.createWorkOrder(dto);
@@ -134,7 +138,7 @@ public class WorkOrderController {
                     description = "查询该日期的工单。"
             ),
             @Parameter(
-                    name = "result",
+                    name = "status",
                     required = false,
                     schema = @Schema(type = "String"),
                     description = "查询该状态的工单。"
@@ -178,7 +182,7 @@ public class WorkOrderController {
                                                     "    },\n" +
                                                     "    \"serviceDate\": \"2020-04-30\",\n" +
                                                     "    \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
-                                                    "    \"result\": null,\n" +
+                                                    "    \"status\": null,\n" +
                                                     "    \"resultDescription\": null,\n" +
                                                     "    \"serviceItem\": null,\n" +
                                                     "    \"actions\": [],\n" +
@@ -199,24 +203,14 @@ public class WorkOrderController {
                                                     "            \"partListEquipments\": [\n" +
                                                     "                {\n" +
                                                     "                    \"id\": \"1\",\n" +
-                                                    "                    \"equipment\": {\n" +
-                                                    "                        \"id\": \"1\",\n" +
-                                                    "                        \"deviceName\": \"数控机床轴承\",\n" +
-                                                    "                        \"deviceModel\": \"10*10\",\n" +
-                                                    "                        \"manufacture\": null\n" +
-                                                    "                    },\n" +
+                                                    "                    \"equipment\": \"数控机床轴承\",\n" +
                                                     "                    \"quantity\": \"10\"\n" +
                                                     "                },\n" +
                                                     "                {\n" +
-                                                    "                    \"id\": \"2\",\n" +
-                                                    "                    \"equipment\": {\n" +
-                                                    "                        \"id\": \"2\",\n" +
-                                                    "                        \"deviceName\": \"数控机床轴承\",\n" +
-                                                    "                        \"deviceModel\": \"8*8\",\n" +
-                                                    "                        \"manufacture\": null\n" +
-                                                    "                    },\n" +
-                                                    "                    \"quantity\": \"5\"\n" +
-                                                    "                }\n" +
+                                                    "                    \"id\": \"1\",\n" +
+                                                    "                    \"equipment\": \"数控机床轴承\",\n" +
+                                                    "                    \"quantity\": \"10\"\n" +
+                                                    "                },\n" +
                                                     "            ]\n" +
                                                     "        }\n" +
                                                     "    ]\n" +
@@ -257,15 +251,16 @@ public class WorkOrderController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @RolesAllowed({Role.Constants.STAFF_CLIENT_SERVICE,
             Role.Constants.MANAGER_AFTER_SALES,
-            Role.Constants.ENGINEER_AFTER_SALES})
-    public ResponseEntity<List<WorkOrderEntity>> getWorkOrders(
+            Role.Constants.ENGINEER_AFTER_SALES,
+            Role.Constants.VICE_PRESIDENT})
+    public ResponseEntity<WorkOrderListDto> getWorkOrders(
             @AuthenticationPrincipal UserEntity user,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) ClientEntity client,
             @RequestParam(required = false) UserEntity worker,
             @RequestParam(required = false) LocalDate date,
-            @RequestParam(required = false) String result
+            @RequestParam(required = false) String status
             ) {
         if (page == null) {
             page = 0;
@@ -277,21 +272,24 @@ public class WorkOrderController {
         Collection<?> grantedAuthorityList = user.getAuthorities();
 
         try {
-            if (grantedAuthorityList.contains(Role.Constants.MANAGER_AFTER_SALES)) {
-                List<WorkOrderEntity> workOrderList = workOrderService.getWorkOrders(page, size, client, worker, date, result);
-                return ResponseEntity.ok(workOrderList);
+            List<WorkOrderEntity> workOrderList;
+            if (grantedAuthorityList.contains(Role.Constants.MANAGER_AFTER_SALES) ||
+                grantedAuthorityList.contains(Role.Constants.VICE_PRESIDENT)) {
+                workOrderList = workOrderService.getWorkOrders(page, size, client, worker, date, status);
             } else {
-                List<WorkOrderEntity> workOrderList = workOrderService.getWorkOrders(page, size, client, user, date, result);
-                return ResponseEntity.ok(workOrderList);
+                workOrderList = workOrderService.getWorkOrders(page, size, client, user, date, status);
             }
+            WorkOrderListDto dto = objectMapper.convertValue(workOrderList, WorkOrderListDto.class);
+            dto.setMessage("");
+            return ResponseEntity.ok(dto);
         } catch (UserException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(null);
+                    .body(new WorkOrderListDto(null, e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+                    .body(new WorkOrderListDto(null, e.getMessage()));
         }
     }
 }

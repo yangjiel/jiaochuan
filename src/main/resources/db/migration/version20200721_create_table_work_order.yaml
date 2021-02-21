@@ -10,7 +10,7 @@ databaseChangeLog:
                 worker_id INTEGER NOT NULL,
                 address NVARCHAR(64) NOT NULL,
                 service_date DATE,
-                result NVARCHAR(16),
+                status NVARCHAR(16),
                 result_description NVARCHAR(256),
                 service_item NVARCHAR(256),
                 FOREIGN KEY (client_id) REFERENCES client(id),

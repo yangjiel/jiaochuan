@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class EquipmentDto {
-    private Long equipmentId;
+    private String equipment;
     private Integer quantity;
 }

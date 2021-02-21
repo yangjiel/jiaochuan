@@ -4,15 +4,11 @@ import com.jiaochuan.hazakura.entity.workorder.EquipmentEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.WorkOrder.EquipmentRepository;
-import io.sentry.event.User;
-import lombok.NonNull;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.lang.reflect.Field;
 import java.util.List;
 
 @Service
@@ -23,24 +19,7 @@ public class EquipmentService {
     @Transactional
     public void createEquipment(EquipmentEntity equipmentEntity) throws AppException, UserException {
         // Check if required fields are not empty
-        try {
-            for (Field field : equipmentEntity.getClass().getDeclaredFields()) {
-                if (field.getAnnotation(NonNull.class) == null) {
-                    continue;
-                }
-                if (!field.trySetAccessible()) {
-                    throw new AppException("创建用户时无法取得EquipmentEntity的反射访问权限，其成员变量无法通过反射访问。");
-                }
-
-                if (field.getType() == String.class && StringUtils.isBlank((String) field.get(equipmentEntity))) {
-                    throw new UserException("必填项" + field.getName() + "不能为空。");
-                } else if (field.get(equipmentEntity) == null) {
-                    throw new UserException("必填项" + field.getName() + "不能为空。");
-                }
-            }
-        } catch (IllegalAccessException e) {
-            throw new AppException("创建用户时无法取得EquipmentEntity的反射访问权限，其成员变量无法通过反射访问。");
-        }
+        Helper.checkFields(EquipmentEntity.class, equipmentEntity);
 
         equipmentRepository.save(equipmentEntity);
     }
