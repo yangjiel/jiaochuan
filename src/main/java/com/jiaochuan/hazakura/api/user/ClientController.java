@@ -3,6 +3,7 @@ package com.jiaochuan.hazakura.api.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.exception.AppException;
+import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.ClientService;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -36,12 +37,13 @@ public class ClientController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
+                                            "    \"clientId\": 1,\n" +
                                             "    \"userName\": \"四川电器集团\",\n" +
                                             "    \"contactName\": \"刘晓东\",\n" +
                                             "    \"cell\": \"13813249988\",\n" +
                                             "    \"email\": \"null\",\n" +
-                                            "    \"companyAddress\": \"四川省成都市高新西区金月路45号高鑫产业园\"\n" +
-                                            "    \"notes\":\"D5数控机床购买及安装\"\n" +
+                                            "    \"companyAddress\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
+                                            "    \"notes\": \"D5数控机床购买及安装\"\n" +
                                             "}")
                     }
             )
@@ -96,21 +98,16 @@ public class ClientController {
     public ResponseEntity<String> createClient(@RequestBody String jsonRequest) {
         try {
             ClientEntity clientEntity = objectMapper.readValue(jsonRequest, ClientEntity.class);
-            if (clientService.checkClientName(clientEntity.getUserName())) {
-                return ResponseEntity
-                        .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                        .body("该客户名已存在！");
-            } else if (clientService.checkClientCell(clientEntity.getCell())) {
-                return ResponseEntity
-                        .status(HttpStatus.UNPROCESSABLE_ENTITY)
-                        .body("该客户手机号码已存在！");
-            }
             clientService.createClient(clientEntity);
             return ResponseEntity.ok().build();
         } catch (AppException e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage());
+        } catch (UserException e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -126,11 +123,13 @@ public class ClientController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
+                                            "    \"clientId\": 1,\n" +
                                             "    \"userName\": \"四川电器集团\",\n" +
                                             "    \"contactName\": \"刘晓东\",\n" +
                                             "    \"cell\": \"13813249988\",\n" +
                                             "    \"email\": \"null\",\n" +
-                                            "    \"companyAddress\": \"四川省成都市高新西区金月路45号高鑫产业园\"\n" +
+                                            "    \"companyAddress\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
+                                            "    \"notes\": \"D5数控机床购买及安装\"\n" +
                                             "}")
                     }
             )
@@ -171,15 +170,18 @@ public class ClientController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
-    public ResponseEntity<String> updateClient(@RequestBody String jsonRequest) {
+    public ResponseEntity<String> updateClient(@RequestBody PatchClientDto dto) {
         try {
-            ClientEntity clientEntity = objectMapper.readValue(jsonRequest, ClientEntity.class);
-            clientService.createClient(clientEntity);
+            clientService.patchClient(dto);
             return ResponseEntity.ok().build();
         } catch (AppException e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage());
+        } catch (UserException e) {
+            return ResponseEntity
+                    .status(HttpStatus.UNPROCESSABLE_ENTITY)
+                    .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -217,11 +219,13 @@ public class ClientController {
                                     @ExampleObject(value =
                                             "{\n" +
                                                     "    \"clients\": [{\n" +
+                                                    "        \"clientId\": 1,\n" +
                                                     "        \"userName\": \"四川电器集团\",\n" +
                                                     "        \"contactName\": \"刘晓东\",\n" +
                                                     "        \"cell\": \"13106660000\",\n" +
                                                     "        \"email\": \"user@example.com\",\n" +
-                                                    "        \"companyAddress\": \"四川省成都市高新四区金月璐45号高鑫产业园\"\n" +
+                                                    "        \"companyAddress\": \"四川省成都市高新四区金月璐45号高鑫产业园\",\n" +
+                                                    "        \"notes\": \"D5数控机床购买及安装\"\n" +
                                                     "    }\n" +
                                                     "    ...\n" +
                                                     "    ]\n" +
@@ -270,7 +274,7 @@ public class ClientController {
             )
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ClientEntity>> getClients(
+    public ResponseEntity<ClientListDto> getClients(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size
     ) {
@@ -283,15 +287,16 @@ public class ClientController {
 
         try {
             List<ClientEntity> clientsList = clientService.getClients(page, size);
-            return ResponseEntity.ok(clientsList);
+            ClientListDto dto = objectMapper.convertValue(clientsList, ClientListDto.class);
+            return ResponseEntity.ok(dto);
         } catch (AppException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(null);
+                    .body(new ClientListDto(null, e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(null);
+                    .body(new ClientListDto(null, e.getMessage()));
         }
     }
 }

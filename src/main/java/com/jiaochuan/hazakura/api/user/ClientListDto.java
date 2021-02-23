@@ -1,4 +1,4 @@
-package com.jiaochuan.hazakura.api.workorder;
+package com.jiaochuan.hazakura.api.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-class WorkOrderListDto {
-    private List<PostWorkOrderDto> WorkOrderList;
+public class ClientListDto {
+    private List<PatchClientDto> clientList;
     private String message;
 }

@@ -254,7 +254,7 @@ public class WorkOrderController {
             Role.Constants.MANAGER_AFTER_SALES,
             Role.Constants.ENGINEER_AFTER_SALES,
             Role.Constants.VICE_PRESIDENT})
-    public ResponseEntity<WorkOrderListDto> getWorkOrders(
+    public ResponseEntity<String> getWorkOrders(
             @AuthenticationPrincipal UserEntity user,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size,
@@ -280,17 +280,17 @@ public class WorkOrderController {
             } else {
                 workOrderList = workOrderService.getWorkOrders(page, size, client, user, date, status);
             }
-            WorkOrderListDto dto = objectMapper.convertValue(workOrderList, WorkOrderListDto.class);
-            dto.setMessage("");
-            return ResponseEntity.ok(dto);
+
+            String json = objectMapper.writeValueAsString(workOrderList);
+            return ResponseEntity.ok(json);
         } catch (UserException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new WorkOrderListDto(null, e.getMessage()));
+                    .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new WorkOrderListDto(null, e.getMessage()));
+                    .body(e.getMessage());
         }
     }
 }

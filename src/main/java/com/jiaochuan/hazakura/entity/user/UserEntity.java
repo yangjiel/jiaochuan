@@ -1,9 +1,7 @@
 package com.jiaochuan.hazakura.entity.user;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
@@ -35,10 +33,10 @@ public class UserEntity extends AbstractEntity implements UserDetails {
     @Column(name = "password", columnDefinition = "CHAR(60)", nullable = false)
     private String password;
 
-    @Column(name = "first_name", columnDefinition = "NVARCHAR(4)", nullable = false)
+    @Column(name = "first_name", columnDefinition = "NVARCHAR(16)", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", columnDefinition = "NVARCHAR(16)", nullable = false)
+    @Column(name = "last_name", columnDefinition = "NVARCHAR(4)", nullable = false)
     private String lastName;
 
     @Column(name = "role", columnDefinition = "VARCHAR(100)", nullable = false)

@@ -7,7 +7,7 @@ databaseChangeLog:
             CREATE TABLE client (
                 id INTEGER AUTO_INCREMENT PRIMARY KEY,
                 user_name NVARCHAR(20) NOT NULL,
-                contact_name NVARCHAR(6) NOT NULL,
+                contact_name NVARCHAR(20) NOT NULL,
                 cell CHAR(11) NOT NULL,
                 email VARCHAR(64),
                 company_address NVARCHAR(100) NOT NULL,
