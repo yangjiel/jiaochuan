@@ -89,7 +89,13 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "{\n" +
+                    description = "注册成功，response body将返回用户信息",
+                    content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(implementation = List.class),
+                    examples = {
+                            @ExampleObject(value =
+                                    "{\n" +
                                     "    \"id\": 1,\n" +
                                     "    \"username\": \"sam\",\n" +
                                     "    \"password\": \"Initial1\",\n" +
@@ -99,7 +105,9 @@ public class UserController {
                                     "    \"cell\": \"13106660000\",\n" +
                                     "    \"email\": \"user@example.com\",\n" +
                                     "    \"birthday\": \"1900-01-01\"\n" +
-                                    "}"
+                                    "}")
+                    }
+            )
             ),
             @ApiResponse(
                     responseCode = "400",

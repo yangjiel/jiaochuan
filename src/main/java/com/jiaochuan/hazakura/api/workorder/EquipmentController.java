@@ -3,7 +3,6 @@ package com.jiaochuan.hazakura.api.workorder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiaochuan.hazakura.api.user.LoginResponseDto;
 import com.jiaochuan.hazakura.entity.workorder.EquipmentEntity;
-import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.service.EquipmentService;
 import io.swagger.v3.oas.annotations.media.Content;

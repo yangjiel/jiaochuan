@@ -37,7 +37,7 @@ public class ClientController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
-                                            "    \"clientId\": 1,\n" +
+                                            "    \"id\": 1,\n" +
                                             "    \"userName\": \"四川电器集团\",\n" +
                                             "    \"contactName\": \"刘晓东\",\n" +
                                             "    \"cell\": \"13813249988\",\n" +
@@ -123,7 +123,7 @@ public class ClientController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
-                                            "    \"clientId\": 1,\n" +
+                                            "    \"id\": 1,\n" +
                                             "    \"userName\": \"四川电器集团\",\n" +
                                             "    \"contactName\": \"刘晓东\",\n" +
                                             "    \"cell\": \"13813249988\",\n" +
@@ -217,9 +217,9 @@ public class ClientController {
                             schema = @Schema(implementation = List.class),
                             examples = {
                                     @ExampleObject(value =
-                                            "{\n" +
-                                                    "    \"clients\": [{\n" +
-                                                    "        \"clientId\": 1,\n" +
+                                                    "[\n" +
+                                                    "    {\n" +
+                                                    "        \"id\": 1,\n" +
                                                     "        \"userName\": \"四川电器集团\",\n" +
                                                     "        \"contactName\": \"刘晓东\",\n" +
                                                     "        \"cell\": \"13106660000\",\n" +
@@ -228,8 +228,7 @@ public class ClientController {
                                                     "        \"notes\": \"D5数控机床购买及安装\"\n" +
                                                     "    }\n" +
                                                     "    ...\n" +
-                                                    "    ]\n" +
-                                                    "}")
+                                                    "]")
                             }
                     )
             ),
