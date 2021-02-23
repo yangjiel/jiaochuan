@@ -89,7 +89,17 @@ public class UserController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "注册成功，response body将返回\"注册成功！\"。"
+                    description = "{\n" +
+                                    "    \"id\": 1,\n" +
+                                    "    \"username\": \"sam\",\n" +
+                                    "    \"password\": \"Initial1\",\n" +
+                                    "    \"firstName\": \"三\",\n" +
+                                    "    \"lastName\": \"张\",\n" +
+                                    "    \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                    "    \"cell\": \"13106660000\",\n" +
+                                    "    \"email\": \"user@example.com\",\n" +
+                                    "    \"birthday\": \"1900-01-01\"\n" +
+                                    "}"
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -127,8 +137,9 @@ public class UserController {
     )
     public ResponseEntity<String> createUser(@RequestBody String jsonRequest) {
         try {
-            userService.createUser(objectMapper.readValue(jsonRequest, UserEntity.class));
-            return ResponseEntity.ok().build();
+            UserEntity userEntity = userService.createUser(objectMapper.readValue(jsonRequest, UserEntity.class));
+            String json = objectMapper.writeValueAsString(userEntity);
+            return ResponseEntity.ok(json);
         } catch (UserException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -157,14 +168,13 @@ public class UserController {
                             examples = {
                                     @ExampleObject(value =
                                     "{\n" +
-                                    "    \"status\": \"登录成功！\",\n" +
-                                    "    \"user\": {\n" +
-                                    "        \"firstName\": \"三\",\n" +
-                                    "        \"lastName\": \"张\",\n" +
-                                    "        \"role\": \"ENGINEER_AFTER_SALES\",\n" +
-                                    "        \"cell\": \"13106660000\",\n" +
-                                    "        \"email\": \"user@example.com\",\n" +
-                                    "        \"birthday\": \"1900-01-01\"\n" +
+                                    "    \"id\": 1,\n" +
+                                    "    \"firstName\": \"三\",\n" +
+                                    "    \"lastName\": \"张\",\n" +
+                                    "    \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                    "    \"cell\": \"13106660000\",\n" +
+                                    "    \"email\": \"user@example.com\",\n" +
+                                    "    \"birthday\": \"1900-01-01\"\n" +
                                     "    }\n" +
                                     "}")
                             }
@@ -206,7 +216,7 @@ public class UserController {
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<LoginResponseDto> login(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<String> login(@RequestParam String username, @RequestParam String password) {
         try {
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
             Authentication auth = authManager.authenticate(authToken);
@@ -214,17 +224,16 @@ public class UserController {
             sc.setAuthentication(auth);
 
             UserEntity userEntity = (UserEntity) userService.loadUserByUsername(username);
-            return ResponseEntity.ok(new LoginResponseDto("登录成功！", userEntity));
+            String json = objectMapper.writeValueAsString(userEntity);
+            return ResponseEntity.ok(json);
         } catch (BadCredentialsException e) {
-            LoginResponseDto dto = new LoginResponseDto("登录失败，请检查用户名或密码。", null);
             return ResponseEntity
                     .status(HttpStatus.FORBIDDEN)
-                    .body(dto);
+                    .body("登录失败，请检查用户名或密码。");
         } catch (Exception e) {
-            LoginResponseDto dto = new LoginResponseDto("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage(), null);
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(dto);
+                    .body("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage());
         }
     }
 
@@ -342,9 +351,9 @@ public class UserController {
                             schema = @Schema(implementation = LoginResponseDto.class),
                             examples = {
                                     @ExampleObject(value =
-                                    "{\n" +
-                                    "    \"status\": \"成功！\",\n" +
-                                    "    \"users\": [{\n" +
+                                    "[\n" +
+                                    "    {\n" +
+                                    "        \"id: 1,\n" +
                                     "        \"firstName\": \"三\",\n" +
                                     "        \"lastName\": \"张\",\n" +
                                     "        \"role\": \"ENGINEER_AFTER_SALES\",\n" +
@@ -353,8 +362,7 @@ public class UserController {
                                     "        \"birthday\": \"1900-01-01\"\n" +
                                     "    }\n" +
                                     "    ...\n" +
-                                    "    ]\n" +
-                                    "}")
+                                    "]\n")
                             }
                     )
             ),
@@ -401,7 +409,7 @@ public class UserController {
             )
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<GetUsersResponseDto> getUsers(
+    public ResponseEntity<String> getUsers(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size
     ) {
@@ -414,16 +422,16 @@ public class UserController {
 
         try {
             List<UserEntity> usersList = userService.getUsers(page, size);
-            return ResponseEntity.ok(new GetUsersResponseDto("成功！", usersList));
+            String json = objectMapper.writeValueAsString(usersList);
+            return ResponseEntity.ok(json);
         } catch (UserException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new GetUsersResponseDto(e.getMessage(), null));
+                    .body(e.getMessage());
         } catch (Exception e) {
-            GetUsersResponseDto dto = new GetUsersResponseDto("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage(), null);
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(dto);
+                    .body("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage());
         }
     }
 

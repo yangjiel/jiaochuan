@@ -17,10 +17,10 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClientEntity extends AbstractEntity {
-    @Column(name = "user_name", columnDefinition = "VARCHAR(16)", nullable = false)
+    @Column(name = "user_name", columnDefinition = "NVARCHAR(20)", nullable = false)
     private String userName;
 
-    @Column(name = "contact_name", columnDefinition = "CHAR(60)", nullable = false)
+    @Column(name = "contact_name", columnDefinition = "NVARCHAR(20)", nullable = false)
     private String contactName;
 
     @Column(name = "cell", columnDefinition = "CHAR(11)", nullable = false)

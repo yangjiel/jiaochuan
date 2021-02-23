@@ -25,10 +25,13 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     @Transactional
-    public void createUser(UserEntity userEntity) throws AppException, UserException {
+    public UserEntity createUser(UserEntity userEntity) throws AppException, UserException {
         // Check if required fields are not empty
         Helper.checkFields(UserEntity.class, userEntity);
 
+        if (userEntity.getUsername().length() > 16 || userEntity.getFirstName().length() > 16) {
+            throw new UserException("用户名长度不能大于16个字符！");
+        }
 
         // Check if username has been taken
         if (userRepository.findByUsername(userEntity.getUsername()) != null) {
@@ -46,6 +49,9 @@ public class UserService implements UserDetailsService {
         if (password.length() > 16) {
             throw new UserException("密码长度不能大于16位字符。");
         }
+        if (userEntity.getLastName().length() > 4) {
+            throw new UserException("用户姓氏长度不能大于4个字符！");
+        }
 
         // Hash password
         userEntity.setPassword(passwordEncoder.encode(password));
@@ -57,8 +63,12 @@ public class UserService implements UserDetailsService {
         if (!userEntity.getEmail().contains("@")) {
             throw new UserException("电子邮箱格式不正确。");
         }
+        if (userEntity.getEmail().length() > 64) {
+            throw new UserException("电子邮箱长度不能大于64个字符！");
+        }
 
         userRepository.save(userEntity);
+        return userEntity;
     }
 
     @Override
