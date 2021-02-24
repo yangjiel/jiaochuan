@@ -273,7 +273,7 @@ public class ClientController {
             )
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ClientListDto> getClients(
+    public ResponseEntity<String> getClients(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size
     ) {
@@ -286,16 +286,16 @@ public class ClientController {
 
         try {
             List<ClientEntity> clientsList = clientService.getClients(page, size);
-            ClientListDto dto = objectMapper.convertValue(clientsList, ClientListDto.class);
-            return ResponseEntity.ok(dto);
+            String json = objectMapper.writeValueAsString(clientsList);
+            return ResponseEntity.ok(json);
         } catch (AppException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(new ClientListDto(null, e.getMessage()));
+                    .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ClientListDto(null, e.getMessage()));
+                    .body(e.getMessage());
         }
     }
 }
