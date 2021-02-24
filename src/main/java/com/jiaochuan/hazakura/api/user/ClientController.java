@@ -99,7 +99,8 @@ public class ClientController {
         try {
             ClientEntity clientEntity = objectMapper.readValue(jsonRequest, ClientEntity.class);
             clientService.createClient(clientEntity);
-            return ResponseEntity.ok().build();
+            String json = objectMapper.writeValueAsString(clientEntity);
+            return ResponseEntity.ok(json);
         } catch (AppException e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -172,8 +173,9 @@ public class ClientController {
     )
     public ResponseEntity<String> updateClient(@RequestBody PatchClientDto dto) {
         try {
-            clientService.patchClient(dto);
-            return ResponseEntity.ok().build();
+            ClientEntity clientEntity = clientService.patchClient(dto);
+            String json = objectMapper.writeValueAsString(clientEntity);
+            return ResponseEntity.ok(json);
         } catch (AppException e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
