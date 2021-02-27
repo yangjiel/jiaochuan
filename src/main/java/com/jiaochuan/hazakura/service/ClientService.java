@@ -55,7 +55,7 @@ public class ClientService {
         clientRepository.save(clientEntity);
     }
 
-    public void patchClient(PatchClientDto dto) throws AppException, UserException{
+    public ClientEntity patchClient(PatchClientDto dto) throws AppException, UserException{
         Set<String> mandatoryFieldsSet = Set.of("clientId", "userName", "contactName", "cell", "companyAddress");
         Helper.checkFields(PatchClientDto.class, dto, mandatoryFieldsSet);
         ClientEntity clientEntity = clientRepository.findById(dto.getClientId()).orElse(null);
@@ -77,6 +77,7 @@ public class ClientService {
         clientEntity.setCompanyAddress(dto.getCompanyAddress());
         clientEntity.setNotes(dto.getNotes());
         clientRepository.save(clientEntity);
+        return clientEntity;
     }
 
     public List<ClientEntity> getClients(int page, int size) throws Exception {
