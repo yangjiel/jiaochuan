@@ -186,9 +186,10 @@ public class ClientController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
-    public ResponseEntity<String> updateClient(@RequestBody PatchClientDto dto) {
+    public ResponseEntity<String> updateClient(@RequestBody String jsonRequest) {
         try {
-            ClientEntity clientEntity = clientService.patchClient(dto);
+            ClientEntity clientEntity = objectMapper.readValue(jsonRequest, ClientEntity.class);
+             clientService.patchClient(clientEntity);
             String json = objectMapper.writeValueAsString(clientEntity);
             return ResponseEntity.ok(json);
         } catch (AppException e) {
