@@ -3,6 +3,7 @@ package com.jiaochuan.hazakura.service;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.ReflectionUtils;
 
 import javax.persistence.Column;
 import java.lang.reflect.Field;
@@ -24,28 +25,22 @@ class Helper {
 
         String className = clazz.getSimpleName();
 
-        try {
-            for (Field field : clazz.getDeclaredFields()) {
-
-                if (!field.trySetAccessible()) {
-                    throw new AppException(String.format("创建用户时无法取得%s的反射访问权限，其成员变量无法通过反射访问。", className));
-                }
-
-                boolean check = false;
-                if (mandatoryFieldsSet != null && mandatoryFieldsSet.contains(field.getName())) {
-                    check = true;
-                }
-
-                Column col = field.getAnnotation(Column.class);
-                check |= (col != null && !col.nullable());
-                if (check && ((field.getType() == String.class && StringUtils.isBlank((String) field.get(entity))
-                        ) || field.get(entity) == null)) {
-                    throw new UserException(String.format("必填项%s不能为空。", field.getName()));
-                }
+        ReflectionUtils.doWithFields(clazz, (field) -> {
+            if (!field.trySetAccessible()) {
+                throw new IllegalAccessException(String.format("创建用户时无法取得%s的反射访问权限，其成员变量无法通过反射访问。", className));
             }
-        } catch(IllegalAccessException e) {
-            throw new AppException(String.format("创建用户时无法取得%s的反射访问权限，其成员变量无法通过反射访问。", className));
-        }
+
+            boolean check = false;
+            if (mandatoryFieldsSet != null && mandatoryFieldsSet.contains(field.getName())) {
+                check = true;
+            }
+
+            Column col = field.getAnnotation(Column.class);
+            check |= (col != null && !col.nullable());
+            if (check && ((field.getType() == String.class && StringUtils.isBlank((String) field.get(entity))) || field.get(entity) == null)) {
+                throw new IllegalArgumentException(String.format("必填项%s不能为空。", field.getName()));
+            }
+        });
     }
 
 }

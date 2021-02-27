@@ -1,6 +1,5 @@
 package com.jiaochuan.hazakura.service;
 
-import com.jiaochuan.hazakura.api.user.PatchClientDto;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
@@ -55,29 +54,21 @@ public class ClientService {
         clientRepository.save(clientEntity);
     }
 
-    public ClientEntity patchClient(PatchClientDto dto) throws AppException, UserException{
-        Set<String> mandatoryFieldsSet = Set.of("clientId", "userName", "contactName", "cell", "companyAddress");
-        Helper.checkFields(PatchClientDto.class, dto, mandatoryFieldsSet);
-        ClientEntity clientEntity = clientRepository.findById(dto.getClientId()).orElse(null);
-        if (clientEntity == null) {
-            throw new UserException(String.format("ID为%s的客户不存在。", dto.getClientId()));
+    public void patchClient(ClientEntity clientEntity) throws AppException, UserException{
+        Helper.checkFields(ClientEntity.class, clientEntity, Set.of("id"));
+        ClientEntity check = clientRepository.findById(clientEntity.getId()).orElse(null);
+        if (check == null) {
+            throw new UserException(String.format("ID为%s的客户不存在。", clientEntity.getId()));
         }
-        ClientEntity check = clientRepository.findByUserName(dto.getUserName());
-        if (!check.getId().equals(clientEntity.getId())) {
+        check = clientRepository.findByUserName(clientEntity.getUserName());
+        if (check != null && !check.getId().equals(clientEntity.getId())) {
             throw new UserException("该客户名已存在");
         }
-        clientEntity.setUserName(dto.getUserName());
-        check = clientRepository.findByCell(dto.getCell());
-        if (!check.getId().equals(clientEntity.getId())) {
+        check = clientRepository.findByCell(clientEntity.getCell());
+        if (check != null && !check.getId().equals(clientEntity.getId())) {
             throw new UserException("该客户手机号码已存在");
         }
-        clientEntity.setContactName(dto.getContactName());
-        clientEntity.setCell(dto.getCell());
-        clientEntity.setEmail(dto.getEmail());
-        clientEntity.setCompanyAddress(dto.getCompanyAddress());
-        clientEntity.setNotes(dto.getNotes());
         clientRepository.save(clientEntity);
-        return clientEntity;
     }
 
     public List<ClientEntity> getClients(int page, int size) throws Exception {
