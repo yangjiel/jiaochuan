@@ -32,6 +32,6 @@ public class ClientEntity extends AbstractEntity {
     @Column(name = "company_address", columnDefinition = "NVARCHAR(100)", nullable = false)
     private String companyAddress;
 
-    @Column(name = "notes", columnDefinition = "NVARCHAR(100)")
+    @Column(name = "notes", columnDefinition = "NVARCHAR(256)")
     private String notes;
 }
