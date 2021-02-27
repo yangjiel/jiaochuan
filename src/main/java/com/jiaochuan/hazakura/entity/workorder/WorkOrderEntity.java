@@ -27,20 +27,20 @@ public class WorkOrderEntity extends AbstractEntity {
     @NonNull
     private UserEntity worker;
 
-    @Column(name = "service_date", columnDefinition = "DATE", nullable = false)
+    @Column(name = "create_date", columnDefinition = "DATE", nullable = false)
     @NonNull
-    private LocalDate serviceDate;
+    private LocalDate createDate;
 
-    @Column(name = "address", columnDefinition = "NVARCHAR")
+    @Column(name = "address", columnDefinition = "NVARCHAR(100)")
     private String address;
 
-    @Column(name = "status", columnDefinition = "NVARCHAR")
-    private String status;
+    @Column(name = "status", columnDefinition = "NVARCHAR(32)")
+    private Status status;
 
-    @Column(name = "result_description", columnDefinition = "NVARCHAR")
-    private String resultDescription;
+    @Column(name = "description", columnDefinition = "NVARCHAR(256)")
+    private String description;
 
-    @Column(name = "service_item", columnDefinition = "NVARCHAR")
+    @Column(name = "service_item", columnDefinition = "NVARCHAR(256)")
     private String serviceItem;
 
     @OneToMany(orphanRemoval = true, mappedBy = "workOrder")

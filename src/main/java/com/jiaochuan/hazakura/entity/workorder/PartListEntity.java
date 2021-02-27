@@ -1,14 +1,13 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.List;
 
 @Table(name="part_list")
@@ -28,6 +27,10 @@ public class PartListEntity extends AbstractEntity {
     @NonNull
     @JsonBackReference
     private WorkOrderEntity workOrder;
+
+    @Column(name = "create_date", columnDefinition = "DATE", nullable = false)
+    @NonNull
+    private LocalDate createDate;
 
     @Column(name = "usage", columnDefinition = "NVARCHAR(200)")
     private String usage;

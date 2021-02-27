@@ -8,6 +8,7 @@ databaseChangeLog:
                 id INTEGER AUTO_INCREMENT PRIMARY KEY,
                 part_list_id INTEGER NOT NULL,
                 equipment NVARCHAR(200) NOT NULL,
+                model NVARCHAR(100) NOT NULL,
                 quantity INTEGER NOT NULL,
                 FOREIGN KEY (part_list_id) REFERENCES part_list(id)
             );

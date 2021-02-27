@@ -24,6 +24,9 @@ public class PartListEquipmentEntity extends AbstractEntity {
     @Column(name = "equipment")
     private String equipment;
 
+    @Column(name = "model")
+    private String model;
+
     @Column(name = "quantity")
     private Integer quantity;
 }

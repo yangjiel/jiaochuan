@@ -46,17 +46,18 @@ public class WorkOrderController {
                                             "    \"clientId\": \"1\",\n" +
                                             "    \"workerId\": \"1\",\n" +
                                             "    \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
-                                            "    \"serviceDate\": \"2020-04-30\",\n" +
                                             "    \"status\": \"\",\n" +
-                                            "    \"resultDescription\": \"\",\n" +
+                                            "    \"description\": \"\",\n" +
                                             "    \"serviceItem\": \"\",\n" +
                                             "    \"equipments\": [ \n" +
                                             "        {\n" +
                                             "            \"equipment\": \"机床\",\n" +
+                                            "            \"model\": \"8x8\",\n" +
                                             "            \"quantity\": \"10\" \n" +
                                             "        }, \n" +
                                             "        {\n" +
                                             "            \"equipment\": \"电钻\",\n" +
+                                            "            \"model\": \"8x8\",\n" +
                                             "            \"quantity\": \"10\" \n" +
                                             "        } \n" +
                                             "    ] \n" +
@@ -181,10 +182,10 @@ public class WorkOrderController {
                                                     "        \"email\": \"pj.t@outlook.com\",\n" +
                                                     "        \"birthday\": \"1900-01-01\"\n" +
                                                     "    },\n" +
-                                                    "    \"serviceDate\": \"2020-04-30\",\n" +
+                                                    "    \"createDate\": \"2020-04-30\",\n" +
                                                     "    \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
                                                     "    \"status\": null,\n" +
-                                                    "    \"resultDescription\": null,\n" +
+                                                    "    \"description\": null,\n" +
                                                     "    \"serviceItem\": null,\n" +
                                                     "    \"actions\": [],\n" +
                                                     "    \"partLists\": [\n" +
@@ -201,15 +202,18 @@ public class WorkOrderController {
                                                     "                \"birthday\": \"1900-01-01\"\n" +
                                                     "            },\n" +
                                                     "            \"usage\": null,\n" +
+                                                    "            \"createDate\": \"2020-04-30\",\n" +
                                                     "            \"partListEquipments\": [\n" +
                                                     "                {\n" +
                                                     "                    \"id\": \"1\",\n" +
                                                     "                    \"equipment\": \"数控机床轴承\",\n" +
+                                                    "                    \"model\": \"8x8\",\n" +
                                                     "                    \"quantity\": \"10\"\n" +
                                                     "                },\n" +
                                                     "                {\n" +
                                                     "                    \"id\": \"1\",\n" +
                                                     "                    \"equipment\": \"数控机床轴承\",\n" +
+                                                    "                    \"model\": \"8x8\",\n" +
                                                     "                    \"quantity\": \"10\"\n" +
                                                     "                },\n" +
                                                     "            ]\n" +

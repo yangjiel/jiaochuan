@@ -55,7 +55,7 @@ public class WorkOrderService {
     @Transactional
     public void createWorkOrder(PostWorkOrderDto dto) throws AppException, UserException {
         // Check if required fields are not empty
-        Set<String> mandatoryFieldsSet = Set.of("clientId", "workerId", "serviceDate", "address");
+        Set<String> mandatoryFieldsSet = Set.of("clientId", "workerId", "address");
         Helper.checkFields(PostWorkOrderDto.class, dto, mandatoryFieldsSet);
 
         ClientEntity clientEntity = clientRepository.findById(dto.getClientId()).orElse(null);
@@ -67,9 +67,21 @@ public class WorkOrderService {
         if (workerEntity == null) {
             throw new UserException(String.format("ID为%s的用户不存在。", dto.getClientId()));
         }
+        if (dto.getAddress().length() > 100) {
+            throw new UserException("工单地址长度不能大于100个字符！");
+        }
+        if (dto.getDescription().length() > 256) {
+            throw new UserException("工单备注长度不能大于256个字符！");
+        }
+        if (dto.getServiceItem().length() > 256) {
+            throw new UserException("工单服务内容长度不能大于256个字符！");
+        }
 
-        WorkOrderEntity workOrderEntity = new WorkOrderEntity(clientEntity, workerEntity, dto.getServiceDate());
+        WorkOrderEntity workOrderEntity = new WorkOrderEntity(clientEntity, workerEntity, LocalDate.now());
         workOrderEntity.setAddress(dto.getAddress());
+        workOrderEntity.setStatus(dto.getStatus());
+        workOrderEntity.setDescription(dto.getDescription());
+        workOrderEntity.setServiceItem(dto.getServiceItem());
         PartListEntity partListEntity = createPartList(workerEntity, workOrderEntity, dto.getEquipments());
 
         List<PartListEntity> partLists = new ArrayList<>();
@@ -95,7 +107,7 @@ public class WorkOrderService {
             predicates.add(cb.equal(workOrder.get("worker"), worker));
         }
         if (date != null) {
-            predicates.add(cb.equal(workOrder.get("serviceDate"), date));
+            predicates.add(cb.equal(workOrder.get("createDate"), date));
         }
         if (status != null) {
             predicates.add(cb.like(workOrder.get("status"), "%" + status + "%"));
@@ -109,13 +121,14 @@ public class WorkOrderService {
     public PartListEntity createPartList(UserEntity workerEntity, WorkOrderEntity workOrderEntity,
                                List<EquipmentDto> equipments) {
 
-        PartListEntity partListEntity = new PartListEntity(workerEntity, workOrderEntity);
+        PartListEntity partListEntity = new PartListEntity(workerEntity, workOrderEntity, LocalDate.now());
         List<PartListEquipmentEntity> xrfList = new ArrayList<>();
         if (equipments != null) {
             for (EquipmentDto equipmentPair : equipments) {
                 String equipment = equipmentPair.getEquipment();
+                String model = equipmentPair.getModel();
                 Integer quantity = equipmentPair.getQuantity();
-                PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipment, quantity);
+                PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipment, model, quantity);
                 partListEquipmentRepository.save(xrf);
                 xrfList.add(xrf);
             }

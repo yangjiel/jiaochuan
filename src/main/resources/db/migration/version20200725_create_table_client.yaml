@@ -11,7 +11,7 @@ databaseChangeLog:
                 cell CHAR(11) NOT NULL,
                 email VARCHAR(64),
                 company_address NVARCHAR(100) NOT NULL,
-                notes NVARCHAR(100) NOT NULL
+                notes NVARCHAR(256) NOT NULL
             );
           rollback: |
             DROP TABLE client;

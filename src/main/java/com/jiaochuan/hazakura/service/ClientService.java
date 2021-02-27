@@ -25,10 +25,10 @@ public class ClientService {
 
         // Check format for cell phone and email
         if (clientEntity.getUserName().length() > 20) {
-            throw new UserException("用户名长度不能大于20个字符！");
+            throw new UserException("客户名长度不能大于20个字符！");
         }
         if (clientEntity.getContactName().length() > 20) {
-            throw new UserException("联系名长度不能大于20个字符！");
+            throw new UserException("客户联系姓名长度不能大于20个字符！");
         }
         if (clientEntity.getCell().length() != 11) {
             throw new UserException("手机号码长度不能多于或少于11位。");
@@ -42,8 +42,8 @@ public class ClientService {
         if (clientEntity.getCompanyAddress().length() > 100) {
             throw new UserException("公司地址长度不能大于100个字符！");
         }
-        if (clientEntity.getNotes().length() > 100) {
-            throw new UserException("用户备注不能大于100个字符！");
+        if (clientEntity.getNotes().length() > 256) {
+            throw new UserException("客户备注不能大于256个字符！");
         }
 
         if (clientRepository.findByUserName(clientEntity.getUserName()) != null) {
@@ -60,9 +60,17 @@ public class ClientService {
         Helper.checkFields(PatchClientDto.class, dto, mandatoryFieldsSet);
         ClientEntity clientEntity = clientRepository.findById(dto.getClientId()).orElse(null);
         if (clientEntity == null) {
-            throw new UserException(String.format("ID为%s的用户不存在。", dto.getClientId()));
+            throw new UserException(String.format("ID为%s的客户不存在。", dto.getClientId()));
+        }
+        ClientEntity check = clientRepository.findByUserName(dto.getUserName());
+        if (!check.getId().equals(clientEntity.getId())) {
+            throw new UserException("该客户名已存在");
         }
         clientEntity.setUserName(dto.getUserName());
+        check = clientRepository.findByCell(dto.getCell());
+        if (!check.getId().equals(clientEntity.getId())) {
+            throw new UserException("该客户手机号码已存在");
+        }
         clientEntity.setContactName(dto.getContactName());
         clientEntity.setCell(dto.getCell());
         clientEntity.setEmail(dto.getEmail());
