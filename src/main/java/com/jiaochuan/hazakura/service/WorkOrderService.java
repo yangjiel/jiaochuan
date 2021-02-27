@@ -53,9 +53,9 @@ public class WorkOrderService {
     private EntityManager em;
 
     @Transactional
-    public void createWorkOrder(PostWorkOrderDto dto) throws AppException, UserException {
+    public WorkOrderEntity createWorkOrder(PostWorkOrderDto dto) throws AppException, UserException {
         // Check if required fields are not empty
-        Set<String> mandatoryFieldsSet = Set.of("clientId", "workerId", "address");
+        Set<String> mandatoryFieldsSet = Set.of("clientId", "workerId");
         Helper.checkFields(PostWorkOrderDto.class, dto, mandatoryFieldsSet);
 
         ClientEntity clientEntity = clientRepository.findById(dto.getClientId()).orElse(null);
@@ -88,6 +88,7 @@ public class WorkOrderService {
         partLists.add(partListEntity);
         workOrderEntity.setPartLists(partLists);
         workOrderRepository.save(workOrderEntity);
+        return workOrderEntity;
     }
 
     public List<WorkOrderEntity> getWorkOrders(int page, int size, ClientEntity client, UserEntity worker, LocalDate date, String status) throws UserException {

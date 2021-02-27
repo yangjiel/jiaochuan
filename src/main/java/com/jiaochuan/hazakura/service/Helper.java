@@ -31,17 +31,15 @@ class Helper {
                     throw new AppException(String.format("创建用户时无法取得%s的反射访问权限，其成员变量无法通过反射访问。", className));
                 }
 
+                boolean check = false;
                 if (mandatoryFieldsSet != null && mandatoryFieldsSet.contains(field.getName())) {
-                    continue;
+                    check = true;
                 }
 
                 Column col = field.getAnnotation(Column.class);
-                if (col != null && !col.nullable() && (
-                        (field.getType() == String.class &&
-                                StringUtils.isBlank((String) field.get(entity))
-                        ) ||
-                        field.get(entity) == null)
-                ) {
+                check |= (col != null && !col.nullable());
+                if (check && ((field.getType() == String.class && StringUtils.isBlank((String) field.get(entity))
+                        ) || field.get(entity) == null)) {
                     throw new UserException(String.format("必填项%s不能为空。", field.getName()));
                 }
             }

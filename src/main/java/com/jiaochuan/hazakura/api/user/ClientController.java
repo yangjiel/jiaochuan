@@ -37,7 +37,6 @@ public class ClientController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
-                                            "    \"id\": 1,\n" +
                                             "    \"userName\": \"四川电器集团\",\n" +
                                             "    \"contactName\": \"刘晓东\",\n" +
                                             "    \"cell\": \"13813249988\",\n" +
@@ -51,7 +50,23 @@ public class ClientController {
     @ApiResponses(value = {
             @ApiResponse(
                     responseCode = "200",
-                    description = "登记成功，返回200"
+                    description = "登记成功，返回200",
+                    content = @Content(
+                            schema = @Schema(implementation = String.class),
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(value =
+                                            "{\n" +
+                                                    "    \"id\": 1,\n" +
+                                                    "    \"userName\": \"四川电器集团\",\n" +
+                                                    "    \"contactName\": \"刘晓东\",\n" +
+                                                    "    \"cell\": \"13813249988\",\n" +
+                                                    "    \"email\": \"null\",\n" +
+                                                    "    \"companyAddress\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
+                                                    "    \"notes\": \"D5数控机床购买及安装\"\n" +
+                                                    "}")
+                            }
+                    )
             ),
             @ApiResponse(
                     responseCode = "400",
