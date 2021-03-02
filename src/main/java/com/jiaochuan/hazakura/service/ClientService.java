@@ -17,11 +17,7 @@ public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
 
-    @Transactional
-    public void createClient(ClientEntity clientEntity) throws AppException, UserException {
-        // Check if required fields are not empty
-        Helper.checkFields(ClientEntity.class, clientEntity);
-
+    private void checkClient(ClientEntity clientEntity) throws UserException {
         // Check format for cell phone and email
         if (clientEntity.getUserName().length() > 20) {
             throw new UserException("客户名长度不能大于20个字符！");
@@ -44,6 +40,15 @@ public class ClientService {
         if (clientEntity.getNotes().length() > 256) {
             throw new UserException("客户备注不能大于256个字符！");
         }
+    }
+
+    @Transactional
+    public void createClient(ClientEntity clientEntity) throws AppException, UserException {
+        // Check if required fields are not empty
+        Helper.checkFields(ClientEntity.class, clientEntity);
+        clientEntity.setId(null);
+
+        checkClient(clientEntity);
 
         if (clientRepository.findByUserName(clientEntity.getUserName()) != null) {
             throw new UserException("该客户名已存在！");
@@ -54,12 +59,15 @@ public class ClientService {
         clientRepository.save(clientEntity);
     }
 
-    public void patchClient(ClientEntity clientEntity) throws AppException, UserException{
+    public void updateClient(ClientEntity clientEntity) throws AppException, UserException{
         Helper.checkFields(ClientEntity.class, clientEntity, Set.of("id"));
         ClientEntity check = clientRepository.findById(clientEntity.getId()).orElse(null);
         if (check == null) {
             throw new UserException(String.format("ID为%s的客户不存在。", clientEntity.getId()));
         }
+
+        checkClient(clientEntity);
+
         check = clientRepository.findByUserName(clientEntity.getUserName());
         if (check != null && !check.getId().equals(clientEntity.getId())) {
             throw new UserException("该客户名已存在");

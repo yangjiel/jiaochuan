@@ -182,14 +182,14 @@ public class ClientController {
                     )
             )
     })
-    @PatchMapping(
+    @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
     public ResponseEntity<String> updateClient(@RequestBody String jsonRequest) {
         try {
             ClientEntity clientEntity = objectMapper.readValue(jsonRequest, ClientEntity.class);
-             clientService.patchClient(clientEntity);
+             clientService.updateClient(clientEntity);
             String json = objectMapper.writeValueAsString(clientEntity);
             return ResponseEntity.ok(json);
         } catch (AppException e) {
