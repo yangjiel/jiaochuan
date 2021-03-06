@@ -75,7 +75,7 @@ public class WorkOrderController {
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
-                                                    "    \"id\": \"3\",\n" +
+                                                    "    \"WOid\": \"3\",\n" +
                                                     "    \"client\": {\n" +
                                                     "        \"id\": \"1\",\n" +
                                                     "        \"userName\": \"四川电器集团\",\n" +
@@ -94,12 +94,6 @@ public class WorkOrderController {
                                                     "        \"email\": \"pj.t@outlook.com\",\n" +
                                                     "        \"birthday\": \"1900-01-01\"\n" +
                                                     "    },\n" +
-                                                    "    \"createDate\": \"2020-04-30\",\n" +
-                                                    "    \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
-                                                    "    \"status\": null,\n" +
-                                                    "    \"description\": null,\n" +
-                                                    "    \"serviceItem\": null,\n" +
-                                                    "    \"actions\": [],\n" +
                                                     "    \"partLists\": [\n" +
                                                     "        {\n" +
                                                     "            \"id\": \"2\",\n" +
@@ -128,10 +122,17 @@ public class WorkOrderController {
                                                     "                    \"model\": \"8x8\",\n" +
                                                     "                    \"quantity\": \"10\"\n" +
                                                     "                },\n" +
+                                                    "                ...\n" +
                                                     "            ]\n" +
                                                     "        }\n" +
+                                                    "        ...\n" +
                                                     "    ]\n" +
-                                                    "    ...\n" +
+                                                    "    \"createDate\": \"2020-04-30\",\n" +
+                                                    "    \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
+                                                    "    \"status\": null,\n" +
+                                                    "    \"description\": null,\n" +
+                                                    "    \"serviceItem\": null,\n" +
+                                                    "    \"actions\": [],\n" +
                                                     "}")
                             }
                     )
@@ -231,7 +232,7 @@ public class WorkOrderController {
                                     @ExampleObject(value =
                                             "[\n" +
                                                     "    {\n" +
-                                                    "        \"id\": \"3\",\n" +
+                                                    "        \"WOid\": \"3\",\n" +
                                                     "        \"client\": {\n" +
                                                     "            \"id\": \"1\",\n" +
                                                     "            \"userName\": \"四川电器集团\",\n" +
@@ -250,12 +251,6 @@ public class WorkOrderController {
                                                     "            \"email\": \"pj.t@outlook.com\",\n" +
                                                     "            \"birthday\": \"1900-01-01\"\n" +
                                                     "        },\n" +
-                                                    "        \"createDate\": \"2020-04-30\",\n" +
-                                                    "        \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
-                                                    "        \"status\": null,\n" +
-                                                    "        \"description\": null,\n" +
-                                                    "        \"serviceItem\": null,\n" +
-                                                    "        \"actions\": [],\n" +
                                                     "        \"partLists\": [\n" +
                                                     "            {\n" +
                                                     "                \"id\": \"2\",\n" +
@@ -289,6 +284,12 @@ public class WorkOrderController {
                                                     "            }\n" +
                                                     "            ...\n" +
                                                     "        ]\n" +
+                                                    "        \"createDate\": \"2020-04-30\",\n" +
+                                                    "        \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
+                                                    "        \"status\": null,\n" +
+                                                    "        \"description\": null,\n" +
+                                                    "        \"serviceItem\": null,\n" +
+                                                    "        \"actions\": [],\n" +
                                                     "    }\n" +
                                                     "    ...\n" +
                                                     "]")
