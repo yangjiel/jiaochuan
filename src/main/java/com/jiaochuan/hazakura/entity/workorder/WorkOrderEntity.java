@@ -1,6 +1,8 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @RequiredArgsConstructor
+@JsonPropertyOrder({ "WOid", "client", "worker", "partLists"})
 public class WorkOrderEntity extends AbstractEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", referencedColumnName = "id", nullable = false)
@@ -49,4 +52,7 @@ public class WorkOrderEntity extends AbstractEntity {
     @OneToMany(orphanRemoval = true, mappedBy = "workOrder")
     @JsonManagedReference
     private List<PartListEntity> partLists;
+
+    @JsonProperty("WOid")
+    public Long getId() {return this.id;}
 }
