@@ -17,6 +17,7 @@ import com.jiaochuan.hazakura.jpa.WorkOrder.PartListEquipmentRepository;
 import com.jiaochuan.hazakura.jpa.WorkOrder.PartListRepository;
 import com.jiaochuan.hazakura.jpa.WorkOrder.WorkOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -115,8 +116,11 @@ public class WorkOrderService {
             predicates.add(cb.like(workOrder.get("status"), "%" + status + "%"));
         }
         cq.where(predicates.toArray(new Predicate[0]));
-
-        return em.createQuery(cq).getResultList();
+        List<WorkOrderEntity> list = em.createQuery(cq).getResultList();
+        PagedListHolder<WorkOrderEntity> pagedList = new PagedListHolder<>(list);
+        pagedList.setPageSize(size);
+        pagedList.setPage(page);
+        return pagedList.getPageList();
     }
 
     @Transactional

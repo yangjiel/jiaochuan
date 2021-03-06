@@ -349,15 +349,15 @@ public class WorkOrderController {
         Collection<?> grantedAuthorityList = user.getAuthorities();
 
         try {
-            List<WorkOrderEntity> workOrderList;
+            List<WorkOrderEntity> workOrderListPage;
             if (grantedAuthorityList.contains(Role.Constants.MANAGER_AFTER_SALES) ||
                 grantedAuthorityList.contains(Role.Constants.VICE_PRESIDENT)) {
-                workOrderList = workOrderService.getWorkOrders(page, size, client, worker, date, status);
+                workOrderListPage = workOrderService.getWorkOrders(page, size, client, worker, date, status);
             } else {
-                workOrderList = workOrderService.getWorkOrders(page, size, client, user, date, status);
+                workOrderListPage = workOrderService.getWorkOrders(page, size, client, user, date, status);
             }
 
-            String json = objectMapper.writeValueAsString(workOrderList);
+            String json = objectMapper.writeValueAsString(workOrderListPage);
             return ResponseEntity.ok(json);
         } catch (UserException e) {
             return ResponseEntity
