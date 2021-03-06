@@ -6,6 +6,7 @@ import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEquipmentEntity;
+import com.jiaochuan.hazakura.entity.workorder.Status;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
@@ -79,7 +80,7 @@ public class WorkOrderService {
 
         WorkOrderEntity workOrderEntity = new WorkOrderEntity(clientEntity, workerEntity, LocalDate.now());
         workOrderEntity.setAddress(dto.getAddress());
-        workOrderEntity.setStatus(dto.getStatus());
+        workOrderEntity.setStatus(dto.getStatus() != null ? dto.getStatus() : Status.PENDING_FIRST_APPROVAL);
         workOrderEntity.setDescription(dto.getDescription());
         workOrderEntity.setServiceItem(dto.getServiceItem());
         PartListEntity partListEntity = createPartList(workerEntity, workOrderEntity, dto.getEquipments());
