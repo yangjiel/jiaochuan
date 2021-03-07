@@ -1,11 +1,9 @@
 package com.jiaochuan.hazakura.service;
 
-import com.jiaochuan.hazakura.api.workorder.EquipmentDto;
 import com.jiaochuan.hazakura.api.workorder.PostWorkOrderDto;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
-import com.jiaochuan.hazakura.entity.workorder.PartListEquipmentEntity;
 import com.jiaochuan.hazakura.entity.workorder.Status;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.AppException;
@@ -32,7 +30,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class WorkOrderService {
+public class WorkOrderService extends PartListService {
     @Autowired
     private WorkOrderRepository workOrderRepository;
 
@@ -84,11 +82,13 @@ public class WorkOrderService {
         workOrderEntity.setStatus(dto.getStatus() != null ? dto.getStatus() : Status.PENDING_FIRST_APPROVAL);
         workOrderEntity.setDescription(dto.getDescription());
         workOrderEntity.setServiceItem(dto.getServiceItem());
-        PartListEntity partListEntity = createPartList(workerEntity, workOrderEntity, dto.getEquipments());
+        if (dto.getEquipments().size() > 0) {
+            PartListEntity partListEntity = createPartListHelper(workerEntity, workOrderEntity, dto.getEquipments());
 
-        List<PartListEntity> partLists = new ArrayList<>();
-        partLists.add(partListEntity);
-        workOrderEntity.setPartLists(partLists);
+            List<PartListEntity> partLists = new ArrayList<>();
+            partLists.add(partListEntity);
+            workOrderEntity.setPartLists(partLists);
+        }
         workOrderRepository.save(workOrderEntity);
         return workOrderEntity;
     }
@@ -123,24 +123,4 @@ public class WorkOrderService {
         return pagedList.getPageList();
     }
 
-    @Transactional
-    public PartListEntity createPartList(UserEntity workerEntity, WorkOrderEntity workOrderEntity,
-                               List<EquipmentDto> equipments) {
-
-        PartListEntity partListEntity = new PartListEntity(workerEntity, workOrderEntity, LocalDate.now());
-        List<PartListEquipmentEntity> xrfList = new ArrayList<>();
-        if (equipments != null) {
-            for (EquipmentDto equipmentPair : equipments) {
-                String equipment = equipmentPair.getEquipment();
-                String model = equipmentPair.getModel();
-                Integer quantity = equipmentPair.getQuantity();
-                PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipment, model, quantity);
-                partListEquipmentRepository.save(xrf);
-                xrfList.add(xrf);
-            }
-        }
-        partListEntity.setPartListEquipments(xrfList);
-        partListRepository.save(partListEntity);
-        return partListEntity;
-    }
 }
