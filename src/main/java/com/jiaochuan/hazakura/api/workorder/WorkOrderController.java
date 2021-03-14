@@ -127,9 +127,9 @@ public class WorkOrderController {
                                                     "        }\n" +
                                                     "        ...\n" +
                                                     "    ],\n" +
+                                                    "    \"status\": null,\n" +
                                                     "    \"createDate\": \"2020-04-30\",\n" +
                                                     "    \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
-                                                    "    \"status\": null,\n" +
                                                     "    \"description\": null,\n" +
                                                     "    \"serviceItem\": null,\n" +
                                                     "    \"actions\": []\n" +
@@ -284,9 +284,9 @@ public class WorkOrderController {
                                                     "            }\n" +
                                                     "            ...\n" +
                                                     "        ],\n" +
+                                                    "        \"status\": null,\n" +
                                                     "        \"createDate\": \"2020-04-30\",\n" +
                                                     "        \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
-                                                    "        \"status\": null,\n" +
                                                     "        \"description\": null,\n" +
                                                     "        \"serviceItem\": null,\n" +
                                                     "        \"actions\": []\n" +
@@ -327,6 +327,7 @@ public class WorkOrderController {
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @RolesAllowed({Role.Constants.STAFF_CLIENT_SERVICE,
+            Role.Constants.DIRECTOR_AFTER_SALES,
             Role.Constants.MANAGER_AFTER_SALES,
             Role.Constants.ENGINEER_AFTER_SALES,
             Role.Constants.VICE_PRESIDENT})

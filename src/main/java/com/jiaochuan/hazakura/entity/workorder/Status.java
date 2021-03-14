@@ -7,6 +7,7 @@ public enum Status {
     DISPATCHED("已派工"),
     PROCEEDING("进行中"),
     FINISHED("已完工"),
+    PENDING_MATERIAL_RETUEN("待返料"),
     REJECTED("已驳回");
 
     public static class Constants {
@@ -17,6 +18,7 @@ public enum Status {
         public static final String DISPATCHED = "DISPATCHED";
         public static final String PROCEEDING = "PROCEEDING";
         public static final String FINISHED = "FINISHED";
+        public static final String PENDING_MATERIAL_RETURN = "PENDING_MATERIAL_RETURN";
         public static final String REJECTED = "REJECTED";
     }
 
