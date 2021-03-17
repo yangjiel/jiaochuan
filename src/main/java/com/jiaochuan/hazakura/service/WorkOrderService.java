@@ -130,10 +130,26 @@ public class WorkOrderService extends PartListService {
     @Transactional
     public WorkOrderEntity updateWorkOrderStatusHelper(WorkOrderEntity input) {
         WorkOrderEntity workOrderEntity = workOrderRepository.findById(input.getId()).orElse(null);
-        if (workOrderEntity != null) {
-            workOrderEntity.setStatus(input.getStatus());
-            workOrderRepository.save(workOrderEntity);
+        if (workOrderEntity == null) {
+            return workOrderEntity;
         }
+        workOrderEntity.setStatus(input.getStatus());
+        if (input.getStatus() == Status.APPROVED) {
+            for (PartListEntity partListEntity : workOrderEntity.getPartLists()) {
+                if (partListEntity.getPartListStatus() == PartListStatus.PENDING_FINALIZE) {
+                    partListEntity.setPartListStatus(PartListStatus.PENDING_APPROVAL);
+                    partListRepository.save(partListEntity);
+                }
+            }
+        } else if (input.getStatus() == Status.DISPATCHED) {
+            for (PartListEntity partListEntity : workOrderEntity.getPartLists()) {
+                if (partListEntity.getPartListStatus() != PartListStatus.READY) {
+                    break;
+                }
+            }
+            workOrderEntity.setStatus(Status.PROCEEDING);
+        }
+        workOrderRepository.save(workOrderEntity);
         return workOrderEntity;
     }
 
