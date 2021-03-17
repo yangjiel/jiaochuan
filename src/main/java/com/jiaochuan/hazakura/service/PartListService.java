@@ -5,6 +5,7 @@ import com.jiaochuan.hazakura.api.workorder.PostPartListDto;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEquipmentEntity;
+import com.jiaochuan.hazakura.entity.workorder.PartListStatus;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
@@ -57,10 +58,16 @@ public class PartListService {
         if (dto.getUsage().length() > 200) {
             throw new UserException("领料单备注长度不能大于200个字符！");
         }
-        if (workOrderEntity.getPartLists().size() != 0) {
-            throw new UserException("该工单已存在初次领料单，请申请二次领料单！");
+//        if (workOrderEntity.getPartLists().size() != 0) {
+//            throw new UserException("该工单已存在初次领料单，请申请二次领料单！");
+//        }
+        if (workOrderEntity.getPartLists().size() > 0) {
+            throw new UserException("目前版本尚未支持二次领料单！");
         }
-        PartListEntity partListEntity = createPartListHelper(workerEntity, workOrderEntity, dto.getEquipments());
+        PartListEntity partListEntity = createPartListHelper(workerEntity,
+                workOrderEntity,
+                PartListStatus.PENDING_FINALIZE,
+                dto.getEquipments());
         workOrderEntity.getPartLists().add(partListEntity);
         workOrderRepository.save(workOrderEntity);
         return partListEntity;
@@ -68,10 +75,12 @@ public class PartListService {
     }
 
     @Transactional
-    public PartListEntity createPartListHelper(UserEntity workerEntity, WorkOrderEntity workOrderEntity,
-                                         List<EquipmentDto> equipments) {
+    public PartListEntity createPartListHelper(UserEntity workerEntity,
+                                               WorkOrderEntity workOrderEntity,
+                                               PartListStatus status,
+                                               List<EquipmentDto> equipments) {
 
-        PartListEntity partListEntity = new PartListEntity(workerEntity, workOrderEntity, LocalDate.now());
+        PartListEntity partListEntity = new PartListEntity(workerEntity, workOrderEntity, status, LocalDate.now());
         List<PartListEquipmentEntity> xrfList = new ArrayList<>();
         if (equipments != null) {
             for (EquipmentDto equipmentPair : equipments) {
@@ -85,6 +94,17 @@ public class PartListService {
         }
         partListEntity.setPartListEquipments(xrfList);
         partListRepository.save(partListEntity);
+        return partListEntity;
+    }
+
+    @Transactional
+    public PartListEntity updatePartListStatusHelper(PartListEntity input) {
+
+        PartListEntity partListEntity = partListRepository.findById(input.getId()).orElse(null);
+        if (partListEntity != null) {
+            partListEntity.setPartListStatus(input.getPartListStatus());
+            partListRepository.save(partListEntity);
+        }
         return partListEntity;
     }
 }
