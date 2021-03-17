@@ -3,10 +3,7 @@ package com.jiaochuan.hazakura.service;
 import com.jiaochuan.hazakura.api.workorder.EquipmentDto;
 import com.jiaochuan.hazakura.api.workorder.PostPartListDto;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
-import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
-import com.jiaochuan.hazakura.entity.workorder.PartListEquipmentEntity;
-import com.jiaochuan.hazakura.entity.workorder.PartListStatus;
-import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
+import com.jiaochuan.hazakura.entity.workorder.*;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.User.UserRepository;
@@ -103,6 +100,16 @@ public class PartListService {
         PartListEntity partListEntity = partListRepository.findById(input.getId()).orElse(null);
         if (partListEntity != null) {
             partListEntity.setPartListStatus(input.getPartListStatus());
+            if (input.getPartListStatus() == PartListStatus.READY &&
+                    partListEntity.getWorkOrder().getStatus() == Status.DISPATCHED) {
+                for (PartListEntity each : partListEntity.getWorkOrder().getPartLists()) {
+                    if (each.getPartListStatus() != PartListStatus.READY) {
+                        break;
+                    }
+                }
+                partListEntity.getWorkOrder().setStatus(Status.PROCEEDING);
+                workOrderRepository.save(partListEntity.getWorkOrder());
+            }
             partListRepository.save(partListEntity);
         }
         return partListEntity;
