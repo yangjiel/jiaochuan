@@ -9,5 +9,6 @@ public class PostPartListDto {
     private Long workerId;
     private Long workOrderId;
     private String usage;
+    private Long partListId;
     private List<EquipmentDto> equipments;
 }

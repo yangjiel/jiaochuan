@@ -4,6 +4,7 @@ import com.jiaochuan.hazakura.api.workorder.PostWorkOrderDto;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
+import com.jiaochuan.hazakura.entity.workorder.PartListStatus;
 import com.jiaochuan.hazakura.entity.workorder.Status;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.AppException;
@@ -82,13 +83,15 @@ public class WorkOrderService extends PartListService {
         workOrderEntity.setStatus(dto.getStatus() != null ? dto.getStatus() : Status.PENDING_FIRST_APPROVAL);
         workOrderEntity.setDescription(dto.getDescription());
         workOrderEntity.setServiceItem(dto.getServiceItem());
-        if (dto.getEquipments().size() > 0) {
-            PartListEntity partListEntity = createPartListHelper(workerEntity, workOrderEntity, dto.getEquipments());
+        PartListEntity partListEntity;
+        partListEntity = createPartListHelper(workerEntity,
+                workOrderEntity,
+                PartListStatus.PENDING_FINALIZE,
+                dto.getEquipments());
+        List<PartListEntity> partLists = new ArrayList<>();
+        partLists.add(partListEntity);
+        workOrderEntity.setPartLists(partLists);
 
-            List<PartListEntity> partLists = new ArrayList<>();
-            partLists.add(partListEntity);
-            workOrderEntity.setPartLists(partLists);
-        }
         workOrderRepository.save(workOrderEntity);
         return workOrderEntity;
     }
@@ -122,6 +125,16 @@ public class WorkOrderService extends PartListService {
         pagedList.setPageSize(size);
         pagedList.setPage(page);
         return pagedList.getPageList();
+    }
+
+    @Transactional
+    public WorkOrderEntity updateWorkOrderStatusHelper(WorkOrderEntity input) {
+        WorkOrderEntity workOrderEntity = workOrderRepository.findById(input.getId()).orElse(null);
+        if (workOrderEntity != null) {
+            workOrderEntity.setStatus(input.getStatus());
+            workOrderRepository.save(workOrderEntity);
+        }
+        return workOrderEntity;
     }
 
 }

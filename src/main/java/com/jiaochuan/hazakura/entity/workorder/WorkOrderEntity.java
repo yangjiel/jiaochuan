@@ -18,7 +18,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @RequiredArgsConstructor
-@JsonPropertyOrder({ "WOid", "client", "worker", "partLists", "status"})
+@JsonPropertyOrder({ "WOid", "client", "worker", "partLists"})
 public class WorkOrderEntity extends AbstractEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", referencedColumnName = "id", nullable = false)
@@ -30,15 +30,15 @@ public class WorkOrderEntity extends AbstractEntity {
     @NonNull
     private UserEntity worker;
 
+    @Column(name = "status", columnDefinition = "NVARCHAR(32)", nullable = false)
+    private Status status;
+
     @Column(name = "create_date", columnDefinition = "DATE", nullable = false)
     @NonNull
     private LocalDate createDate;
 
     @Column(name = "address", columnDefinition = "NVARCHAR(100)")
     private String address;
-
-    @Column(name = "status", columnDefinition = "NVARCHAR(32)")
-    private Status status;
 
     @Column(name = "description", columnDefinition = "NVARCHAR(256)")
     private String description;
