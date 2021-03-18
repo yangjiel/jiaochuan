@@ -131,7 +131,7 @@ public class WorkOrderService extends PartListService {
     public WorkOrderEntity updateWorkOrderStatusHelper(WorkOrderEntity input) {
         WorkOrderEntity workOrderEntity = workOrderRepository.findById(input.getId()).orElse(null);
         if (workOrderEntity == null) {
-            return workOrderEntity;
+            return null;
         }
         workOrderEntity.setStatus(input.getStatus());
         if (input.getStatus() == Status.APPROVED) {
