@@ -352,6 +352,7 @@ public class WorkOrderController {
         try {
             List<WorkOrderEntity> workOrderListPage;
             if (grantedAuthorityList.contains(Role.Constants.MANAGER_AFTER_SALES) ||
+                grantedAuthorityList.contains(Role.Constants.DIRECTOR_AFTER_SALES) ||
                 grantedAuthorityList.contains(Role.Constants.VICE_PRESIDENT)) {
                 workOrderListPage = workOrderService.getWorkOrders(page, size, client, worker, date, status);
             } else {
