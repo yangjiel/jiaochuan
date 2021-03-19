@@ -41,7 +41,7 @@ public enum Role {
 
     public final String roleDescription;
 
-    private Role(String roleDescription) {
+    Role(String roleDescription) {
         this.roleDescription = roleDescription;
     }
 }
