@@ -61,6 +61,12 @@ public class UserEntity extends AbstractEntity implements UserDetails {
         return grantedAuthorityList;
     }
 
+    public Collection<String> getAuthorityNames() {
+        List<String> names = new ArrayList<>();
+        names.add(role.name());
+        return names;
+    }
+
     @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {

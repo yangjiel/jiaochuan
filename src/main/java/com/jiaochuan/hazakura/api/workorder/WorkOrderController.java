@@ -347,7 +347,7 @@ public class WorkOrderController {
             size = 500;
         }
 
-        Collection<?> grantedAuthorityList = user.getAuthorities();
+        Collection<String> grantedAuthorityList = user.getAuthorityNames();
 
         try {
             List<WorkOrderEntity> workOrderListPage;
