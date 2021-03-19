@@ -276,6 +276,7 @@ public class PartListController {
             produces = MediaType.TEXT_PLAIN_VALUE
     )
     @RolesAllowed({Role.Constants.MANAGER_AFTER_SALES,
+            Role.Constants.MANAGER_PROCUREMENT,
             Role.Constants.STAFF_INVENTORY,
             Role.Constants.VICE_PRESIDENT})
     public ResponseEntity<String> updatePartListStatus(@RequestBody String jsonRequest) {
