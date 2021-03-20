@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
+import com.jiaochuan.hazakura.entity.workorder.Status;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.WorkOrderService;
@@ -338,7 +339,7 @@ public class WorkOrderController {
             @RequestParam(required = false) ClientEntity client,
             @RequestParam(required = false) UserEntity worker,
             @RequestParam(required = false) LocalDate date,
-            @RequestParam(required = false) String status
+            @RequestParam(required = false) Status status
             ) {
         if (page == null) {
             page = 0;
