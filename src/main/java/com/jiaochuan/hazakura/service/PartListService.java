@@ -77,7 +77,7 @@ public class PartListService {
                                                PartListStatus status,
                                                List<EquipmentDto> equipments) {
 
-        PartListEntity partListEntity = new PartListEntity(workerEntity, workOrderEntity, status, LocalDate.now());
+        PartListEntity partListEntity = new PartListEntity(workerEntity, workOrderEntity, status);
         List<PartListEquipmentEntity> xrfList = new ArrayList<>();
         if (equipments != null) {
             for (EquipmentDto equipmentPair : equipments) {
@@ -95,22 +95,38 @@ public class PartListService {
     }
 
     @Transactional
-    public PartListEntity updatePartListStatusHelper(PartListEntity input) {
-
-        PartListEntity partListEntity = partListRepository.findById(input.getId()).orElse(null);
-        if (partListEntity != null) {
-            partListEntity.setPartListStatus(input.getPartListStatus());
-            if (input.getPartListStatus() == PartListStatus.READY &&
-                    partListEntity.getWorkOrder().getStatus() == Status.DISPATCHED) {
-                for (PartListEntity each : partListEntity.getWorkOrder().getPartLists()) {
-                    if (each.getPartListStatus() != PartListStatus.READY) {
-                        break;
-                    }
+    public PartListEntity updatePartListStatusHelper(PostPartListDto dto) {
+        PartListEntity partListEntity = partListRepository.findById(dto.getPartListId()).orElse(null);
+        if (partListEntity == null) {
+            return null;
+        }
+        if (dto.getPartListStatus() != null) {
+            partListEntity.setPartListStatus(dto.getPartListStatus());
+            boolean allReady = true;
+            for (PartListEntity each : partListEntity.getWorkOrder().getPartLists()) {
+                if (each.getPartListStatus() != PartListStatus.READY) {
+                    allReady = false;
+                    break;
                 }
+            }
+            if (allReady &&
+                    dto.getPartListStatus() == PartListStatus.READY &&
+                    partListEntity.getWorkOrder().getStatus() == Status.DISPATCHED) {
+
                 partListEntity.getWorkOrder().setStatus(Status.PROCEEDING);
                 workOrderRepository.save(partListEntity.getWorkOrder());
             }
+            if (dto.getPartListStatus() == PartListStatus.APPROVED) {
+                partListEntity.setCreateDate(LocalDate.now());
+            }
             partListRepository.save(partListEntity);
+        }
+        if (dto.getWorkerId() != null) {
+            UserEntity worker = userRepository.findById(dto.getWorkerId()).orElse(null);
+            if (worker != null) {
+                partListEntity.setWorker(worker);
+                partListRepository.save(partListEntity);
+            }
         }
         return partListEntity;
     }
