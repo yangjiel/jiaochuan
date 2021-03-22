@@ -175,8 +175,13 @@ public class PartListController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
-                                            "    \"id\": \"1\", \n" +
+                                            "    \"partListId\": \"2\", \n" +
                                             "    \"partListStatus\": \"PENDING_APPROVAL\"\n" +
+                                            "}\n" +
+                                    "OR\n" +
+                                            "{\n" +
+                                            "    \"partListId\": 2, \n" +
+                                            "    \"workerId\": 1\n" +
                                             "}")
                     }
             )
@@ -270,8 +275,7 @@ public class PartListController {
                     )
             )
     })
-    @PostMapping(
-            path = "/status",
+    @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
@@ -279,10 +283,9 @@ public class PartListController {
             Role.Constants.MANAGER_PROCUREMENT,
             Role.Constants.STAFF_INVENTORY,
             Role.Constants.VICE_PRESIDENT})
-    public ResponseEntity<String> updatePartListStatus(@RequestBody String jsonRequest) {
+    public ResponseEntity<String> updatePartListStatus(@RequestBody PostPartListDto dto) {
         try {
-            PartListEntity partListEntity = objectMapper.readValue(jsonRequest, PartListEntity.class);
-            partListEntity = partListService.updatePartListStatusHelper(partListEntity);
+            PartListEntity partListEntity = partListService.updatePartListStatusHelper(dto);
             String json = objectMapper.writeValueAsString(partListEntity.getWorkOrder());
             return ResponseEntity.ok(json);
         } catch (Exception e) {

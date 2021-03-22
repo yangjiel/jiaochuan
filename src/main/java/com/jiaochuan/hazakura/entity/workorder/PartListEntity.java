@@ -32,8 +32,7 @@ public class PartListEntity extends AbstractEntity {
     @NonNull
     private PartListStatus partListStatus;
 
-    @Column(name = "create_date", columnDefinition = "DATE", nullable = false)
-    @NonNull
+    @Column(name = "create_date", columnDefinition = "DATE")
     private LocalDate createDate;
 
     @Column(name = "usage", columnDefinition = "NVARCHAR(200)")
