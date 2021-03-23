@@ -138,11 +138,15 @@ public class WorkOrderService extends PartListService {
     }
 
     @Transactional
-    public WorkOrderEntity updateWorkOrderStatusHelper(UserEntity user,
+    public WorkOrderEntity updateWorkOrderStatusHelper(Long userId,
                                                        WorkOrderEntity input) throws UserException {
         WorkOrderEntity workOrderEntity = workOrderRepository.findById(input.getId()).orElse(null);
+        UserEntity user = userRepository.findById(userId).orElse(null);
         if (workOrderEntity == null) {
-            return null;
+            throw new UserException("工单不存在！");
+        }
+        if (user == null) {
+            throw new UserException("用户不存在！");
         }
         if ((user.getRole() == Role.DIRECTOR_AFTER_SALES &&
                 input.getStatus() != Status.PENDING_FINAL_APPROVAL)) {
@@ -158,12 +162,8 @@ public class WorkOrderService extends PartListService {
                     partListRepository.save(partListEntity);
                 }
             }
-        } else if (input.getStatus() == Status.DISPATCHED) {
-            for (PartListEntity partListEntity : workOrderEntity.getPartLists()) {
-                if (partListEntity.getPartListStatus() != PartListStatus.READY) {
-                    break;
-                }
-            }
+        } else if (input.getStatus() == Status.DISPATCHED &&
+                workOrderEntity.containAllPartListStatus(PartListStatus.READY)) {
             workOrderEntity.setStatus(Status.PROCEEDING);
         }
         workOrderRepository.save(workOrderEntity);

@@ -1,5 +1,6 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
@@ -55,4 +56,14 @@ public class WorkOrderEntity extends AbstractEntity {
 
     @JsonProperty("WOid")
     public Long getId() {return this.id;}
+
+    @JsonIgnore
+    public boolean containAllPartListStatus(PartListStatus partListStatus) {
+        for (PartListEntity partListEntity : this.getPartLists()) {
+            if (partListEntity.getPartListStatus() != partListStatus) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

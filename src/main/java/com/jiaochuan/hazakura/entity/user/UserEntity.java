@@ -61,6 +61,7 @@ public class UserEntity extends AbstractEntity implements UserDetails {
         return grantedAuthorityList;
     }
 
+    @JsonIgnore
     public Collection<String> getAuthorityNames() {
         List<String> names = new ArrayList<>();
         names.add(role.name());

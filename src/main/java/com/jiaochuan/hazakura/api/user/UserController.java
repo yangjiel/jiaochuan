@@ -21,7 +21,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -318,10 +317,12 @@ public class UserController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
-    public ResponseEntity<String> updateUser(@AuthenticationPrincipal UserEntity user,
+    public ResponseEntity<String> updateUser(Authentication authentication,
                                              @RequestBody UpdateUserDto dto) {
         try {
-            UserEntity userEntity = userService.updateUser(user, dto);
+            UserEntity userEntity = userService.updateUser(
+                    ((UserEntity)authentication.getPrincipal()).getId(),
+                    dto);
             String json = objectMapper.writeValueAsString(userEntity);
             return ResponseEntity.ok(json);
         } catch (UserException e) {

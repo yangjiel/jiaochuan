@@ -5,7 +5,6 @@ import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.User.UserRepository;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.jiaochuan.hazakura.service.Helper.*;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -30,85 +31,45 @@ public class UserService implements UserDetailsService {
         // Check if required fields are not empty
         Helper.checkFields(UserEntity.class, userEntity);
 
-        if (userEntity.getUsername().length() > 16 || userEntity.getFirstName().length() > 16) {
-            throw new UserException("用户名长度不能大于16个字符！");
-        }
-
-        // Check if username has been taken
+        checkUsername(userEntity.getUsername());
         if (userRepository.findByUsername(userEntity.getUsername()) != null) {
-            throw new UserException("用户名已被使用。");
+            throw new UserException("用户名已被使用！");
         }
-
-        // Check if password is within constraint
         String password = userEntity.getPassword();
-        if (!StringUtils.isAlphanumericSpace(password)) {
-            throw new UserException("密码中存在特殊字符，请检查输入。");
-        }
-        if (password.length() < 8) {
-            throw new UserException("密码长度不能小于8位字符。");
-        }
-        if (password.length() > 16) {
-            throw new UserException("密码长度不能大于16位字符。");
-        }
+        checkPassword(password);
         if (userEntity.getLastName().length() > 4) {
             throw new UserException("用户姓氏长度不能大于4个字符！");
         }
 
         // Hash password
         userEntity.setPassword(passwordEncoder.encode(password));
-
-        // Check format for cell phone and email
-        if (userEntity.getCell().length() != 11) {
-            throw new UserException("手机号码长度不能多于或少于11位。");
-        }
-        if (!userEntity.getEmail().contains("@")) {
-            throw new UserException("电子邮箱格式不正确。");
-        }
-        if (userEntity.getEmail().length() > 64) {
-            throw new UserException("电子邮箱长度不能大于64个字符！");
-        }
+        checkCell(userEntity.getCell());
+        checkEmail(userEntity.getEmail());
 
         userRepository.save(userEntity);
         return userEntity;
     }
 
     @Transactional
-    public UserEntity updateUser(UserEntity user,
+    public UserEntity updateUser(Long userId,
                                  UpdateUserDto dto) throws UserException {
-        if (dto.getUsername() != null && dto.getUsername().length() > 16) {
-            throw new UserException("用户名长度不能大于16个字符！");
+        UserEntity user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new UserException("用户不存在！");
         }
-
-        if (dto.getUsername() != null && userRepository.findByUsername(dto.getUsername()) != null) {
-            throw new UserException("用户名已被使用。");
+        checkUsername(dto.getUsername());
+        if (userRepository.findByUsername(dto.getUsername()) != null) {
+            throw new UserException("用户名已被使用！");
         }
-
         String password = dto.getPassword();
-        if (password != null && !StringUtils.isAlphanumericSpace(password)) {
-            throw new UserException("密码中存在特殊字符，请检查输入。");
-        }
-        if (password != null && password.length() < 8) {
-            throw new UserException("密码长度不能小于8位字符。");
-        }
-        if (password != null && password.length() > 16) {
-            throw new UserException("密码长度不能大于16位字符。");
-        }
-
+        checkPassword(password);
         // Hash password
         if (user.getPassword().equals(passwordEncoder.encode(dto.getOldPassword()))) {
             user.setPassword(passwordEncoder.encode(password));
         }
 
-        // Check format for cell phone and email
-        if (dto.getCell() != null && dto.getCell().length() != 11) {
-            throw new UserException("手机号码长度不能多于或少于11位。");
-        }
-        if (dto.getEmail() != null && !dto.getEmail().contains("@")) {
-            throw new UserException("电子邮箱格式不正确。");
-        }
-        if (dto.getEmail() != null && dto.getEmail().length() > 64) {
-            throw new UserException("电子邮箱长度不能大于64个字符！");
-        }
+        checkCell(dto.getCell());
+        checkEmail(dto.getEmail());
 
         userRepository.save(user);
         return user;
@@ -119,7 +80,7 @@ public class UserService implements UserDetailsService {
         UserEntity userEntity = userRepository.findByUsername(username);
 
         if (userEntity == null) {
-            throw new UsernameNotFoundException("用户名不存在。");
+            throw new UsernameNotFoundException("用户名不存在！");
         }
 
         return userEntity;
@@ -127,7 +88,7 @@ public class UserService implements UserDetailsService {
 
     public List<UserEntity> getUsers(int page, int size) throws UserException {
         if (page < 0 || size < 0) {
-            throw new UserException("分页设置不能小于0。");
+            throw new UserException("分页设置不能小于0！");
         }
         return userRepository.findAll(PageRequest.of(page, size)).getContent();
     }

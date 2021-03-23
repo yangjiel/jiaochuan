@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -284,10 +284,12 @@ public class PartListController {
     @RolesAllowed({Role.Constants.MANAGER_PROCUREMENT,
             Role.Constants.STAFF_INVENTORY,
             Role.Constants.VICE_PRESIDENT})
-    public ResponseEntity<String> updatePartListStatus(@AuthenticationPrincipal UserEntity user,
+    public ResponseEntity<String> updatePartListStatus(Authentication authentication,
                                                        @RequestBody PostPartListDto dto) {
         try {
-            PartListEntity partListEntity = partListService.updatePartListStatusHelper(user, dto);
+            PartListEntity partListEntity = partListService.updatePartListStatusHelper(
+                    ((UserEntity)authentication.getPrincipal()).getId(),
+                    dto);
             String json = objectMapper.writeValueAsString(partListEntity.getWorkOrder());
             return ResponseEntity.ok(json);
         } catch (Exception e) {

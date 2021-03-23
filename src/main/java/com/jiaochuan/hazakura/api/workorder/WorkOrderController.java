@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -495,11 +496,13 @@ public class WorkOrderController {
     )
     @RolesAllowed({Role.Constants.MANAGER_AFTER_SALES,
             Role.Constants.VICE_PRESIDENT})
-    public ResponseEntity<String> updateWorkOrderStatus(@AuthenticationPrincipal UserEntity user,
+    public ResponseEntity<String> updateWorkOrderStatus(Authentication authentication,
                                                         @RequestBody String jsonRequest) {
         try {
             WorkOrderEntity workOrderEntity = objectMapper.readValue(jsonRequest, WorkOrderEntity.class);
-            workOrderEntity = workOrderService.updateWorkOrderStatusHelper(user, workOrderEntity);
+            workOrderEntity = workOrderService.updateWorkOrderStatusHelper(
+                    ((UserEntity)authentication.getPrincipal()).getId(),
+                    workOrderEntity);
             String json = objectMapper.writeValueAsString(workOrderEntity);
             return ResponseEntity.ok(json);
         } catch (UserException e) {
