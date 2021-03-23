@@ -21,6 +21,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -172,7 +173,7 @@ public class UserController {
                     description = "登录成功，response body将返回已经登录的用户的信息。",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = LoginResponseDto.class),
+                            schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
                                     "{\n" +
@@ -193,7 +194,7 @@ public class UserController {
                     description = "登录失败，用户名或密码错误，或用户不存在。",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = LoginResponseDto.class),
+                            schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
                                     "{\n" +
@@ -208,7 +209,7 @@ public class UserController {
                     description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = LoginResponseDto.class),
+                            schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
                                     "{\n" +
@@ -245,6 +246,94 @@ public class UserController {
         }
     }
 
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "JSON形式的UserEntity",
+            content = @Content(
+                    schema = @Schema(implementation = String.class),
+                    mediaType = "application/json",
+                    examples = {
+                            @ExampleObject(value =
+                                    "{\n" +
+                                            "    \"username\": \"sam\",\n" +
+                                            "    \"password\": \"Initial1\",\n" +
+                                            "    \"firstName\": \"三\",\n" +
+                                            "    \"lastName\": \"张\",\n" +
+                                            "    \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                            "    \"cell\": \"13106660000\",\n" +
+                                            "    \"email\": \"user@example.com\",\n" +
+                                            "    \"birthday\": \"1900-01-01\"\n" +
+                                            "}")
+                    }
+            )
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "修改成功，response body将返回用户信息",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value =
+                                            "{\n" +
+                                                    "    \"username\": \"sam\",\n" +
+                                                    "    \"oldPassword\": \"old\",\n" +
+                                                    "    \"password\": \"Initial1\",\n" +
+                                                    "    \"cell\": \"13106660000\",\n" +
+                                                    "    \"email\": \"user@example.com\",\n" +
+                                                    "}")
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "用户输入错误，例如：必填项没有填写、用户名已被使用、密码有特殊字符等。"
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "没有访问权限，用户没登录，登录状态已过期或者该用户无权访问。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "Forbidden")
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
+                    content = @Content(
+                            mediaType = "text/plain",
+                            schema = @Schema(implementation = String.class),
+                            examples = {
+                                    @ExampleObject(value = "注册成功！"),
+                                    @ExampleObject(value = "用户名不存在。"),
+                                    @ExampleObject(value = "服务器出现错误，请与管理员联系。内部错误：RuntimeException ...")
+                            }
+                    )
+            )
+    })
+    @PutMapping(
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.TEXT_PLAIN_VALUE
+    )
+    public ResponseEntity<String> updateUser(@AuthenticationPrincipal UserEntity user,
+                                             @RequestBody UpdateUserDto dto) {
+        try {
+            UserEntity userEntity = userService.updateUser(user, dto);
+            String json = objectMapper.writeValueAsString(userEntity);
+            return ResponseEntity.ok(json);
+        } catch (UserException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage());
+        }
+    }
 
     @ApiResponses(value = {
             @ApiResponse(
@@ -356,7 +445,7 @@ public class UserController {
                     description = "成功，response body将返回已经分页的用户信息。",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = LoginResponseDto.class),
+                            schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
                                     "[\n" +
@@ -379,7 +468,7 @@ public class UserController {
                     description = "请求出错，例如传进来的分页参数page或size < 0。",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = LoginResponseDto.class),
+                            schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
                                     "{\n" +
@@ -405,7 +494,7 @@ public class UserController {
                     description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = LoginResponseDto.class),
+                            schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
                                     "{\n" +

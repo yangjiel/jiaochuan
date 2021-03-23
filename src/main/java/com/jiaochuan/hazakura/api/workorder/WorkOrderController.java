@@ -475,19 +475,23 @@ public class WorkOrderController {
                     )
             )
     })
-    @PostMapping(
-            path = "/status",
+    @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
     @RolesAllowed({Role.Constants.MANAGER_AFTER_SALES,
             Role.Constants.VICE_PRESIDENT})
-    public ResponseEntity<String> updateWorkOrderStatus(@RequestBody String jsonRequest) {
+    public ResponseEntity<String> updateWorkOrderStatus(@AuthenticationPrincipal UserEntity user,
+                                                        @RequestBody String jsonRequest) {
         try {
             WorkOrderEntity workOrderEntity = objectMapper.readValue(jsonRequest, WorkOrderEntity.class);
-            workOrderEntity = workOrderService.updateWorkOrderStatusHelper(workOrderEntity);
+            workOrderEntity = workOrderService.updateWorkOrderStatusHelper(user, workOrderEntity);
             String json = objectMapper.writeValueAsString(workOrderEntity);
             return ResponseEntity.ok(json);
+        } catch (UserException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)

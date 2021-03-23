@@ -1,5 +1,6 @@
 package com.jiaochuan.hazakura.service;
 
+import com.jiaochuan.hazakura.api.user.UpdateUserDto;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
@@ -69,6 +70,48 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(userEntity);
         return userEntity;
+    }
+
+    @Transactional
+    public UserEntity updateUser(UserEntity user,
+                                 UpdateUserDto dto) throws UserException {
+        if (dto.getUsername() != null && dto.getUsername().length() > 16) {
+            throw new UserException("用户名长度不能大于16个字符！");
+        }
+
+        if (dto.getUsername() != null && userRepository.findByUsername(dto.getUsername()) != null) {
+            throw new UserException("用户名已被使用。");
+        }
+
+        String password = dto.getPassword();
+        if (password != null && !StringUtils.isAlphanumericSpace(password)) {
+            throw new UserException("密码中存在特殊字符，请检查输入。");
+        }
+        if (password != null && password.length() < 8) {
+            throw new UserException("密码长度不能小于8位字符。");
+        }
+        if (password != null && password.length() > 16) {
+            throw new UserException("密码长度不能大于16位字符。");
+        }
+
+        // Hash password
+        if (user.getPassword().equals(passwordEncoder.encode(dto.getOldPassword()))) {
+            user.setPassword(passwordEncoder.encode(password));
+        }
+
+        // Check format for cell phone and email
+        if (dto.getCell() != null && dto.getCell().length() != 11) {
+            throw new UserException("手机号码长度不能多于或少于11位。");
+        }
+        if (dto.getEmail() != null && !dto.getEmail().contains("@")) {
+            throw new UserException("电子邮箱格式不正确。");
+        }
+        if (dto.getEmail() != null && dto.getEmail().length() > 64) {
+            throw new UserException("电子邮箱长度不能大于64个字符！");
+        }
+
+        userRepository.save(user);
+        return user;
     }
 
     @Override

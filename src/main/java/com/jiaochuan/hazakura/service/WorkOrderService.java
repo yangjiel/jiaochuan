@@ -2,6 +2,7 @@ package com.jiaochuan.hazakura.service;
 
 import com.jiaochuan.hazakura.api.workorder.PostWorkOrderDto;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
+import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListStatus;
@@ -133,13 +134,20 @@ public class WorkOrderService extends PartListService {
     }
 
     @Transactional
-    public WorkOrderEntity updateWorkOrderStatusHelper(WorkOrderEntity input) {
+    public WorkOrderEntity updateWorkOrderStatusHelper(UserEntity user,
+                                                       WorkOrderEntity input) throws UserException {
         WorkOrderEntity workOrderEntity = workOrderRepository.findById(input.getId()).orElse(null);
         if (workOrderEntity == null) {
             return null;
         }
+        if ((user.getRole() == Role.DIRECTOR_AFTER_SALES &&
+                input.getStatus() != Status.PENDING_FINAL_APPROVAL)) {
+            throw new UserException("该用户无权设置该工单状态");
+        }
         workOrderEntity.setStatus(input.getStatus());
-        if (input.getStatus() == Status.APPROVED) {
+        if (input.getStatus() == Status.PENDING_FINAL_APPROVAL) {
+            workOrderEntity.getPartLists().get(0).setWorker(user);
+        } else if (input.getStatus() == Status.APPROVED) {
             for (PartListEntity partListEntity : workOrderEntity.getPartLists()) {
                 if (partListEntity.getPartListStatus() == PartListStatus.PENDING_FINALIZE) {
                     partListEntity.setPartListStatus(PartListStatus.PENDING_APPROVAL);

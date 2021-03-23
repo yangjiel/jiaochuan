@@ -2,6 +2,7 @@ package com.jiaochuan.hazakura.api.workorder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiaochuan.hazakura.entity.user.Role;
+import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.PartListService;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -279,13 +281,13 @@ public class PartListController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
-    @RolesAllowed({Role.Constants.MANAGER_AFTER_SALES,
-            Role.Constants.MANAGER_PROCUREMENT,
+    @RolesAllowed({Role.Constants.MANAGER_PROCUREMENT,
             Role.Constants.STAFF_INVENTORY,
             Role.Constants.VICE_PRESIDENT})
-    public ResponseEntity<String> updatePartListStatus(@RequestBody PostPartListDto dto) {
+    public ResponseEntity<String> updatePartListStatus(@AuthenticationPrincipal UserEntity user,
+                                                       @RequestBody PostPartListDto dto) {
         try {
-            PartListEntity partListEntity = partListService.updatePartListStatusHelper(dto);
+            PartListEntity partListEntity = partListService.updatePartListStatusHelper(user, dto);
             String json = objectMapper.writeValueAsString(partListEntity.getWorkOrder());
             return ResponseEntity.ok(json);
         } catch (Exception e) {

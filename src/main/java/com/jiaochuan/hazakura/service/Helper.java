@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ReflectionUtils;
 
 import javax.persistence.Column;
-import java.lang.reflect.Field;
 import java.util.Set;
 
 class Helper {

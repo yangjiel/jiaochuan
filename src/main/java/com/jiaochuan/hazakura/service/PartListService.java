@@ -2,6 +2,7 @@ package com.jiaochuan.hazakura.service;
 
 import com.jiaochuan.hazakura.api.workorder.EquipmentDto;
 import com.jiaochuan.hazakura.api.workorder.PostPartListDto;
+import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.*;
 import com.jiaochuan.hazakura.exception.AppException;
@@ -95,10 +96,17 @@ public class PartListService {
     }
 
     @Transactional
-    public PartListEntity updatePartListStatusHelper(PostPartListDto dto) {
+    public PartListEntity updatePartListStatusHelper(UserEntity user,
+                                                     PostPartListDto dto) throws UserException {
         PartListEntity partListEntity = partListRepository.findById(dto.getPartListId()).orElse(null);
         if (partListEntity == null) {
             return null;
+        }
+        if ((user.getRole() == Role.MANAGER_PROCUREMENT &&
+                dto.getPartListStatus() != PartListStatus.APPROVED) ||
+                (user.getRole() == Role.STAFF_INVENTORY &&
+                        dto.getPartListStatus() != PartListStatus.READY)) {
+            throw new UserException("该用户无权设置该领料单状态");
         }
         if (dto.getPartListStatus() != null) {
             partListEntity.setPartListStatus(dto.getPartListStatus());
