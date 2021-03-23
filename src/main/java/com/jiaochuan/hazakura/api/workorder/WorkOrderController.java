@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
+import com.jiaochuan.hazakura.entity.workorder.PartListStatus;
 import com.jiaochuan.hazakura.entity.workorder.Status;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.UserException;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -339,7 +341,8 @@ public class WorkOrderController {
             @RequestParam(required = false) ClientEntity client,
             @RequestParam(required = false) UserEntity worker,
             @RequestParam(required = false) LocalDate date,
-            @RequestParam(required = false) Status status
+            @RequestParam(required = false) Status status,
+            @RequestParam(required = false) PartListStatus partListStatus
             ) {
         if (page == null) {
             page = 0;
@@ -355,9 +358,21 @@ public class WorkOrderController {
             if (grantedAuthorityList.contains(Role.Constants.MANAGER_AFTER_SALES) ||
                 grantedAuthorityList.contains(Role.Constants.DIRECTOR_AFTER_SALES) ||
                 grantedAuthorityList.contains(Role.Constants.VICE_PRESIDENT)) {
-                workOrderListPage = workOrderService.getWorkOrders(page, size, client, worker, date, status);
+                workOrderListPage = workOrderService.getWorkOrders(page,
+                        size,
+                        client,
+                        worker,
+                        date,
+                        status,
+                        partListStatus);
             } else {
-                workOrderListPage = workOrderService.getWorkOrders(page, size, client, user, date, status);
+                workOrderListPage = workOrderService.getWorkOrders(page,
+                        size,
+                        client,
+                        user,
+                        date,
+                        status,
+                        partListStatus);
             }
 
             String json = objectMapper.writeValueAsString(workOrderListPage);
@@ -475,19 +490,25 @@ public class WorkOrderController {
                     )
             )
     })
-    @PostMapping(
-            path = "/status",
+    @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
     @RolesAllowed({Role.Constants.MANAGER_AFTER_SALES,
             Role.Constants.VICE_PRESIDENT})
-    public ResponseEntity<String> updateWorkOrderStatus(@RequestBody String jsonRequest) {
+    public ResponseEntity<String> updateWorkOrderStatus(Authentication authentication,
+                                                        @RequestBody String jsonRequest) {
         try {
             WorkOrderEntity workOrderEntity = objectMapper.readValue(jsonRequest, WorkOrderEntity.class);
-            workOrderEntity = workOrderService.updateWorkOrderStatusHelper(workOrderEntity);
+            workOrderEntity = workOrderService.updateWorkOrderStatusHelper(
+                    ((UserEntity)authentication.getPrincipal()).getId(),
+                    workOrderEntity);
             String json = objectMapper.writeValueAsString(workOrderEntity);
             return ResponseEntity.ok(json);
+        } catch (UserException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)

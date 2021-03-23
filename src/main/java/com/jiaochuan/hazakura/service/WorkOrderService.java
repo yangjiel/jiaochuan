@@ -2,6 +2,7 @@ package com.jiaochuan.hazakura.service;
 
 import com.jiaochuan.hazakura.api.workorder.PostWorkOrderDto;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
+import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListStatus;
@@ -101,7 +102,8 @@ public class WorkOrderService extends PartListService {
                                                ClientEntity client,
                                                UserEntity worker,
                                                LocalDate date,
-                                               Status status) throws UserException {
+                                               Status status,
+                                               PartListStatus partListStatus) throws UserException {
         if (page < 0 || size < 0) {
             throw new UserException("分页设置不能小于0。");
         }
@@ -123,6 +125,9 @@ public class WorkOrderService extends PartListService {
         if (status != null) {
             predicates.add(cb.equal(workOrder.get("status"), status));
         }
+        if (partListStatus != null) {
+            predicates.add(cb.equal(workOrder.join("partLists").get("partListStatus"), partListStatus));
+        }
         cq.orderBy(cb.desc(workOrder.get("createDate")));
         cq.where(predicates.toArray(new Predicate[0]));
         List<WorkOrderEntity> list = em.createQuery(cq).getResultList();
@@ -133,25 +138,32 @@ public class WorkOrderService extends PartListService {
     }
 
     @Transactional
-    public WorkOrderEntity updateWorkOrderStatusHelper(WorkOrderEntity input) {
+    public WorkOrderEntity updateWorkOrderStatusHelper(Long userId,
+                                                       WorkOrderEntity input) throws UserException {
         WorkOrderEntity workOrderEntity = workOrderRepository.findById(input.getId()).orElse(null);
+        UserEntity user = userRepository.findById(userId).orElse(null);
         if (workOrderEntity == null) {
-            return null;
+            throw new UserException("工单不存在！");
+        }
+        if (user == null) {
+            throw new UserException("用户不存在！");
+        }
+        if ((user.getRole() == Role.DIRECTOR_AFTER_SALES &&
+                input.getStatus() != Status.PENDING_FINAL_APPROVAL)) {
+            throw new UserException("该用户无权设置该工单状态");
         }
         workOrderEntity.setStatus(input.getStatus());
-        if (input.getStatus() == Status.APPROVED) {
+        if (input.getStatus() == Status.PENDING_FINAL_APPROVAL) {
+            workOrderEntity.getPartLists().get(0).setWorker(user);
+        } else if (input.getStatus() == Status.APPROVED) {
             for (PartListEntity partListEntity : workOrderEntity.getPartLists()) {
                 if (partListEntity.getPartListStatus() == PartListStatus.PENDING_FINALIZE) {
                     partListEntity.setPartListStatus(PartListStatus.PENDING_APPROVAL);
                     partListRepository.save(partListEntity);
                 }
             }
-        } else if (input.getStatus() == Status.DISPATCHED) {
-            for (PartListEntity partListEntity : workOrderEntity.getPartLists()) {
-                if (partListEntity.getPartListStatus() != PartListStatus.READY) {
-                    break;
-                }
-            }
+        } else if (input.getStatus() == Status.DISPATCHED &&
+                workOrderEntity.containAllPartListStatus(PartListStatus.READY)) {
             workOrderEntity.setStatus(Status.PROCEEDING);
         }
         workOrderRepository.save(workOrderEntity);

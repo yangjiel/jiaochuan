@@ -1,7 +1,6 @@
 package com.jiaochuan.hazakura.api.workorder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jiaochuan.hazakura.api.user.LoginResponseDto;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.service.EquipmentService;
@@ -48,7 +47,7 @@ public class EquipmentController {
                     description = "登记成功，返回200",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = LoginResponseDto.class),
+                            schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
@@ -67,7 +66,7 @@ public class EquipmentController {
                     description = "用户输入错误，例如：必填项没有填写、客户id有特殊字符等。",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = LoginResponseDto.class),
+                            schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +

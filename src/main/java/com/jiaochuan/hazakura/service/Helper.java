@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ReflectionUtils;
 
 import javax.persistence.Column;
-import java.lang.reflect.Field;
 import java.util.Set;
 
 class Helper {
@@ -43,4 +42,42 @@ class Helper {
         });
     }
 
+    static void checkUsername(String username) throws UserException {
+        if (username == null || username.equals("")) {
+            throw new UserException("用户名不能为空！");
+        }
+        if (username.length() > 16) {
+            throw new UserException("用户名长度不能大于16个字符！");
+        }
+    }
+
+    static void checkPassword(String password) throws UserException {
+        if (password == null) {
+            throw new UserException("密码不能为空！");
+        }
+        if (!StringUtils.isAlphanumericSpace(password)) {
+            throw new UserException("密码中存在特殊字符，请检查输入。");
+        }
+        if (password.length() < 8) {
+            throw new UserException("密码长度不能小于8位字符。");
+        }
+        if (password.length() > 16) {
+            throw new UserException("密码长度不能大于16位字符。");
+        }
+    }
+
+    static void checkCell(String cell) throws UserException {
+        if (cell == null || cell.length() != 11) {
+            throw new UserException("手机号码长度不能多于或少于11位。");
+        }
+    }
+
+    static void checkEmail(String email) throws UserException {
+        if (email == null || email.equals("") || !email.contains("@")) {
+            throw new UserException("电子邮箱格式不正确。");
+        }
+        if (email.length() > 64) {
+            throw new UserException("电子邮箱长度不能大于64个字符！");
+        }
+    }
 }

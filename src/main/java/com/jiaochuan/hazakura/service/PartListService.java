@@ -2,6 +2,7 @@ package com.jiaochuan.hazakura.service;
 
 import com.jiaochuan.hazakura.api.workorder.EquipmentDto;
 import com.jiaochuan.hazakura.api.workorder.PostPartListDto;
+import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.*;
 import com.jiaochuan.hazakura.exception.AppException;
@@ -95,24 +96,27 @@ public class PartListService {
     }
 
     @Transactional
-    public PartListEntity updatePartListStatusHelper(PostPartListDto dto) {
+    public PartListEntity updatePartListStatusHelper(Long userId,
+                                                     PostPartListDto dto) throws UserException {
         PartListEntity partListEntity = partListRepository.findById(dto.getPartListId()).orElse(null);
+        UserEntity user = userRepository.findById(userId).orElse(null);
         if (partListEntity == null) {
-            return null;
+            throw new UserException("领料单不存在！");
+        }
+        if (user == null) {
+            throw new UserException("用户不存在！");
+        }
+        if ((user.getRole() == Role.MANAGER_PROCUREMENT &&
+                dto.getPartListStatus() != PartListStatus.APPROVED) ||
+                (user.getRole() == Role.STAFF_INVENTORY &&
+                        dto.getPartListStatus() != PartListStatus.READY)) {
+            throw new UserException("该用户无权设置该领料单状态");
         }
         if (dto.getPartListStatus() != null) {
             partListEntity.setPartListStatus(dto.getPartListStatus());
-            boolean allReady = true;
-            for (PartListEntity each : partListEntity.getWorkOrder().getPartLists()) {
-                if (each.getPartListStatus() != PartListStatus.READY) {
-                    allReady = false;
-                    break;
-                }
-            }
-            if (allReady &&
-                    dto.getPartListStatus() == PartListStatus.READY &&
-                    partListEntity.getWorkOrder().getStatus() == Status.DISPATCHED) {
-
+            if (dto.getPartListStatus() == PartListStatus.READY &&
+                    partListEntity.getWorkOrder().getStatus() == Status.DISPATCHED &&
+                    partListEntity.getWorkOrder().containAllPartListStatus(PartListStatus.READY)) {
                 partListEntity.getWorkOrder().setStatus(Status.PROCEEDING);
                 workOrderRepository.save(partListEntity.getWorkOrder());
             }
