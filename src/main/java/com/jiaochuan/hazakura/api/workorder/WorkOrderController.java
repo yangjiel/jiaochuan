@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
+import com.jiaochuan.hazakura.entity.workorder.PartListStatus;
 import com.jiaochuan.hazakura.entity.workorder.Status;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.UserException;
@@ -339,7 +340,8 @@ public class WorkOrderController {
             @RequestParam(required = false) ClientEntity client,
             @RequestParam(required = false) UserEntity worker,
             @RequestParam(required = false) LocalDate date,
-            @RequestParam(required = false) Status status
+            @RequestParam(required = false) Status status,
+            @RequestParam(required = false) PartListStatus partListStatus
             ) {
         if (page == null) {
             page = 0;
@@ -355,9 +357,21 @@ public class WorkOrderController {
             if (grantedAuthorityList.contains(Role.Constants.MANAGER_AFTER_SALES) ||
                 grantedAuthorityList.contains(Role.Constants.DIRECTOR_AFTER_SALES) ||
                 grantedAuthorityList.contains(Role.Constants.VICE_PRESIDENT)) {
-                workOrderListPage = workOrderService.getWorkOrders(page, size, client, worker, date, status);
+                workOrderListPage = workOrderService.getWorkOrders(page,
+                        size,
+                        client,
+                        worker,
+                        date,
+                        status,
+                        partListStatus);
             } else {
-                workOrderListPage = workOrderService.getWorkOrders(page, size, client, user, date, status);
+                workOrderListPage = workOrderService.getWorkOrders(page,
+                        size,
+                        client,
+                        user,
+                        date,
+                        status,
+                        partListStatus);
             }
 
             String json = objectMapper.writeValueAsString(workOrderListPage);

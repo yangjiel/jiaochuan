@@ -102,7 +102,8 @@ public class WorkOrderService extends PartListService {
                                                ClientEntity client,
                                                UserEntity worker,
                                                LocalDate date,
-                                               Status status) throws UserException {
+                                               Status status,
+                                               PartListStatus partListStatus) throws UserException {
         if (page < 0 || size < 0) {
             throw new UserException("分页设置不能小于0。");
         }
@@ -123,6 +124,9 @@ public class WorkOrderService extends PartListService {
         }
         if (status != null) {
             predicates.add(cb.equal(workOrder.get("status"), status));
+        }
+        if (partListStatus != null) {
+            predicates.add(cb.equal(workOrder.join("partLists").get("partListStatus"), partListStatus));
         }
         cq.orderBy(cb.desc(workOrder.get("createDate")));
         cq.where(predicates.toArray(new Predicate[0]));
