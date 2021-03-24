@@ -154,8 +154,11 @@ public class WorkOrderService extends PartListService {
         }
         workOrderEntity.setStatus(input.getStatus());
         if (input.getStatus() == Status.PENDING_FINAL_APPROVAL) {
-            workOrderEntity.getPartLists().get(0).setWorker(user);
-        } else if (input.getStatus() == Status.APPROVED) {
+            PartListEntity partListEntity = workOrderEntity.getPartLists().get(0);
+            partListEntity.setWorker(user);
+            partListEntity.setCreateDate(LocalDate.now());
+            partListRepository.save(partListEntity);
+        } else if (input.getStatus() == Status.PENDING_DISPATCH) {
             for (PartListEntity partListEntity : workOrderEntity.getPartLists()) {
                 if (partListEntity.getPartListStatus() == PartListStatus.PENDING_FINALIZE) {
                     partListEntity.setPartListStatus(PartListStatus.PENDING_APPROVAL);
