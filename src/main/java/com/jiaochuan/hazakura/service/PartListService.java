@@ -120,9 +120,6 @@ public class PartListService {
                 partListEntity.getWorkOrder().setStatus(Status.PROCEEDING);
                 workOrderRepository.save(partListEntity.getWorkOrder());
             }
-            if (dto.getPartListStatus() == PartListStatus.APPROVED) {
-                partListEntity.setCreateDate(LocalDate.now());
-            }
             partListRepository.save(partListEntity);
         }
         if (dto.getWorkerId() != null) {

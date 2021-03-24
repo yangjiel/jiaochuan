@@ -57,19 +57,26 @@ public class UserService implements UserDetailsService {
         if (user == null) {
             throw new UserException("用户不存在！");
         }
-        checkUsername(dto.getUsername());
+        if (dto.getUsername() != null) {
+            checkUsername(dto.getUsername());
+        }
         if (userRepository.findByUsername(dto.getUsername()) != null) {
             throw new UserException("用户名已被使用！");
         }
         String password = dto.getPassword();
-        checkPassword(password);
-        // Hash password
-        if (user.getPassword().equals(passwordEncoder.encode(dto.getOldPassword()))) {
-            user.setPassword(passwordEncoder.encode(password));
+        if (password != null) {
+            checkPassword(password);
+            // Hash password
+            if (passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
+                user.setPassword(passwordEncoder.encode(password));
+            }
         }
-
-        checkCell(dto.getCell());
-        checkEmail(dto.getEmail());
+        if (dto.getCell() != null) {
+            checkCell(dto.getCell());
+        }
+        if (dto.getEmail() != null) {
+            checkEmail(dto.getEmail());
+        }
 
         userRepository.save(user);
         return user;
