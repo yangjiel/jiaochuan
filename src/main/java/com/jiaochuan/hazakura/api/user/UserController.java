@@ -253,14 +253,28 @@ public class UserController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
-                                            "    \"username\": \"sam\",\n" +
+                                            "    \"oldPassword\": \"old\",\n" +
                                             "    \"password\": \"Initial1\",\n" +
-                                            "    \"firstName\": \"三\",\n" +
-                                            "    \"lastName\": \"张\",\n" +
-                                            "    \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                            "}\n" +
+                                            "OR\n" +
+                                            "{\n" +
+                                            "    \"username\": \"sam\",\n" +
+                                            "}\n" +
+                                            "OR\n" +
+                                            "{\n" +
+                                            "    \"cell\": \"13106660000\",\n" +
+                                            "}\n" +
+                                            "OR\n" +
+                                            "{\n" +
+                                            "    \"email\": \"user@example.com\",\n" +
+                                            "}" +
+                                            "OR\n" +
+                                            "{\n" +
+                                            "    \"oldPassword\": \"old\",\n" +
+                                            "    \"password\": \"Initial1\",\n" +
+                                            "    \"username\": \"sam\",\n" +
                                             "    \"cell\": \"13106660000\",\n" +
                                             "    \"email\": \"user@example.com\",\n" +
-                                            "    \"birthday\": \"1900-01-01\"\n" +
                                             "}")
                     }
             )
@@ -275,11 +289,14 @@ public class UserController {
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
-                                                    "    \"username\": \"sam\",\n" +
-                                                    "    \"oldPassword\": \"old\",\n" +
-                                                    "    \"password\": \"Initial1\",\n" +
+                                                    "    \"id\": 1,\n" +
+                                                    "    \"firstName\": \"三\",\n" +
+                                                    "    \"lastName\": \"张\",\n" +
+                                                    "    \"role\": \"ENGINEER_AFTER_SALES\",\n" +
                                                     "    \"cell\": \"13106660000\",\n" +
                                                     "    \"email\": \"user@example.com\",\n" +
+                                                    "    \"birthday\": \"1900-01-01\"\n" +
+                                                    "    }\n" +
                                                     "}")
                             }
                     )
@@ -300,14 +317,23 @@ public class UserController {
                     )
             ),
             @ApiResponse(
+                    responseCode = "406",
+                    description = "请求不接受，密码错误。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "密码错误！")
+                            }
+                    )
+            ),
+            @ApiResponse(
                     responseCode = "500",
                     description = "服务器错误，例如各类异常。异常的详细信息将会在返回的response body中。",
                     content = @Content(
                             mediaType = "text/plain",
                             schema = @Schema(implementation = String.class),
                             examples = {
-                                    @ExampleObject(value = "注册成功！"),
-                                    @ExampleObject(value = "用户名不存在。"),
                                     @ExampleObject(value = "服务器出现错误，请与管理员联系。内部错误：RuntimeException ...")
                             }
                     )
@@ -326,6 +352,11 @@ public class UserController {
             String json = objectMapper.writeValueAsString(userEntity);
             return ResponseEntity.ok(json);
         } catch (UserException e) {
+            if (e.getMessage().equals("密码错误！")) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_ACCEPTABLE)
+                        .body(e.getMessage());
+            }
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(e.getMessage());

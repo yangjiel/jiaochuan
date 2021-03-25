@@ -330,6 +330,8 @@ public class WorkOrderController {
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @RolesAllowed({Role.Constants.STAFF_CLIENT_SERVICE,
+            Role.Constants.STAFF_INVENTORY,
+            Role.Constants.STAFF_PROCUREMENT,
             Role.Constants.DIRECTOR_AFTER_SALES,
             Role.Constants.MANAGER_AFTER_SALES,
             Role.Constants.ENGINEER_AFTER_SALES,
@@ -351,13 +353,18 @@ public class WorkOrderController {
             size = 500;
         }
 
-        Collection<String> grantedAuthorityList = user.getAuthorityNames();
+//        Collection<String> grantedAuthorityList = user.getAuthorityNames();
 
         try {
             List<WorkOrderEntity> workOrderListPage;
-            if (grantedAuthorityList.contains(Role.Constants.MANAGER_AFTER_SALES) ||
-                grantedAuthorityList.contains(Role.Constants.DIRECTOR_AFTER_SALES) ||
-                grantedAuthorityList.contains(Role.Constants.VICE_PRESIDENT)) {
+//            if (grantedAuthorityList.contains(Role.Constants.MANAGER_AFTER_SALES) ||
+//                grantedAuthorityList.contains(Role.Constants.DIRECTOR_AFTER_SALES) ||
+//                grantedAuthorityList.contains(Role.Constants.VICE_PRESIDENT)) {
+            if (user.getRole() == Role.MANAGER_PROCUREMENT ||
+                    user.getRole() == Role.STAFF_INVENTORY ||
+                    user.getRole() == Role.MANAGER_AFTER_SALES ||
+                    user.getRole() == Role.DIRECTOR_AFTER_SALES ||
+                    user.getRole() == Role.VICE_PRESIDENT) {
                 workOrderListPage = workOrderService.getWorkOrders(page,
                         size,
                         client,
