@@ -148,10 +148,10 @@ public class WorkOrderService extends PartListService {
         if (user == null) {
             throw new UserException("用户不存在！");
         }
-        if ((user.getRole() == Role.DIRECTOR_AFTER_SALES &&
-                input.getStatus() != Status.PENDING_FINAL_APPROVAL)) {
-            throw new UserException("该用户无权设置该工单状态");
-        }
+//        if ((user.getRole() == Role.DIRECTOR_AFTER_SALES &&
+//                input.getStatus() != Status.PENDING_FINAL_APPROVAL)) {
+//            throw new UserException("该用户无权设置该工单状态");
+//        }
         workOrderEntity.setStatus(input.getStatus());
         if (input.getStatus() == Status.PENDING_FINAL_APPROVAL) {
             PartListEntity partListEntity = workOrderEntity.getPartLists().get(0);

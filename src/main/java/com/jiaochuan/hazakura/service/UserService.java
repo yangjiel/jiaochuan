@@ -69,6 +69,8 @@ public class UserService implements UserDetailsService {
             // Hash password
             if (passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
                 user.setPassword(passwordEncoder.encode(password));
+            } else {
+                throw new UserException("密码错误！");
             }
         }
         if (dto.getCell() != null) {
