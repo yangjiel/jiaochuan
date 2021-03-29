@@ -6,6 +6,7 @@ import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.User.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,6 +84,6 @@ public class ClientService {
         if (page < 0 || size < 0) {
             throw new UserException("分页设置不能小于0。");
         }
-        return clientRepository.findAll(PageRequest.of(page, size)).getContent();
+        return clientRepository.findAll(PageRequest.of(page, size, Sort.by("contactName").ascending())).getContent();
     }
 }

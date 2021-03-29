@@ -128,7 +128,7 @@ public class WorkOrderService extends PartListService {
         if (partListStatus != null) {
             predicates.add(cb.equal(workOrder.join("partLists").get("partListStatus"), partListStatus));
         }
-        cq.orderBy(cb.desc(workOrder.get("createDate")));
+        cq.orderBy(cb.desc(workOrder.get("id")));
         cq.where(predicates.toArray(new Predicate[0]));
         List<WorkOrderEntity> list = em.createQuery(cq).getResultList();
         PagedListHolder<WorkOrderEntity> pagedList = new PagedListHolder<>(list);
