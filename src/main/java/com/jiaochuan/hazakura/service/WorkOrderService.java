@@ -107,6 +107,7 @@ public class WorkOrderService extends PartListService {
         if (page < 0 || size < 0) {
             throw new UserException("分页设置不能小于0。");
         }
+        final String clientStr = "client";
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<WorkOrderEntity> cq = cb.createQuery(WorkOrderEntity.class);
 
@@ -114,7 +115,7 @@ public class WorkOrderService extends PartListService {
         List<Predicate> predicates = new ArrayList<>();
 
         if (client != null) {
-            predicates.add(cb.equal(workOrder.get("client"), client));
+            predicates.add(cb.equal(workOrder.get(clientStr), client));
         }
         if (worker != null) {
             predicates.add(cb.equal(workOrder.get("worker"), worker));
@@ -137,13 +138,13 @@ public class WorkOrderService extends PartListService {
                 cq.orderBy(cb.desc(cb.function(
                         "convertEncode",
                         String.class,
-                        workOrder.join("client").get("userName"), cb.literal("gbk"))));
+                        workOrder.join(clientStr).get("userName"), cb.literal("gbk"))));
                 break;
             case "nameAsc":
                 cq.orderBy(cb.asc(cb.function(
                         "convertEncode",
                         String.class,
-                        workOrder.join("client").get("userName"), cb.literal("gbk"))));
+                        workOrder.join(clientStr).get("userName"), cb.literal("gbk"))));
                 break;
             default:
                 cq.orderBy(cb.desc(workOrder.get("id")));
