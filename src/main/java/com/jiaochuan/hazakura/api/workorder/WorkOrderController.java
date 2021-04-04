@@ -412,8 +412,30 @@ public class WorkOrderController {
                             @ExampleObject(value =
                                     "{\n" +
                                             "    \"workOrderId\": 1,\n" +
+                                            "    \"status\": \"PENDING_FINAL_APPROVAL\"" +
+                                            "}\n" +
+                                            "OR\n" +
+                                            "{\n" +
+                                            "    \"workOrderId\": 1,\n" +
+                                            "    \"engineerId\": 1, \n" +
+                                            "}\n"+
+                                            "OR\n" +
+                                            "{\n" +
+                                            "    \"workOrderId\": 1,\n" +
+                                            "    \"description\": \"test\", \n" +
+                                            "}\n"+
+                                            "OR\n" +
+                                            "{\n" +
+                                            "    \"workOrderId\": 1,\n" +
+                                            "    \"comment\": \"test\", \n" +
+                                            "}\n"+
+                                            "OR\n" +
+                                            "{\n" +
+                                            "    \"workOrderId\": 1,\n" +
                                             "    \"engineerId\": 1, \n" +
                                             "    \"status\": \"PENDING_FINAL_APPROVAL\"" +
+                                            "    \"description\": \"test\", \n" +
+                                            "    \"comment\": \"test\", \n" +
                                             "}")
                     }
             )
