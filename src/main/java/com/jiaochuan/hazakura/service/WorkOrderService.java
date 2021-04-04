@@ -65,6 +65,7 @@ public class WorkOrderService extends PartListService {
         }
 
         UserEntity workerEntity = userRepository.findById(dto.getWorkerId()).orElse(null);
+        UserEntity engineerEntity = userRepository.findById(dto.getEngineerId()).orElse(null);
         if (workerEntity == null) {
             throw new UserException(String.format("ID为%s的用户不存在。", dto.getClientId()));
         }
@@ -79,10 +80,14 @@ public class WorkOrderService extends PartListService {
         }
 
         WorkOrderEntity workOrderEntity = new WorkOrderEntity(clientEntity, workerEntity, LocalDateTime.now());
+        if (engineerEntity != null) {
+            workOrderEntity.setEngineer(engineerEntity);
+        }
         workOrderEntity.setAddress(dto.getAddress());
         workOrderEntity.setStatus(dto.getStatus() != null ? dto.getStatus() : Status.PENDING_FIRST_APPROVAL);
         workOrderEntity.setDescription(dto.getDescription());
         workOrderEntity.setServiceItem(dto.getServiceItem());
+        workOrderEntity.setComment(dto.getComment());
         PartListEntity partListEntity;
         partListEntity = createPartListHelper(workerEntity,
                 workOrderEntity,
@@ -175,6 +180,12 @@ public class WorkOrderService extends PartListService {
         UserEntity engineer = userRepository.findById(dto.getEngineerId()).orElse(null);
         if (engineer != null) {
             workOrderEntity.setEngineer(engineer);
+        }
+        if (dto.getDescription() != null) {
+            workOrderEntity.setDescription(dto.getDescription());
+        }
+        if (dto.getComment() != null) {
+            workOrderEntity.setComment(dto.getComment());
         }
         workOrderEntity.setStatus(dto.getStatus());
         if (dto.getStatus() == Status.PENDING_FINAL_APPROVAL) {

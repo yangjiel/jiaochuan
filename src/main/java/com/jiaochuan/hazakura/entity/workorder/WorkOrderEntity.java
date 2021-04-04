@@ -49,6 +49,9 @@ public class WorkOrderEntity extends AbstractEntity {
     @Column(name = "service_item", columnDefinition = "VARCHAR(256)")
     private String serviceItem;
 
+    @Column(name = "comment", columnDefinition = "VARCHAR(256)")
+    private String comment;
+
     @OneToMany(orphanRemoval = true, mappedBy = "workOrder")
     private List<ActionEntity> actions;
 

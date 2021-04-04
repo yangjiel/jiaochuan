@@ -14,6 +14,7 @@ public class PostWorkOrderDto {
     private String address;
     private Status status;
     private String description;
+    private String comment;
     private String serviceItem;
     private List<EquipmentDto> equipments;
 }
