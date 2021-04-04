@@ -110,7 +110,7 @@ public class WorkOrderController {
                                                     "                \"birthday\": \"1900-01-01\"\n" +
                                                     "            },\n" +
                                                     "            \"usage\": null,\n" +
-                                                    "            \"createDate\": \"2020-04-30\",\n" +
+                                                    "            \"createDate\": \"2020-04-30 22:50:00\",\n" +
                                                     "            \"partListEquipments\": [\n" +
                                                     "                {\n" +
                                                     "                    \"id\": \"1\",\n" +
@@ -129,11 +129,13 @@ public class WorkOrderController {
                                                     "        }\n" +
                                                     "        ...\n" +
                                                     "    ],\n" +
+                                                    "    \"engineer\": null,\n" +
                                                     "    \"status\": null,\n" +
-                                                    "    \"createDate\": \"2020-04-30\",\n" +
+                                                    "    \"createDate\": \"2020-04-30 22:50:00\",\n" +
                                                     "    \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
                                                     "    \"description\": null,\n" +
                                                     "    \"serviceItem\": null,\n" +
+                                                    "    \"comment\": null,\n" +
                                                     "    \"actions\": []\n" +
                                                     "}")
                             }
@@ -273,7 +275,7 @@ public class WorkOrderController {
                                                     "                    \"birthday\": \"1900-01-01\"\n" +
                                                     "                },\n" +
                                                     "                \"usage\": null,\n" +
-                                                    "                \"createDate\": \"2020-04-30\",\n" +
+                                                    "                \"createDate\": \"2020-04-30 22:50:00\",\n" +
                                                     "                \"partListEquipments\": [\n" +
                                                     "                    {\n" +
                                                     "                        \"id\": \"1\",\n" +
@@ -292,11 +294,22 @@ public class WorkOrderController {
                                                     "            }\n" +
                                                     "            ...\n" +
                                                     "        ],\n" +
+                                                    "        \"engineer\": {\n" +
+                                                    "            \"id\": 2,\n" +
+                                                    "            \"username\": \"jason\",\n" +
+                                                    "            \"firstName\": \"四\",\n" +
+                                                    "            \"lastName\": \"张\",\n" +
+                                                    "            \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                                    "            \"cell\": \"13106660000\",\n" +
+                                                    "            \"email\": \"pj.t@outlook.com\",\n" +
+                                                    "            \"birthday\": \"1900-01-01\"\n" +
+                                                    "        },\n" +
                                                     "        \"status\": null,\n" +
-                                                    "        \"createDate\": \"2020-04-30\",\n" +
+                                                    "        \"createDate\": \"2020-04-30 22:50:00\",\n" +
                                                     "        \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
                                                     "        \"description\": null,\n" +
                                                     "        \"serviceItem\": null,\n" +
+                                                    "        \"comment\": null,\n" +
                                                     "        \"actions\": []\n" +
                                                     "    }\n" +
                                                     "    ...\n" +
@@ -412,22 +425,22 @@ public class WorkOrderController {
                             @ExampleObject(value =
                                     "{\n" +
                                             "    \"workOrderId\": 1,\n" +
-                                            "    \"status\": \"PENDING_FINAL_APPROVAL\"" +
+                                            "    \"status\": \"PENDING_FINAL_APPROVAL\"\n" +
                                             "}\n" +
                                             "OR\n" +
                                             "{\n" +
                                             "    \"workOrderId\": 1,\n" +
-                                            "    \"engineerId\": 1, \n" +
+                                            "    \"engineerId\": 1\n" +
                                             "}\n"+
                                             "OR\n" +
                                             "{\n" +
                                             "    \"workOrderId\": 1,\n" +
-                                            "    \"description\": \"test\", \n" +
+                                            "    \"description\": \"test\"\n" +
                                             "}\n"+
                                             "OR\n" +
                                             "{\n" +
                                             "    \"workOrderId\": 1,\n" +
-                                            "    \"comment\": \"test\", \n" +
+                                            "    \"comment\": \"test\"\n" +
                                             "}\n"+
                                             "OR\n" +
                                             "{\n" +
@@ -435,7 +448,7 @@ public class WorkOrderController {
                                             "    \"engineerId\": 1, \n" +
                                             "    \"status\": \"PENDING_FINAL_APPROVAL\"" +
                                             "    \"description\": \"test\", \n" +
-                                            "    \"comment\": \"test\", \n" +
+                                            "    \"comment\": \"test\"\n" +
                                             "}")
                     }
             )
@@ -483,7 +496,7 @@ public class WorkOrderController {
                                                     "                \"birthday\": \"1900-01-01\"\n" +
                                                     "            },\n" +
                                                     "            \"usage\": null,\n" +
-                                                    "            \"createDate\": \"2020-04-30\",\n" +
+                                                    "            \"createDate\": \"2020-04-30 22:50:00\",\n" +
                                                     "            \"partListEquipments\": [\n" +
                                                     "                {\n" +
                                                     "                    \"id\": \"1\",\n" +
@@ -502,11 +515,22 @@ public class WorkOrderController {
                                                     "        }\n" +
                                                     "        ...\n" +
                                                     "    ],\n" +
+                                                    "    \"engineer\": {\n" +
+                                                    "        \"id\": 2,\n" +
+                                                    "        \"username\": \"jason\",\n" +
+                                                    "        \"firstName\": \"四\",\n" +
+                                                    "        \"lastName\": \"张\",\n" +
+                                                    "        \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                                    "        \"cell\": \"13106660000\",\n" +
+                                                    "        \"email\": \"pj.t@outlook.com\",\n" +
+                                                    "        \"birthday\": \"1900-01-01\"\n" +
+                                                    "    },\n" +
                                                     "    \"status\": \"PENDING_FINAL_APPROVAL\",\n" +
-                                                    "    \"createDate\": \"2020-04-30\",\n" +
+                                                    "    \"createDate\": \"2020-04-30 22:50:00\",\n" +
                                                     "    \"address\": \"四川省成都市高新西区金月路45号高鑫产业园\",\n" +
                                                     "    \"description\": null,\n" +
                                                     "    \"serviceItem\": null,\n" +
+                                                    "    \"comment\": null,\n" +
                                                     "    \"actions\": []\n" +
                                                     "}")
                             }

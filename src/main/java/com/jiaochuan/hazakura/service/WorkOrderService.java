@@ -65,7 +65,10 @@ public class WorkOrderService extends PartListService {
         }
 
         UserEntity workerEntity = userRepository.findById(dto.getWorkerId()).orElse(null);
-        UserEntity engineerEntity = userRepository.findById(dto.getEngineerId()).orElse(null);
+        UserEntity engineerEntity = null;
+        if (dto.getEngineerId() != null) {
+            engineerEntity = userRepository.findById(dto.getEngineerId()).orElse(null);
+        }
         if (workerEntity == null) {
             throw new UserException(String.format("ID为%s的用户不存在。", dto.getClientId()));
         }
@@ -177,9 +180,12 @@ public class WorkOrderService extends PartListService {
 //                input.getStatus() != Status.PENDING_FINAL_APPROVAL)) {
 //            throw new UserException("该用户无权设置该工单状态");
 //        }
-        UserEntity engineer = userRepository.findById(dto.getEngineerId()).orElse(null);
-        if (engineer != null) {
-            workOrderEntity.setEngineer(engineer);
+        UserEntity engineerEntity = null;
+        if (dto.getEngineerId() != null) {
+            engineerEntity = userRepository.findById(dto.getEngineerId()).orElse(null);
+        }
+        if (engineerEntity != null) {
+            workOrderEntity.setEngineer(engineerEntity);
         }
         if (dto.getDescription() != null) {
             workOrderEntity.setDescription(dto.getDescription());
