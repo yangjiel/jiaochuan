@@ -44,6 +44,9 @@ public class UserService implements UserDetailsService {
         // Hash password
         userEntity.setPassword(passwordEncoder.encode(password));
         checkCell(userEntity.getCell());
+        if (userRepository.findByCell(userEntity.getCell()) != null) {
+            throw new UserException("该用户手机号码已存在！");
+        }
         checkEmail(userEntity.getEmail());
 
         userRepository.save(userEntity);
