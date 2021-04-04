@@ -32,7 +32,7 @@ public class WorkOrderEntity extends AbstractEntity {
     @JoinColumn(name = "engineer_id", referencedColumnName = "id")
     private UserEntity engineer;
 
-    @Column(name = "status", columnDefinition = "NVARCHAR(32)", nullable = false)
+    @Column(name = "status", columnDefinition = "VARCHAR(32)", nullable = false)
     private Status status;
 
     @Column(name = "create_date", columnDefinition = "DATETIME", nullable = false)
@@ -40,13 +40,13 @@ public class WorkOrderEntity extends AbstractEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDate;
 
-    @Column(name = "address", columnDefinition = "NVARCHAR(100)")
+    @Column(name = "address", columnDefinition = "VARCHAR(100)")
     private String address;
 
-    @Column(name = "description", columnDefinition = "NVARCHAR(256)")
+    @Column(name = "description", columnDefinition = "VARCHAR(256)")
     private String description;
 
-    @Column(name = "service_item", columnDefinition = "NVARCHAR(256)")
+    @Column(name = "service_item", columnDefinition = "VARCHAR(256)")
     private String serviceItem;
 
     @OneToMany(orphanRemoval = true, mappedBy = "workOrder")

@@ -28,14 +28,14 @@ public class PartListEntity extends AbstractEntity {
     @JsonBackReference
     private WorkOrderEntity workOrder;
 
-    @Column(name = "part_list_status", columnDefinition = "NVARCHAR(32)", nullable = false)
+    @Column(name = "part_list_status", columnDefinition = "VARCHAR(32)", nullable = false)
     @NonNull
     private PartListStatus partListStatus;
 
     @Column(name = "create_date", columnDefinition = "DATETIME")
     private LocalDateTime createDate;
 
-    @Column(name = "usage", columnDefinition = "NVARCHAR(200)")
+    @Column(name = "usage", columnDefinition = "VARCHAR(200)")
     private String usage;
 
     @OneToMany(mappedBy = "partList")

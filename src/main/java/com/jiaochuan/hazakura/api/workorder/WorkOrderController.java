@@ -213,6 +213,12 @@ public class WorkOrderController {
                     required = false,
                     schema = @Schema(type = "String"),
                     description = "查询该状态的工单。"
+            ),
+            @Parameter(
+                    name = "orderBy",
+                    required = false,
+                    schema = @Schema(type = "String"),
+                    description = "timeDesc, timeAsc, nameDesc或nameAsc，默认根据时间排序。"
             )
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(

@@ -217,6 +217,11 @@ public class ClientController {
                     name = "size",
                     required = false,
                     description = "此参数用于说明一个分页里面有多少个数据，如果没有传进来，size = 500。"
+            ),
+            @Parameter(
+                    name = "orderBy",
+                    required = false,
+                    description = "nameDesc或者nameAsc，默认根据nameAsc排序。"
             )
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
