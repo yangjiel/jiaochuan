@@ -159,8 +159,8 @@ public class WorkOrderService extends PartListService {
 
     @Transactional
     public WorkOrderEntity updateWorkOrderStatusHelper(Long userId,
-                                                       WorkOrderEntity input) throws UserException {
-        WorkOrderEntity workOrderEntity = workOrderRepository.findById(input.getId()).orElse(null);
+                                                       PostWorkOrderDto dto) throws UserException {
+        WorkOrderEntity workOrderEntity = workOrderRepository.findById(dto.getWorkOrderId()).orElse(null);
         UserEntity user = userRepository.findById(userId).orElse(null);
         if (workOrderEntity == null) {
             throw new UserException("工单不存在！");
@@ -172,16 +172,17 @@ public class WorkOrderService extends PartListService {
 //                input.getStatus() != Status.PENDING_FINAL_APPROVAL)) {
 //            throw new UserException("该用户无权设置该工单状态");
 //        }
-        if (input.getEngineer() != null) {
-            workOrderEntity.setEngineer(input.getEngineer());
+        UserEntity engineer = userRepository.findById(dto.getEngineerId()).orElse(null);
+        if (engineer != null) {
+            workOrderEntity.setEngineer(engineer);
         }
-        workOrderEntity.setStatus(input.getStatus());
-        if (input.getStatus() == Status.PENDING_FINAL_APPROVAL) {
+        workOrderEntity.setStatus(dto.getStatus());
+        if (dto.getStatus() == Status.PENDING_FINAL_APPROVAL) {
             PartListEntity partListEntity = workOrderEntity.getPartLists().get(0);
             partListEntity.setWorker(user);
             partListEntity.setCreateDate(LocalDateTime.now());
             partListRepository.save(partListEntity);
-        } else if (input.getStatus() == Status.PENDING_DISPATCH) {
+        } else if (dto.getStatus() == Status.PENDING_DISPATCH) {
             for (PartListEntity partListEntity : workOrderEntity.getPartLists()) {
                 if (partListEntity.getPartListStatus() == PartListStatus.PENDING_FINALIZE) {
                     partListEntity.setPartListStatus(PartListStatus.PENDING_APPROVAL);

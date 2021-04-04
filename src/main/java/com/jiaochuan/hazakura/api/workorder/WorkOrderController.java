@@ -411,7 +411,8 @@ public class WorkOrderController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
-                                            "    \"WOid\": \"1\",\n" +
+                                            "    \"workOrderId\": 1,\n" +
+                                            "    \"engineerId\": 1, \n" +
                                             "    \"status\": \"PENDING_FINAL_APPROVAL\"" +
                                             "}")
                     }
@@ -512,12 +513,11 @@ public class WorkOrderController {
     @RolesAllowed({Role.Constants.MANAGER_AFTER_SALES,
             Role.Constants.VICE_PRESIDENT})
     public ResponseEntity<String> updateWorkOrderStatus(Authentication authentication,
-                                                        @RequestBody String jsonRequest) {
+                                                        @RequestBody PostWorkOrderDto dto) {
         try {
-            WorkOrderEntity workOrderEntity = objectMapper.readValue(jsonRequest, WorkOrderEntity.class);
-            workOrderEntity = workOrderService.updateWorkOrderStatusHelper(
+            WorkOrderEntity workOrderEntity = workOrderService.updateWorkOrderStatusHelper(
                     ((UserEntity) authentication.getPrincipal()).getId(),
-                    workOrderEntity);
+                    dto);
             String json = objectMapper.writeValueAsString(workOrderEntity);
             return ResponseEntity.ok(json);
         } catch (UserException e) {
