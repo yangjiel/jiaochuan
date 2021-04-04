@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name="user")
+@Table(name = "user")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)

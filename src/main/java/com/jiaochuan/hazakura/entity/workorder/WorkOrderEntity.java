@@ -1,25 +1,22 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Table(name="work_order")
+@Table(name = "work_order")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @RequiredArgsConstructor
-@JsonPropertyOrder({ "WOid", "client", "worker", "partLists"})
+@JsonPropertyOrder({"WOid", "client", "worker", "partLists"})
 public class WorkOrderEntity extends AbstractEntity {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", referencedColumnName = "id", nullable = false)
@@ -31,12 +28,17 @@ public class WorkOrderEntity extends AbstractEntity {
     @NonNull
     private UserEntity worker;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "engineer_id", referencedColumnName = "id")
+    private UserEntity engineer;
+
     @Column(name = "status", columnDefinition = "NVARCHAR(32)", nullable = false)
     private Status status;
 
-    @Column(name = "create_date", columnDefinition = "DATE", nullable = false)
+    @Column(name = "create_date", columnDefinition = "DATETIME", nullable = false)
     @NonNull
-    private LocalDate createDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createDate;
 
     @Column(name = "address", columnDefinition = "NVARCHAR(100)")
     private String address;
@@ -55,7 +57,9 @@ public class WorkOrderEntity extends AbstractEntity {
     private List<PartListEntity> partLists;
 
     @JsonProperty("WOid")
-    public Long getId() {return this.id;}
+    public Long getId() {
+        return this.id;
+    }
 
     @JsonIgnore
     public boolean containAllPartListStatus(PartListStatus partListStatus) {

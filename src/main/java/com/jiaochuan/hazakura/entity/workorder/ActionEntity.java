@@ -7,7 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.Instant;
 
-@Table(name="action")
+@Table(name = "action")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)

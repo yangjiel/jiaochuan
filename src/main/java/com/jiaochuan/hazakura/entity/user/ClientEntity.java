@@ -10,7 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
-@Table(name="client")
+@Table(name = "client")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)

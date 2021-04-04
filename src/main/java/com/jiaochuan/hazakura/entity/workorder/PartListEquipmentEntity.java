@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
-@Table(name="xrf_part_list_equipment")
+@Table(name = "xrf_part_list_equipment")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)

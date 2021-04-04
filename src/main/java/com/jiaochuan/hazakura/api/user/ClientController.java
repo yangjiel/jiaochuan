@@ -189,7 +189,7 @@ public class ClientController {
     public ResponseEntity<String> updateClient(@RequestBody String jsonRequest) {
         try {
             ClientEntity clientEntity = objectMapper.readValue(jsonRequest, ClientEntity.class);
-             clientService.updateClient(clientEntity);
+            clientService.updateClient(clientEntity);
             String json = objectMapper.writeValueAsString(clientEntity);
             return ResponseEntity.ok(json);
         } catch (AppException e) {
@@ -235,7 +235,7 @@ public class ClientController {
                             schema = @Schema(implementation = List.class),
                             examples = {
                                     @ExampleObject(value =
-                                                    "[\n" +
+                                            "[\n" +
                                                     "    {\n" +
                                                     "        \"id\": 1,\n" +
                                                     "        \"userName\": \"四川电器集团\",\n" +
@@ -293,7 +293,8 @@ public class ClientController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getClients(
             @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) String orderBy
     ) {
         if (page == null) {
             page = 0;
@@ -303,7 +304,7 @@ public class ClientController {
         }
 
         try {
-            List<ClientEntity> clientsList = clientService.getClients(page, size);
+            List<ClientEntity> clientsList = clientService.getClients(page, size, orderBy);
             String json = objectMapper.writeValueAsString(clientsList);
             return ResponseEntity.ok(json);
         } catch (AppException e) {

@@ -10,7 +10,8 @@ import java.util.Set;
 
 class Helper {
 
-    private Helper() {}
+    private Helper() {
+    }
 
     static void checkFields(Class<?> clazz, Object entity) throws AppException, UserException {
         checkFields(clazz, entity, null);

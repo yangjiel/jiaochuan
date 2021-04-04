@@ -5,11 +5,14 @@ import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.User.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Set;
 
@@ -17,6 +20,9 @@ import java.util.Set;
 public class ClientService {
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private EntityManager em;
 
     private void checkClient(ClientEntity clientEntity) throws UserException {
         // Check format for cell phone and email
@@ -60,7 +66,7 @@ public class ClientService {
         clientRepository.save(clientEntity);
     }
 
-    public void updateClient(ClientEntity clientEntity) throws AppException, UserException{
+    public void updateClient(ClientEntity clientEntity) throws AppException, UserException {
         Helper.checkFields(ClientEntity.class, clientEntity, Set.of("id"));
         ClientEntity check = clientRepository.findById(clientEntity.getId()).orElse(null);
         if (check == null) {
@@ -80,10 +86,29 @@ public class ClientService {
         clientRepository.save(clientEntity);
     }
 
-    public List<ClientEntity> getClients(int page, int size) throws Exception {
+    public List<ClientEntity> getClients(int page, int size, String orderBy) throws Exception {
         if (page < 0 || size < 0) {
             throw new UserException("分页设置不能小于0。");
         }
-        return clientRepository.findAll(PageRequest.of(page, size, Sort.by("contactName").ascending())).getContent();
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ClientEntity> cq = cb.createQuery(ClientEntity.class);
+
+        Root<ClientEntity> client = cq.from(ClientEntity.class);
+
+        if (orderBy != null && orderBy.equals("nameDesc")) {
+            cq.orderBy(cb.desc(cb.function("convertEncode",
+                    String.class, client.get("userName"),
+                    cb.literal("gbk"))));
+        } else {
+            cq.orderBy(cb.asc(cb.function("convertEncode",
+                    String.class, client.get("userName"),
+                    cb.literal("gbk"))));
+        }
+
+        List<ClientEntity> list = em.createQuery(cq).getResultList();
+        PagedListHolder<ClientEntity> pagedList = new PagedListHolder<>(list);
+        pagedList.setPageSize(size);
+        pagedList.setPage(page);
+        return pagedList.getPageList();
     }
 }

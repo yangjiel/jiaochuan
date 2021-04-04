@@ -9,11 +9,11 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 public class HazakuraApplication extends SpringBootServletInitializer {
 
-	private static final Logger log = LoggerFactory.getLogger(HazakuraApplication.class);
+    private static final Logger log = LoggerFactory.getLogger(HazakuraApplication.class);
 
-	// Used for local runtime
-	public static void main(String[] args) {
-		log.warn("Test!");
-		SpringApplication.run(HazakuraApplication.class, args);
-	}
+    // Used for local runtime
+    public static void main(String[] args) {
+        log.warn("Test!");
+        SpringApplication.run(HazakuraApplication.class, args);
+    }
 }

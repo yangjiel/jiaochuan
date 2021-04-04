@@ -8,11 +8,13 @@ databaseChangeLog:
                 id INTEGER AUTO_INCREMENT PRIMARY KEY,
                 client_id INTEGER NOT NULL,
                 worker_id INTEGER NOT NULL,
-                address NVARCHAR(100) NOT NULL,
-                create_date DATE,
-                status NVARCHAR(32) NOT NULL,
-                description NVARCHAR(256),
-                service_item NVARCHAR(256),
+                engineer_id INTEGER,
+                address VARCHAR(100) NOT NULL,
+                create_date DATETIME,
+                status VARCHAR(32) NOT NULL,
+                description VARCHAR(256),
+                comment VARCHAR(256),
+                service_item VARCHAR(256),
                 FOREIGN KEY (client_id) REFERENCES client(id),
                 FOREIGN KEY (worker_id) REFERENCES user(id)
             );

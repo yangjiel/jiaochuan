@@ -7,9 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class HazakuraApplicationTests {
 
-	@Test
-	void contextLoads() {
-		assert(true);
-	}
+    @Test
+    void contextLoads() {
+        assert (true);
+    }
 
 }

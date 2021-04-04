@@ -7,10 +7,10 @@ import com.jiaochuan.hazakura.entity.user.UserEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
-@Table(name="part_list")
+@Table(name = "part_list")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -32,8 +32,8 @@ public class PartListEntity extends AbstractEntity {
     @NonNull
     private PartListStatus partListStatus;
 
-    @Column(name = "create_date", columnDefinition = "DATE")
-    private LocalDate createDate;
+    @Column(name = "create_date", columnDefinition = "DATETIME")
+    private LocalDateTime createDate;
 
     @Column(name = "usage", columnDefinition = "NVARCHAR(200)")
     private String usage;

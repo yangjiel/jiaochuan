@@ -25,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-            .and()
+                .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/v1/user/test").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/user/register").permitAll()

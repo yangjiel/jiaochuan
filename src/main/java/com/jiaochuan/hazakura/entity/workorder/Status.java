@@ -15,7 +15,9 @@ public enum Status {
 
 
     public static class Constants {
-        private Constants() {}
+        private Constants() {
+        }
+
         public static final String PENDING_FIRST_APPROVAL = "PENDING_FIRST_APPROVAL";
         public static final String PENDING_FINAL_APPROVAL = "PENDING_FINAL_APPROVAL";
         public static final String APPROVED = "APPROVED";
