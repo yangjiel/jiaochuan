@@ -180,7 +180,7 @@ public class PartListController {
                                             "    \"partListId\": \"2\", \n" +
                                             "    \"partListStatus\": \"PENDING_APPROVAL\"\n" +
                                             "}\n" +
-                                    "OR\n" +
+                                            "OR\n" +
                                             "{\n" +
                                             "    \"partListId\": 2, \n" +
                                             "    \"workerId\": 1\n" +
@@ -288,7 +288,7 @@ public class PartListController {
                                                        @RequestBody PostPartListDto dto) {
         try {
             PartListEntity partListEntity = partListService.updatePartListStatusHelper(
-                    ((UserEntity)authentication.getPrincipal()).getId(),
+                    ((UserEntity) authentication.getPrincipal()).getId(),
                     dto);
             String json = objectMapper.writeValueAsString(partListEntity.getWorkOrder());
             return ResponseEntity.ok(json);

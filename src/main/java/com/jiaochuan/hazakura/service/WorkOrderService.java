@@ -2,7 +2,6 @@ package com.jiaochuan.hazakura.service;
 
 import com.jiaochuan.hazakura.api.workorder.PostWorkOrderDto;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
-import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListStatus;
@@ -26,7 +25,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -79,7 +78,7 @@ public class WorkOrderService extends PartListService {
             throw new UserException("工单服务内容长度不能大于256个字符！");
         }
 
-        WorkOrderEntity workOrderEntity = new WorkOrderEntity(clientEntity, workerEntity, LocalDate.now());
+        WorkOrderEntity workOrderEntity = new WorkOrderEntity(clientEntity, workerEntity, LocalDateTime.now());
         workOrderEntity.setAddress(dto.getAddress());
         workOrderEntity.setStatus(dto.getStatus() != null ? dto.getStatus() : Status.PENDING_FIRST_APPROVAL);
         workOrderEntity.setDescription(dto.getDescription());
@@ -101,12 +100,14 @@ public class WorkOrderService extends PartListService {
                                                int size,
                                                ClientEntity client,
                                                UserEntity worker,
-                                               LocalDate date,
+                                               LocalDateTime datetime,
                                                Status status,
-                                               PartListStatus partListStatus) throws UserException {
+                                               PartListStatus partListStatus,
+                                               String orderBy) throws UserException {
         if (page < 0 || size < 0) {
             throw new UserException("分页设置不能小于0。");
         }
+        final String clientStr = "client";
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<WorkOrderEntity> cq = cb.createQuery(WorkOrderEntity.class);
 
@@ -114,13 +115,13 @@ public class WorkOrderService extends PartListService {
         List<Predicate> predicates = new ArrayList<>();
 
         if (client != null) {
-            predicates.add(cb.equal(workOrder.get("client"), client));
+            predicates.add(cb.equal(workOrder.get(clientStr), client));
         }
         if (worker != null) {
             predicates.add(cb.equal(workOrder.get("worker"), worker));
         }
-        if (date != null) {
-            predicates.add(cb.equal(workOrder.get("createDate"), date));
+        if (datetime != null) {
+            predicates.add(cb.equal(workOrder.get("createDate"), datetime));
         }
         if (status != null) {
             predicates.add(cb.equal(workOrder.get("status"), status));
@@ -128,7 +129,26 @@ public class WorkOrderService extends PartListService {
         if (partListStatus != null) {
             predicates.add(cb.equal(workOrder.join("partLists").get("partListStatus"), partListStatus));
         }
-        cq.orderBy(cb.desc(workOrder.get("id")));
+
+        switch (orderBy != null ? orderBy : "") {
+            case "timeAsc":
+                cq.orderBy(cb.asc(workOrder.get("id")));
+                break;
+            case "nameDesc":
+                cq.orderBy(cb.desc(cb.function(
+                        "convertEncode",
+                        String.class,
+                        workOrder.join(clientStr).get("userName"), cb.literal("gbk"))));
+                break;
+            case "nameAsc":
+                cq.orderBy(cb.asc(cb.function(
+                        "convertEncode",
+                        String.class,
+                        workOrder.join(clientStr).get("userName"), cb.literal("gbk"))));
+                break;
+            default:
+                cq.orderBy(cb.desc(workOrder.get("id")));
+        }
         cq.where(predicates.toArray(new Predicate[0]));
         List<WorkOrderEntity> list = em.createQuery(cq).getResultList();
         PagedListHolder<WorkOrderEntity> pagedList = new PagedListHolder<>(list);
@@ -152,11 +172,14 @@ public class WorkOrderService extends PartListService {
 //                input.getStatus() != Status.PENDING_FINAL_APPROVAL)) {
 //            throw new UserException("该用户无权设置该工单状态");
 //        }
+        if (input.getEngineer() != null) {
+            workOrderEntity.setEngineer(input.getEngineer());
+        }
         workOrderEntity.setStatus(input.getStatus());
         if (input.getStatus() == Status.PENDING_FINAL_APPROVAL) {
             PartListEntity partListEntity = workOrderEntity.getPartLists().get(0);
             partListEntity.setWorker(user);
-            partListEntity.setCreateDate(LocalDate.now());
+            partListEntity.setCreateDate(LocalDateTime.now());
             partListRepository.save(partListEntity);
         } else if (input.getStatus() == Status.PENDING_DISPATCH) {
             for (PartListEntity partListEntity : workOrderEntity.getPartLists()) {
@@ -165,8 +188,7 @@ public class WorkOrderService extends PartListService {
                     partListRepository.save(partListEntity);
                 }
             }
-        } else if (input.getStatus() == Status.DISPATCHED &&
-                workOrderEntity.containAllPartListStatus(PartListStatus.READY)) {
+        } else if (workOrderEntity.containAllPartListStatus(PartListStatus.READY)) {
             workOrderEntity.setStatus(Status.PROCEEDING);
         }
         workOrderRepository.save(workOrderEntity);

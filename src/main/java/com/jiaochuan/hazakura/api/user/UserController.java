@@ -73,16 +73,16 @@ public class UserController {
                     mediaType = "application/json",
                     examples = {
                             @ExampleObject(value =
-                            "{\n" +
-                            "    \"username\": \"sam\",\n" +
-                            "    \"password\": \"Initial1\",\n" +
-                            "    \"firstName\": \"三\",\n" +
-                            "    \"lastName\": \"张\",\n" +
-                            "    \"role\": \"ENGINEER_AFTER_SALES\",\n" +
-                            "    \"cell\": \"13106660000\",\n" +
-                            "    \"email\": \"user@example.com\",\n" +
-                            "    \"birthday\": \"1900-01-01\"\n" +
-                            "}")
+                                    "{\n" +
+                                            "    \"username\": \"sam\",\n" +
+                                            "    \"password\": \"Initial1\",\n" +
+                                            "    \"firstName\": \"三\",\n" +
+                                            "    \"lastName\": \"张\",\n" +
+                                            "    \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                            "    \"cell\": \"13106660000\",\n" +
+                                            "    \"email\": \"user@example.com\",\n" +
+                                            "    \"birthday\": \"1900-01-01\"\n" +
+                                            "}")
                     }
             )
     )
@@ -91,23 +91,23 @@ public class UserController {
                     responseCode = "200",
                     description = "注册成功，response body将返回用户信息",
                     content = @Content(
-                    mediaType = "application/json",
-                    schema = @Schema(implementation = List.class),
-                    examples = {
-                            @ExampleObject(value =
-                                    "{\n" +
-                                    "    \"id\": 1,\n" +
-                                    "    \"username\": \"sam\",\n" +
-                                    "    \"password\": \"Initial1\",\n" +
-                                    "    \"firstName\": \"三\",\n" +
-                                    "    \"lastName\": \"张\",\n" +
-                                    "    \"role\": \"ENGINEER_AFTER_SALES\",\n" +
-                                    "    \"cell\": \"13106660000\",\n" +
-                                    "    \"email\": \"user@example.com\",\n" +
-                                    "    \"birthday\": \"1900-01-01\"\n" +
-                                    "}")
-                    }
-            )
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value =
+                                            "{\n" +
+                                                    "    \"id\": 1,\n" +
+                                                    "    \"username\": \"sam\",\n" +
+                                                    "    \"password\": \"Initial1\",\n" +
+                                                    "    \"firstName\": \"三\",\n" +
+                                                    "    \"lastName\": \"张\",\n" +
+                                                    "    \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                                    "    \"cell\": \"13106660000\",\n" +
+                                                    "    \"email\": \"user@example.com\",\n" +
+                                                    "    \"birthday\": \"1900-01-01\"\n" +
+                                                    "}")
+                            }
+                    )
             ),
             @ApiResponse(
                     responseCode = "400",
@@ -117,11 +117,11 @@ public class UserController {
                     responseCode = "403",
                     description = "没有访问权限，用户没登录，登录状态已过期或者该用户无权访问。",
                     content = @Content(
-                        mediaType = "application/json",
-                        schema = @Schema(implementation = List.class),
-                        examples = {
-                                @ExampleObject(value = "Forbidden")
-                        }
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "Forbidden")
+                            }
                     )
             ),
             @ApiResponse(
@@ -175,16 +175,16 @@ public class UserController {
                             schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
-                                    "{\n" +
-                                    "    \"id\": 1,\n" +
-                                    "    \"firstName\": \"三\",\n" +
-                                    "    \"lastName\": \"张\",\n" +
-                                    "    \"role\": \"ENGINEER_AFTER_SALES\",\n" +
-                                    "    \"cell\": \"13106660000\",\n" +
-                                    "    \"email\": \"user@example.com\",\n" +
-                                    "    \"birthday\": \"1900-01-01\"\n" +
-                                    "    }\n" +
-                                    "}")
+                                            "{\n" +
+                                                    "    \"id\": 1,\n" +
+                                                    "    \"firstName\": \"三\",\n" +
+                                                    "    \"lastName\": \"张\",\n" +
+                                                    "    \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                                    "    \"cell\": \"13106660000\",\n" +
+                                                    "    \"email\": \"user@example.com\",\n" +
+                                                    "    \"birthday\": \"1900-01-01\"\n" +
+                                                    "    }\n" +
+                                                    "}")
                             }
                     )
             ),
@@ -196,10 +196,10 @@ public class UserController {
                             schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
-                                    "{\n" +
-                                    "    \"status\": \"登录失败，请检查用户名或密码。\",\n" +
-                                    "    \"user\": null" +
-                                    "}")
+                                            "{\n" +
+                                                    "    \"status\": \"登录失败，请检查用户名或密码。\",\n" +
+                                                    "    \"user\": null" +
+                                                    "}")
                             }
                     )
             ),
@@ -211,10 +211,10 @@ public class UserController {
                             schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
-                                    "{\n" +
-                                    "    \"status\": \"服务器出现错误，请与管理员联系。内部错误：RuntimeException ...\",\n" +
-                                    "    \"user\": null" +
-                                    "}")
+                                            "{\n" +
+                                                    "    \"status\": \"服务器出现错误，请与管理员联系。内部错误：RuntimeException ...\",\n" +
+                                                    "    \"user\": null" +
+                                                    "}")
                             }
                     )
             )
@@ -347,7 +347,7 @@ public class UserController {
                                              @RequestBody UpdateUserDto dto) {
         try {
             UserEntity userEntity = userService.updateUser(
-                    ((UserEntity)authentication.getPrincipal()).getId(),
+                    ((UserEntity) authentication.getPrincipal()).getId(),
                     dto);
             String json = objectMapper.writeValueAsString(userEntity);
             return ResponseEntity.ok(json);
@@ -417,13 +417,13 @@ public class UserController {
                             mediaType = "application/json",
                             examples = {
                                     @ExampleObject(value = "" +
-                                    "[\n" +
-                                    "    {\n" +
-                                    "        \"roleId\": \"STAFF_CLIENT_SERVICE\", \n" +
-                                    "        \"roleName\": \"客服人员\"\n" +
-                                    "    }, \n" +
-                                    "    ...\n" +
-                                    "]"
+                                            "[\n" +
+                                            "    {\n" +
+                                            "        \"roleId\": \"STAFF_CLIENT_SERVICE\", \n" +
+                                            "        \"roleName\": \"客服人员\"\n" +
+                                            "    }, \n" +
+                                            "    ...\n" +
+                                            "]"
                                     )
                             }
                     )
@@ -480,18 +480,18 @@ public class UserController {
                             schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
-                                    "[\n" +
-                                    "    {\n" +
-                                    "        \"id: 1,\n" +
-                                    "        \"firstName\": \"三\",\n" +
-                                    "        \"lastName\": \"张\",\n" +
-                                    "        \"role\": \"ENGINEER_AFTER_SALES\",\n" +
-                                    "        \"cell\": \"13106660000\",\n" +
-                                    "        \"email\": \"user@example.com\",\n" +
-                                    "        \"birthday\": \"1900-01-01\"\n" +
-                                    "    }\n" +
-                                    "    ...\n" +
-                                    "]\n")
+                                            "[\n" +
+                                                    "    {\n" +
+                                                    "        \"id: 1,\n" +
+                                                    "        \"firstName\": \"三\",\n" +
+                                                    "        \"lastName\": \"张\",\n" +
+                                                    "        \"role\": \"ENGINEER_AFTER_SALES\",\n" +
+                                                    "        \"cell\": \"13106660000\",\n" +
+                                                    "        \"email\": \"user@example.com\",\n" +
+                                                    "        \"birthday\": \"1900-01-01\"\n" +
+                                                    "    }\n" +
+                                                    "    ...\n" +
+                                                    "]\n")
                             }
                     )
             ),
@@ -503,10 +503,10 @@ public class UserController {
                             schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
-                                    "{\n" +
-                                    "    \"status\": \"登录失败，请检查用户名或密码。\",\n" +
-                                    "    \"users\": null" +
-                                    "}")
+                                            "{\n" +
+                                                    "    \"status\": \"登录失败，请检查用户名或密码。\",\n" +
+                                                    "    \"users\": null" +
+                                                    "}")
                             }
                     )
             ),
@@ -529,10 +529,10 @@ public class UserController {
                             schema = @Schema(implementation = String.class),
                             examples = {
                                     @ExampleObject(value =
-                                    "{\n" +
-                                    "    \"status\": \"服务器出现错误，请与管理员联系。内部错误：RuntimeException ...\",\n" +
-                                    "    \"users\": null" +
-                                    "}")
+                                            "{\n" +
+                                                    "    \"status\": \"服务器出现错误，请与管理员联系。内部错误：RuntimeException ...\",\n" +
+                                                    "    \"users\": null" +
+                                                    "}")
                             }
                     )
             )

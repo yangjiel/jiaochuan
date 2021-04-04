@@ -5,6 +5,7 @@ spring:
     properties:
       hibernate:
         globally_quoted_identifiers: true
+        dialect: com.jiaochuan.hazakura.service.CustomMariaDB53Dialect
 server:
   servlet:
     session:

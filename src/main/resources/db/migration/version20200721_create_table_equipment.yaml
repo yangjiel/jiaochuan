@@ -6,9 +6,9 @@ databaseChangeLog:
         - sql: |
             CREATE TABLE equipment (
                 id INTEGER AUTO_INCREMENT PRIMARY KEY,
-                device_name NVARCHAR(64) NOT NULL,
-                device_model NVARCHAR(32),
-                manufacture NVARCHAR(100)
+                device_name VARCHAR(64) NOT NULL,
+                device_model VARCHAR(32),
+                manufacture VARCHAR(100)
             );
           rollback: |
             DROP TABLE equipment;

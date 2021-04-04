@@ -7,7 +7,9 @@ public enum PartListStatus {
     READY("已出库");
 
     public static class Constants {
-        private Constants() {}
+        private Constants() {
+        }
+
         public static final String PENDING_FINALIZE = "PENDING_FINALIZE";
         public static final String PENDING_APPROVAL = "PENDING_APPROVAL";
         public static final String APPROVED = "APPROVED";

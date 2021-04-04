@@ -7,7 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.Instant;
 
-@Table(name="action")
+@Table(name = "action")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -19,7 +19,7 @@ public class ActionEntity extends AbstractEntity {
     @NonNull
     private UserEntity user;
 
-    @Column(name = "type", columnDefinition = "NVARCHAR(100)", nullable = false)
+    @Column(name = "type", columnDefinition = "VARCHAR(100)", nullable = false)
     @Enumerated(EnumType.STRING)
     @NonNull
     private ActionType type;

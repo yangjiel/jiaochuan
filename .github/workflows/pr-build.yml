@@ -15,18 +15,18 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        # Disable shallow clone to suppress warning for Sonar scan
-        fetch-depth: 0
+      - uses: actions/checkout@v2
+        with:
+          # Disable shallow clone to suppress warning for Sonar scan
+          fetch-depth: 0
 
-    - name: Set up JDK
-      uses: actions/setup-java@v1
-      with:
-        java-version: 11
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
 
-    - name: Maven build, test and Sonar scan
-      run: mvn -B clean verify sonar:sonar
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Maven build, test and Sonar scan
+        run: mvn -B clean verify sonar:sonar
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

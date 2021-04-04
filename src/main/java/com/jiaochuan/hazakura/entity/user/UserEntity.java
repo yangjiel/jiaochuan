@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name="user")
+@Table(name = "user")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -33,10 +33,10 @@ public class UserEntity extends AbstractEntity implements UserDetails {
     @Column(name = "password", columnDefinition = "CHAR(60)", nullable = false)
     private String password;
 
-    @Column(name = "first_name", columnDefinition = "NVARCHAR(16)", nullable = false)
+    @Column(name = "first_name", columnDefinition = "VARCHAR(16)", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", columnDefinition = "NVARCHAR(4)", nullable = false)
+    @Column(name = "last_name", columnDefinition = "VARCHAR(4)", nullable = false)
     private String lastName;
 
     @Column(name = "role", columnDefinition = "VARCHAR(100)", nullable = false)

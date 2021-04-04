@@ -6,12 +6,12 @@ databaseChangeLog:
         - sql: |
             CREATE TABLE client (
                 id INTEGER AUTO_INCREMENT PRIMARY KEY,
-                user_name NVARCHAR(20) NOT NULL,
-                contact_name NVARCHAR(20) NOT NULL,
-                cell CHAR(11) NOT NULL,
+                user_name VARCHAR(20) NOT NULL UNIQUE,
+                contact_name VARCHAR(20) NOT NULL,
+                cell CHAR(11) NOT NULL UNIQUE,
                 email VARCHAR(64),
-                company_address NVARCHAR(100) NOT NULL,
-                notes NVARCHAR(256) NOT NULL
+                company_address VARCHAR(100) NOT NULL,
+                notes VARCHAR(256) NOT NULL
             );
           rollback: |
             DROP TABLE client;

@@ -25,8 +25,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
-import java.time.LocalDate;
-import java.util.Collection;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -214,6 +213,12 @@ public class WorkOrderController {
                     required = false,
                     schema = @Schema(type = "String"),
                     description = "查询该状态的工单。"
+            ),
+            @Parameter(
+                    name = "orderBy",
+                    required = false,
+                    schema = @Schema(type = "String"),
+                    description = "timeDesc, timeAsc, nameDesc或nameAsc，默认根据时间排序。"
             )
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -342,10 +347,11 @@ public class WorkOrderController {
             @RequestParam(required = false) Integer size,
             @RequestParam(required = false) ClientEntity client,
             @RequestParam(required = false) UserEntity worker,
-            @RequestParam(required = false) LocalDate date,
+            @RequestParam(required = false) LocalDateTime datetime,
             @RequestParam(required = false) Status status,
-            @RequestParam(required = false) PartListStatus partListStatus
-            ) {
+            @RequestParam(required = false) PartListStatus partListStatus,
+            @RequestParam(required = false) String orderBy
+    ) {
         if (page == null) {
             page = 0;
         }
@@ -369,17 +375,19 @@ public class WorkOrderController {
                         size,
                         client,
                         worker,
-                        date,
+                        datetime,
                         status,
-                        partListStatus);
+                        partListStatus,
+                        orderBy);
             } else {
                 workOrderListPage = workOrderService.getWorkOrders(page,
                         size,
                         client,
                         user,
-                        date,
+                        datetime,
                         status,
-                        partListStatus);
+                        partListStatus,
+                        orderBy);
             }
 
             String json = objectMapper.writeValueAsString(workOrderListPage);
@@ -508,7 +516,7 @@ public class WorkOrderController {
         try {
             WorkOrderEntity workOrderEntity = objectMapper.readValue(jsonRequest, WorkOrderEntity.class);
             workOrderEntity = workOrderService.updateWorkOrderStatusHelper(
-                    ((UserEntity)authentication.getPrincipal()).getId(),
+                    ((UserEntity) authentication.getPrincipal()).getId(),
                     workOrderEntity);
             String json = objectMapper.writeValueAsString(workOrderEntity);
             return ResponseEntity.ok(json);
