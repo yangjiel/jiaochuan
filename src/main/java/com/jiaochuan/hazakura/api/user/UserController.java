@@ -462,6 +462,11 @@ public class UserController {
                     name = "size",
                     required = false,
                     description = "此参数用于说明一个分页里面有多少个数据，如果没有传进来，size = 500。"
+            ),
+            @Parameter(
+                    name = "role",
+                    required = false,
+                    description = "此参数用于筛选出特定用户类别"
             )
     })
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -540,7 +545,8 @@ public class UserController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getUsers(
             @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size
+            @RequestParam(required = false) Integer size,
+            @RequestParam(required = false) Role role
     ) {
         if (page == null) {
             page = 0;
@@ -550,7 +556,7 @@ public class UserController {
         }
 
         try {
-            List<UserEntity> usersList = userService.getUsers(page, size);
+            List<UserEntity> usersList = userService.getUsers(page, size, role);
             String json = objectMapper.writeValueAsString(usersList);
             return ResponseEntity.ok(json);
         } catch (UserException e) {
