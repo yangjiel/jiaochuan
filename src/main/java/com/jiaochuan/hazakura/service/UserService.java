@@ -1,11 +1,13 @@
 package com.jiaochuan.hazakura.service;
 
 import com.jiaochuan.hazakura.api.user.UpdateUserDto;
+import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +16,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.jiaochuan.hazakura.service.Helper.*;
@@ -25,6 +33,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EntityManager em;
 
     @Transactional
     public UserEntity createUser(UserEntity userEntity) throws AppException, UserException {
@@ -98,10 +109,25 @@ public class UserService implements UserDetailsService {
         return userEntity;
     }
 
-    public List<UserEntity> getUsers(int page, int size) throws UserException {
+    public List<UserEntity> getUsers(int page, int size, Role role) throws UserException {
         if (page < 0 || size < 0) {
             throw new UserException("分页设置不能小于0！");
         }
-        return userRepository.findAll(PageRequest.of(page, size)).getContent();
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<UserEntity> cq = cb.createQuery(UserEntity.class);
+
+        Root<UserEntity> userEntity = cq.from(UserEntity.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (role != null) {
+            predicates.add(cb.equal(userEntity.get("role"), role));
+        }
+        cq.where(predicates.toArray(new Predicate[0]));
+        List<UserEntity> list = em.createQuery(cq).getResultList();
+        PagedListHolder<UserEntity> pagedList = new PagedListHolder<>(list);
+        pagedList.setPageSize(size);
+        pagedList.setPage(page);
+        return pagedList.getPageList();
     }
 }

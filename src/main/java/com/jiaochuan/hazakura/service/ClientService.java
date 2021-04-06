@@ -93,15 +93,15 @@ public class ClientService {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<ClientEntity> cq = cb.createQuery(ClientEntity.class);
 
-        Root<ClientEntity> client = cq.from(ClientEntity.class);
+        Root<ClientEntity> clientEntity = cq.from(ClientEntity.class);
 
         if (orderBy != null && orderBy.equals("nameDesc")) {
             cq.orderBy(cb.desc(cb.function("convertEncode",
-                    String.class, client.get("userName"),
+                    String.class, clientEntity.get("userName"),
                     cb.literal("gbk"))));
         } else {
             cq.orderBy(cb.asc(cb.function("convertEncode",
-                    String.class, client.get("userName"),
+                    String.class, clientEntity.get("userName"),
                     cb.literal("gbk"))));
         }
 
