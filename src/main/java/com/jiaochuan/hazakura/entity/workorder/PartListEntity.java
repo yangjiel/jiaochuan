@@ -1,6 +1,7 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
@@ -33,6 +34,7 @@ public class PartListEntity extends AbstractEntity {
     private PartListStatus partListStatus;
 
     @Column(name = "create_date", columnDefinition = "DATETIME")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createDate;
 
     @Column(name = "usage", columnDefinition = "VARCHAR(200)")
