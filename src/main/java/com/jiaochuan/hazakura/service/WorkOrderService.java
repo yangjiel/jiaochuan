@@ -199,7 +199,7 @@ public class WorkOrderService extends PartListService {
             partListEntity.setWorker(user);
             partListEntity.setCreateDate(LocalDateTime.now());
             partListRepository.save(partListEntity);
-        } else if (dto.getStatus() == Status.PENDING_DISPATCH) {
+        } else if (dto.getStatus() == Status.APPROVED) {
             for (PartListEntity partListEntity : workOrderEntity.getPartLists()) {
                 if (partListEntity.getPartListStatus() == PartListStatus.PENDING_FINALIZE) {
                     partListEntity.setPartListStatus(PartListStatus.PENDING_APPROVAL);
