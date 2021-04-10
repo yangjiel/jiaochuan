@@ -206,8 +206,6 @@ public class WorkOrderService extends PartListService {
                     partListRepository.save(partListEntity);
                 }
             }
-        } else if (workOrderEntity.containAllPartListStatus(PartListStatus.READY)) {
-            workOrderEntity.setStatus(Status.PROCEEDING);
         }
         workOrderRepository.save(workOrderEntity);
         return workOrderEntity;
