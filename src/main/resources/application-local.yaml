@@ -3,7 +3,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: root
-    jdbc-url: jdbc:mysql://localhost:3306/dev_test?useUnicode=yes&characterEncoding=UTF-8
+    url: jdbc:mysql://b1fa897a7fee63:00571fbf@us-cdbr-east-03.cleardb.com/heroku_74f731083d3313e?reconnect=true&useUnicode=yes&characterEncoding=UTF-8
 logging:
   level:
     org:
