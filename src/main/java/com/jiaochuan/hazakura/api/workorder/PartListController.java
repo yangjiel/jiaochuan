@@ -178,7 +178,8 @@ public class PartListController {
                             @ExampleObject(value =
                                     "{\n" +
                                             "    \"partListId\": \"2\", \n" +
-                                            "    \"partListStatus\": \"PENDING_APPROVAL\"\n" +
+                                            "    \"partListStatus\": \"PENDING_APPROVAL\",\n" +
+                                            "    \"comment\": \"Pending approve\"\n" +
                                             "}\n" +
                                             "OR\n" +
                                             "{\n" +

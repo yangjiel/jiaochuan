@@ -144,7 +144,7 @@ public class WorkOrderController {
                                                     "                    \"prevStatus\": \"PENDING_FINALIZE\",\n" +
                                                     "                    \"status\": \"PENDING_FINALIZE\"\n" +
                                                     "                },\n" +
-                                                    "                ...." +
+                                                    "                ...\n" +
                                                     "            ]\n" +
                                                     "        }\n" +
                                                     "        ...\n" +
@@ -191,7 +191,7 @@ public class WorkOrderController {
                                                     "            \"prevStatus\": \"PENDING_FIRST_APPROVAL\",\n" +
                                                     "            \"status\": \"PENDING_FINAL_APPROVAL\"\n" +
                                                     "        },\n" +
-                                                    "        ....\n" +
+                                                    "        ...\n" +
                                                     "    ]\n" +
                                                     "}")
                             }
@@ -365,7 +365,7 @@ public class WorkOrderController {
                                                     "                        \"prevStatus\": \"PENDING_FINALIZE\",\n" +
                                                     "                        \"status\": \"PENDING_FINALIZE\"\n" +
                                                     "                    },\n" +
-                                                    "                    ...." +
+                                                    "                    ...\n" +
                                                     "                ]\n" +
                                                     "            }\n" +
                                                     "            ...\n" +
@@ -421,7 +421,7 @@ public class WorkOrderController {
                                                     "                \"prevStatus\": \"PENDING_FIRST_APPROVAL\",\n" +
                                                     "                \"status\": \"PENDING_FINAL_APPROVAL\"\n" +
                                                     "            },\n" +
-                                                    "            ....\n" +
+                                                    "            ...\n" +
                                                     "        ]\n" +
                                                     "    }\n" +
                                                     "    ...\n" +
@@ -537,7 +537,8 @@ public class WorkOrderController {
                             @ExampleObject(value =
                                     "{\n" +
                                             "    \"workOrderId\": 1,\n" +
-                                            "    \"status\": \"PENDING_FINAL_APPROVAL\"\n" +
+                                            "    \"status\": \"PENDING_FINAL_APPROVAL\",\n" +
+                                            "    \"comment\": \"First approved.\"\n" +
                                             "}\n" +
                                             "OR\n" +
                                             "{\n" +
@@ -557,9 +558,9 @@ public class WorkOrderController {
                                             "OR\n" +
                                             "{\n" +
                                             "    \"workOrderId\": 1,\n" +
-                                            "    \"engineerId\": 1, \n" +
-                                            "    \"status\": \"PENDING_FINAL_APPROVAL\"" +
-                                            "    \"description\": \"test\", \n" +
+                                            "    \"engineerId\": 1,\n" +
+                                            "    \"status\": \"PENDING_FINAL_APPROVAL\",\n" +
+                                            "    \"description\": \"test\",\n" +
                                             "    \"comment\": \"test\"\n" +
                                             "}")
                     }
@@ -642,7 +643,7 @@ public class WorkOrderController {
                                                     "                    \"prevStatus\": \"PENDING_FINALIZE\",\n" +
                                                     "                    \"status\": \"PENDING_FINALIZE\"\n" +
                                                     "                },\n" +
-                                                    "                ...." +
+                                                    "                ...\n" +
                                                     "            ]\n" +
                                                     "        }\n" +
                                                     "        ...\n" +
@@ -698,7 +699,7 @@ public class WorkOrderController {
                                                     "            \"prevStatus\": \"PENDING_FIRST_APPROVAL\",\n" +
                                                     "            \"status\": \"PENDING_FINAL_APPROVAL\"\n" +
                                                     "        },\n" +
-                                                    "        ....\n" +
+                                                    "        ...\n" +
                                                     "    ]\n" +
                                                     "}")
                             }
