@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 9dfdc608-e758-4ef0-a5a6-3028af9aa561
+      author: jasonliuengr@gmail.com
+      changes:
+        - sql: |
+            CREATE TABLE part_list_action (
+                id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                part_list_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                prev_status VARCHAR(32) NOT NULL,
+                status VARCHAR(32) NOT NULL,
+                comment VARCHAR(256),
+                date DATETIME NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES user(id),
+                FOREIGN KEY (part_list_id) REFERENCES part_list(id) ON DELETE CASCADE
+            );
+          rollback: |
+            DROP TABLE action;

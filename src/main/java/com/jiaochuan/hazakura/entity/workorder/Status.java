@@ -1,17 +1,18 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
 public enum Status {
-    PENDING_FIRST_APPROVAL("待初审"),
-    PENDING_FINAL_APPROVAL("待终审"),
-    APPROVED("已批准"),
-    PENDING_DISPATCH("待派工"),
-    DISPATCHED("已派工"),
-    PROCEEDING("进行中"),
-    SECOND_MATERIAL("二次领料"),
-    FINISHED("已完工"),
-    PENDING_MATERIAL_RETURN("待返料"),
-    REJECTED("已驳回"),
-    COMPLETED("已截单");
+    PENDING_FIRST_APPROVAL("待初审", 0),
+    PENDING_FINAL_APPROVAL("待终审", 1),
+    APPROVED("已批准", 2),
+    PENDING_DISPATCH("待派工", 3),
+    DISPATCHED("已派工", 4),
+    PROCEEDING("进行中", 5),
+    ON_SITE_INTERRUPTION_APPROVAL("出场中断审批", 6),
+    SECOND_MATERIAL("二次领料", 7),
+    FINISHED("已完工", 8),
+    PENDING_MATERIAL_RETURN("待返料", 9),
+    REJECTED("已驳回", 10),
+    COMPLETED("已截单", 11);
 
 
     public static class Constants {
@@ -32,8 +33,10 @@ public enum Status {
 
 
     public final String statusDescription;
+    public final Integer value;
 
-    private Status(String statusDescription) {
+    private Status(String statusDescription, Integer value) {
         this.statusDescription = statusDescription;
+        this.value = value;
     }
 }

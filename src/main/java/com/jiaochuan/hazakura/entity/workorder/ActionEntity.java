@@ -1,14 +1,14 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
-@Table(name = "action")
-@Entity
+@MappedSuperclass
 @Data
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
@@ -19,20 +19,11 @@ public class ActionEntity extends AbstractEntity {
     @NonNull
     private UserEntity user;
 
-    @Column(name = "type", columnDefinition = "VARCHAR(100)", nullable = false)
-    @Enumerated(EnumType.STRING)
-    @NonNull
-    private ActionType type;
+    @Column(name = "comment", columnDefinition = "VARCHAR(256)")
+    private String comment;
 
-    @Column(name = "status", columnDefinition = "BOOLEAN")
+    @Column(name = "date", columnDefinition = "DATETIME", nullable = false)
     @NonNull
-    private Boolean status;
-
-    @Column(name = "date", columnDefinition = "TIMESTAMP", nullable = false)
-    @NonNull
-    private Instant date;
-
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "work_order_id", referencedColumnName = "id", nullable = false)
-    private WorkOrderEntity workOrder;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime date;
 }

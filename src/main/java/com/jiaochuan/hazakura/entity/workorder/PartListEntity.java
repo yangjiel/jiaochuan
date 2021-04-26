@@ -3,6 +3,7 @@ package com.jiaochuan.hazakura.entity.workorder;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jiaochuan.hazakura.entity.AbstractEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import lombok.*;
@@ -40,7 +41,12 @@ public class PartListEntity extends AbstractEntity {
     @Column(name = "usage", columnDefinition = "VARCHAR(200)")
     private String usage;
 
-    @OneToMany(mappedBy = "partList")
+    @OneToMany(orphanRemoval = true, mappedBy = "partList")
     @JsonManagedReference
     private List<PartListEquipmentEntity> partListEquipments;
+
+    @JsonProperty("partListActions")
+    @OneToMany(orphanRemoval = true, mappedBy = "partList")
+    @JsonManagedReference
+    private List<PartListActionEntity> actions;
 }

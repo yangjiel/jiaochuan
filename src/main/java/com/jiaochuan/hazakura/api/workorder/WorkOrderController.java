@@ -126,6 +126,26 @@ public class WorkOrderController {
                                                     "                },\n" +
                                                     "                ...\n" +
                                                     "            ]\n" +
+                                                    "            \"partListActions\": [\n" +
+                                                    "                {\n" +
+                                                    "                    \"id\": 1,\n" +
+                                                    "                    \"user\": {\n" +
+                                                    "                        \"id\": 1,\n" +
+                                                    "                        \"username\": \"jason\",\n" +
+                                                    "                        \"firstName\": \"测\",\n" +
+                                                    "                        \"lastName\": \"试\",\n" +
+                                                    "                        \"role\": \"VICE_PRESIDENT\",\n" +
+                                                    "                        \"cell\": \"13800000000\",\n" +
+                                                    "                        \"email\": \"something@qq.com\",\n" +
+                                                    "                        \"birthday\": \"1972-02-08\"\n" +
+                                                    "                    },\n" +
+                                                    "                    \"comment\": null,\n" +
+                                                    "                    \"date\": \"2021-04-25 17:00:23\",\n" +
+                                                    "                    \"prevStatus\": \"PENDING_FINALIZE\",\n" +
+                                                    "                    \"status\": \"PENDING_FINALIZE\"\n" +
+                                                    "                },\n" +
+                                                    "                ...." +
+                                                    "            ]\n" +
                                                     "        }\n" +
                                                     "        ...\n" +
                                                     "    ],\n" +
@@ -136,7 +156,43 @@ public class WorkOrderController {
                                                     "    \"description\": null,\n" +
                                                     "    \"serviceItem\": null,\n" +
                                                     "    \"comment\": null,\n" +
-                                                    "    \"actions\": []\n" +
+                                                    "    \"actions\": [\n" +
+                                                    "        {\n" +
+                                                    "            \"id\": 1,\n" +
+                                                    "            \"user\": {\n" +
+                                                    "                \"id\": 1,\n" +
+                                                    "                \"username\": \"jason\",\n" +
+                                                    "                \"firstName\": \"测\",\n" +
+                                                    "                \"lastName\": \"试\",\n" +
+                                                    "                \"role\": \"VICE_PRESIDENT\",\n" +
+                                                    "                \"cell\": \"13800000000\",\n" +
+                                                    "                \"email\": \"something@qq.com\",\n" +
+                                                    "                \"birthday\": \"1972-02-08\"\n" +
+                                                    "            },\n" +
+                                                    "            \"comment\": null,\n" +
+                                                    "            \"date\": \"2021-04-25 17:00:23\",\n" +
+                                                    "            \"prevStatus\": \"PENDING_FIRST_APPROVAL\",\n" +
+                                                    "            \"status\": \"PENDING_FIRST_APPROVAL\"\n" +
+                                                    "        },\n" +
+                                                    "        {\n" +
+                                                    "            \"id\": 2,\n" +
+                                                    "            \"user\": {\n" +
+                                                    "                \"id\": 1,\n" +
+                                                    "                \"username\": \"jason\",\n" +
+                                                    "                \"firstName\": \"测\",\n" +
+                                                    "                \"lastName\": \"试\",\n" +
+                                                    "                \"role\": \"VICE_PRESIDENT\",\n" +
+                                                    "                \"cell\": \"13800000000\",\n" +
+                                                    "                \"email\": \"something@qq.com\",\n" +
+                                                    "                \"birthday\": \"1972-02-08\"\n" +
+                                                    "            },\n" +
+                                                    "            \"comment\": \"Initial approved\",\n" +
+                                                    "            \"date\": \"2021-04-25 17:06:52\",\n" +
+                                                    "            \"prevStatus\": \"PENDING_FIRST_APPROVAL\",\n" +
+                                                    "            \"status\": \"PENDING_FINAL_APPROVAL\"\n" +
+                                                    "        },\n" +
+                                                    "        ....\n" +
+                                                    "    ]\n" +
                                                     "}")
                             }
                     )
@@ -291,6 +347,26 @@ public class WorkOrderController {
                                                     "                    },\n" +
                                                     "                    ...\n" +
                                                     "                ]\n" +
+                                                    "                \"partListActions\": [\n" +
+                                                    "                    {\n" +
+                                                    "                        \"id\": 1,\n" +
+                                                    "                        \"user\": {\n" +
+                                                    "                            \"id\": 1,\n" +
+                                                    "                            \"username\": \"jason\",\n" +
+                                                    "                            \"firstName\": \"测\",\n" +
+                                                    "                            \"lastName\": \"试\",\n" +
+                                                    "                            \"role\": \"VICE_PRESIDENT\",\n" +
+                                                    "                            \"cell\": \"13800000000\",\n" +
+                                                    "                            \"email\": \"something@qq.com\",\n" +
+                                                    "                            \"birthday\": \"1972-02-08\"\n" +
+                                                    "                        },\n" +
+                                                    "                        \"comment\": null,\n" +
+                                                    "                        \"date\": \"2021-04-25 17:00:23\",\n" +
+                                                    "                        \"prevStatus\": \"PENDING_FINALIZE\",\n" +
+                                                    "                        \"status\": \"PENDING_FINALIZE\"\n" +
+                                                    "                    },\n" +
+                                                    "                    ...." +
+                                                    "                ]\n" +
                                                     "            }\n" +
                                                     "            ...\n" +
                                                     "        ],\n" +
@@ -310,7 +386,43 @@ public class WorkOrderController {
                                                     "        \"description\": null,\n" +
                                                     "        \"serviceItem\": null,\n" +
                                                     "        \"comment\": null,\n" +
-                                                    "        \"actions\": []\n" +
+                                                    "        \"actions\": [\n" +
+                                                    "            {\n" +
+                                                    "                \"id\": 1,\n" +
+                                                    "                \"user\": {\n" +
+                                                    "                    \"id\": 1,\n" +
+                                                    "                    \"username\": \"jason\",\n" +
+                                                    "                    \"firstName\": \"测\",\n" +
+                                                    "                    \"lastName\": \"试\",\n" +
+                                                    "                    \"role\": \"VICE_PRESIDENT\",\n" +
+                                                    "                    \"cell\": \"13800000000\",\n" +
+                                                    "                    \"email\": \"something@qq.com\",\n" +
+                                                    "                    \"birthday\": \"1972-02-08\"\n" +
+                                                    "                },\n" +
+                                                    "                \"comment\": null,\n" +
+                                                    "                \"date\": \"2021-04-25 17:00:23\",\n" +
+                                                    "                \"prevStatus\": \"PENDING_FIRST_APPROVAL\",\n" +
+                                                    "                \"status\": \"PENDING_FIRST_APPROVAL\"\n" +
+                                                    "            },\n" +
+                                                    "            {\n" +
+                                                    "                \"id\": 2,\n" +
+                                                    "                \"user\": {\n" +
+                                                    "                    \"id\": 1,\n" +
+                                                    "                    \"username\": \"jason\",\n" +
+                                                    "                    \"firstName\": \"测\",\n" +
+                                                    "                    \"lastName\": \"试\",\n" +
+                                                    "                    \"role\": \"VICE_PRESIDENT\",\n" +
+                                                    "                    \"cell\": \"13800000000\",\n" +
+                                                    "                    \"email\": \"something@qq.com\",\n" +
+                                                    "                    \"birthday\": \"1972-02-08\"\n" +
+                                                    "                },\n" +
+                                                    "                \"comment\": \"Initial approved\",\n" +
+                                                    "                \"date\": \"2021-04-25 17:06:52\",\n" +
+                                                    "                \"prevStatus\": \"PENDING_FIRST_APPROVAL\",\n" +
+                                                    "                \"status\": \"PENDING_FINAL_APPROVAL\"\n" +
+                                                    "            },\n" +
+                                                    "            ....\n" +
+                                                    "        ]\n" +
                                                     "    }\n" +
                                                     "    ...\n" +
                                                     "]")
@@ -512,6 +624,26 @@ public class WorkOrderController {
                                                     "                },\n" +
                                                     "                ...\n" +
                                                     "            ]\n" +
+                                                    "            \"partListActions\": [\n" +
+                                                    "                {\n" +
+                                                    "                    \"id\": 1,\n" +
+                                                    "                    \"user\": {\n" +
+                                                    "                        \"id\": 1,\n" +
+                                                    "                        \"username\": \"jason\",\n" +
+                                                    "                        \"firstName\": \"测\",\n" +
+                                                    "                        \"lastName\": \"试\",\n" +
+                                                    "                        \"role\": \"VICE_PRESIDENT\",\n" +
+                                                    "                        \"cell\": \"13800000000\",\n" +
+                                                    "                        \"email\": \"something@qq.com\",\n" +
+                                                    "                        \"birthday\": \"1972-02-08\"\n" +
+                                                    "                    },\n" +
+                                                    "                    \"comment\": null,\n" +
+                                                    "                    \"date\": \"2021-04-25 17:00:23\",\n" +
+                                                    "                    \"prevStatus\": \"PENDING_FINALIZE\",\n" +
+                                                    "                    \"status\": \"PENDING_FINALIZE\"\n" +
+                                                    "                },\n" +
+                                                    "                ...." +
+                                                    "            ]\n" +
                                                     "        }\n" +
                                                     "        ...\n" +
                                                     "    ],\n" +
@@ -531,7 +663,43 @@ public class WorkOrderController {
                                                     "    \"description\": null,\n" +
                                                     "    \"serviceItem\": null,\n" +
                                                     "    \"comment\": null,\n" +
-                                                    "    \"actions\": []\n" +
+                                                    "    \"actions\": [\n" +
+                                                    "        {\n" +
+                                                    "            \"id\": 1,\n" +
+                                                    "            \"user\": {\n" +
+                                                    "                \"id\": 1,\n" +
+                                                    "                \"username\": \"jason\",\n" +
+                                                    "                \"firstName\": \"测\",\n" +
+                                                    "                \"lastName\": \"试\",\n" +
+                                                    "                \"role\": \"VICE_PRESIDENT\",\n" +
+                                                    "                \"cell\": \"13800000000\",\n" +
+                                                    "                \"email\": \"something@qq.com\",\n" +
+                                                    "                \"birthday\": \"1972-02-08\"\n" +
+                                                    "            },\n" +
+                                                    "            \"comment\": null,\n" +
+                                                    "            \"date\": \"2021-04-25 17:00:23\",\n" +
+                                                    "            \"prevStatus\": \"PENDING_FIRST_APPROVAL\",\n" +
+                                                    "            \"status\": \"PENDING_FIRST_APPROVAL\"\n" +
+                                                    "        },\n" +
+                                                    "        {\n" +
+                                                    "            \"id\": 2,\n" +
+                                                    "            \"user\": {\n" +
+                                                    "                \"id\": 1,\n" +
+                                                    "                \"username\": \"jason\",\n" +
+                                                    "                \"firstName\": \"测\",\n" +
+                                                    "                \"lastName\": \"试\",\n" +
+                                                    "                \"role\": \"VICE_PRESIDENT\",\n" +
+                                                    "                \"cell\": \"13800000000\",\n" +
+                                                    "                \"email\": \"something@qq.com\",\n" +
+                                                    "                \"birthday\": \"1972-02-08\"\n" +
+                                                    "            },\n" +
+                                                    "            \"comment\": \"Initial approved\",\n" +
+                                                    "            \"date\": \"2021-04-25 17:06:52\",\n" +
+                                                    "            \"prevStatus\": \"PENDING_FIRST_APPROVAL\",\n" +
+                                                    "            \"status\": \"PENDING_FINAL_APPROVAL\"\n" +
+                                                    "        },\n" +
+                                                    "        ....\n" +
+                                                    "    ]\n" +
                                                     "}")
                             }
                     )

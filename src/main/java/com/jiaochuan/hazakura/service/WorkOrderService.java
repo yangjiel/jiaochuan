@@ -3,18 +3,12 @@ package com.jiaochuan.hazakura.service;
 import com.jiaochuan.hazakura.api.workorder.PostWorkOrderDto;
 import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
-import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
-import com.jiaochuan.hazakura.entity.workorder.PartListStatus;
-import com.jiaochuan.hazakura.entity.workorder.Status;
-import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
+import com.jiaochuan.hazakura.entity.workorder.*;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.User.ClientRepository;
 import com.jiaochuan.hazakura.jpa.User.UserRepository;
-import com.jiaochuan.hazakura.jpa.WorkOrder.EquipmentRepository;
-import com.jiaochuan.hazakura.jpa.WorkOrder.PartListEquipmentRepository;
-import com.jiaochuan.hazakura.jpa.WorkOrder.PartListRepository;
-import com.jiaochuan.hazakura.jpa.WorkOrder.WorkOrderRepository;
+import com.jiaochuan.hazakura.jpa.WorkOrder.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Service;
@@ -49,6 +43,9 @@ public class WorkOrderService extends PartListService {
 
     @Autowired
     private PartListEquipmentRepository partListEquipmentRepository;
+
+    @Autowired
+    private WorkOrderActionRepository workOrderActionRepository;
 
     @Autowired
     private EntityManager em;
@@ -90,7 +87,15 @@ public class WorkOrderService extends PartListService {
         workOrderEntity.setStatus(dto.getStatus() != null ? dto.getStatus() : Status.PENDING_FIRST_APPROVAL);
         workOrderEntity.setDescription(dto.getDescription());
         workOrderEntity.setServiceItem(dto.getServiceItem());
-        workOrderEntity.setComment(dto.getComment());
+        WorkOrderActionEntity workOrderActionEntity = new WorkOrderActionEntity(workOrderEntity,
+                dto.getStatus(), dto.getStatus());
+        workOrderActionEntity.setUser(workerEntity);
+        workOrderActionEntity.setComment(dto.getComment());
+        workOrderActionEntity.setDate(LocalDateTime.now());
+        workOrderActionRepository.save(workOrderActionEntity);
+        List<WorkOrderActionEntity> workOrderActionEntityList = new ArrayList<>();
+        workOrderActionEntityList.add(workOrderActionEntity);
+        workOrderEntity.setActions(workOrderActionEntityList);
         PartListEntity partListEntity;
         partListEntity = createPartListHelper(workerEntity,
                 workOrderEntity,
@@ -190,9 +195,15 @@ public class WorkOrderService extends PartListService {
         if (dto.getDescription() != null) {
             workOrderEntity.setDescription(dto.getDescription());
         }
-        if (dto.getComment() != null) {
-            workOrderEntity.setComment(dto.getComment());
-        }
+        WorkOrderActionEntity workOrderActionEntity = new WorkOrderActionEntity(workOrderEntity,
+                workOrderEntity.getStatus(), dto.getStatus());
+        workOrderActionEntity.setUser(user);
+        workOrderActionEntity.setComment(dto.getComment());
+        workOrderActionEntity.setDate(LocalDateTime.now());
+        workOrderActionRepository.save(workOrderActionEntity);
+        List<WorkOrderActionEntity> workOrderActionEntityList = workOrderEntity.getActions();
+        workOrderActionEntityList.add(workOrderActionEntity);
+        workOrderEntity.setActions(workOrderActionEntityList);
         workOrderEntity.setStatus(dto.getStatus());
         if (dto.getStatus() == Status.PENDING_FINAL_APPROVAL) {
             PartListEntity partListEntity = workOrderEntity.getPartLists().get(0);

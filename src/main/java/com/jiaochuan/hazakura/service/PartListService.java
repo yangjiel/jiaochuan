@@ -8,6 +8,7 @@ import com.jiaochuan.hazakura.entity.workorder.*;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.User.UserRepository;
+import com.jiaochuan.hazakura.jpa.WorkOrder.PartListActionRepository;
 import com.jiaochuan.hazakura.jpa.WorkOrder.PartListEquipmentRepository;
 import com.jiaochuan.hazakura.jpa.WorkOrder.PartListRepository;
 import com.jiaochuan.hazakura.jpa.WorkOrder.WorkOrderRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -33,6 +35,9 @@ public class PartListService {
 
     @Autowired
     private WorkOrderRepository workOrderRepository;
+
+    @Autowired
+    private PartListActionRepository partListActionRepository;
 
     @Autowired
     private EntityManager em;
@@ -89,6 +94,14 @@ public class PartListService {
                 xrfList.add(xrf);
             }
         }
+        PartListActionEntity partListActionEntity = new PartListActionEntity(partListEntity,
+                status, status);
+        partListActionEntity.setUser(workerEntity);
+        partListActionEntity.setDate(LocalDateTime.now());
+        partListActionRepository.save(partListActionEntity);
+        List<PartListActionEntity> partListActionEntityList = new ArrayList<>();
+        partListActionEntityList.add(partListActionEntity);
+        partListEntity.setActions(partListActionEntityList);
         partListEntity.setPartListEquipments(xrfList);
         partListRepository.save(partListEntity);
         return partListEntity;
@@ -112,6 +125,15 @@ public class PartListService {
             throw new UserException("该用户无权设置该领料单状态");
         }
         if (dto.getPartListStatus() != null) {
+            PartListActionEntity partListActionEntity = new PartListActionEntity(partListEntity,
+                    partListEntity.getPartListStatus(), dto.getPartListStatus());
+            partListActionEntity.setUser(user);
+            partListActionEntity.setComment(dto.getComment());
+            partListActionEntity.setDate(LocalDateTime.now());
+            partListActionRepository.save(partListActionEntity);
+            List<PartListActionEntity> partListActionEntityList = partListEntity.getActions();
+            partListActionEntityList.add(partListActionEntity);
+            partListEntity.setActions(partListActionEntityList);
             partListEntity.setPartListStatus(dto.getPartListStatus());
             if (dto.getPartListStatus() == PartListStatus.READY &&
                     partListEntity.getWorkOrder().containAllPartListStatus(PartListStatus.READY)) {
