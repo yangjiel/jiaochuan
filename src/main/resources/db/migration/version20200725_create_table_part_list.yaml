@@ -12,7 +12,7 @@ databaseChangeLog:
                 create_date DATETIME,
                 `usage` VARCHAR(200),
                 FOREIGN KEY (worker_id) REFERENCES user(id),
-                FOREIGN KEY (work_order_id) REFERENCES work_order(id)
+                FOREIGN KEY (work_order_id) REFERENCES work_order(id) ON DELETE CASCADE
             );
           rollback: |
             DROP TABLE part_list;

@@ -1,7 +1,7 @@
 package com.jiaochuan.hazakura.api.workorder;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jiaochuan.hazakura.entity.workorder.ActionEntity;
+import com.jiaochuan.hazakura.entity.workorder.WorkOrderActionEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.service.ActionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,8 @@ public class ActionController {
     @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> createAction(@RequestBody String jsonRequest) {
         try {
-            ActionEntity actionEntity = objectMapper.convertValue(jsonRequest, ActionEntity.class);
-            actionService.createAction(actionEntity);
+            WorkOrderActionEntity workOrderActionEntity = objectMapper.convertValue(jsonRequest, WorkOrderActionEntity.class);
+            actionService.createAction(workOrderActionEntity);
             return ResponseEntity.ok().build();
         } catch (AppException e) {
             return ResponseEntity

@@ -53,7 +53,8 @@ public class WorkOrderEntity extends AbstractEntity {
     private String comment;
 
     @OneToMany(orphanRemoval = true, mappedBy = "workOrder")
-    private List<ActionEntity> actions;
+    @JsonManagedReference
+    private List<WorkOrderActionEntity> actions;
 
     @OneToMany(orphanRemoval = true, mappedBy = "workOrder")
     @JsonManagedReference

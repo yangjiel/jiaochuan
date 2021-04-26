@@ -10,7 +10,7 @@ databaseChangeLog:
                 equipment VARCHAR(200) NOT NULL,
                 model VARCHAR(100) NOT NULL,
                 quantity INTEGER NOT NULL,
-                FOREIGN KEY (part_list_id) REFERENCES part_list(id)
+                FOREIGN KEY (part_list_id) REFERENCES part_list(id) ON DELETE CASCADE
             );
           rollback: |
             DROP TABLE xrf_part_list_equipment;
