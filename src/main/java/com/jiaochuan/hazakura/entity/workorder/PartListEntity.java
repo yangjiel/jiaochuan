@@ -28,6 +28,7 @@ public class PartListEntity extends AbstractEntity {
     @JoinColumn(name = "work_order_id", referencedColumnName = "id", nullable = false)
     @NonNull
     @JsonBackReference
+    @ToString.Exclude
     private WorkOrderEntity workOrder;
 
     @Column(name = "part_list_status", columnDefinition = "VARCHAR(32)", nullable = false)

@@ -18,18 +18,14 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EquipmentEntity extends AbstractEntity {
-    @Column(name = "device_name", columnDefinition = "VARCHAR(64)", nullable = false)
+    @Column(name = "equipment", columnDefinition = "VARCHAR(64)", nullable = false)
     @NonNull
-    private String deviceName;
+    private String equipment;
 
-    @Column(name = "device_model", columnDefinition = "VARCHAR(32)")
+    @Column(name = "model", columnDefinition = "VARCHAR(32)")
     @NonNull
-    private String deviceModel;
+    private String model;
 
-    @Column(name = "manufacture", columnDefinition = "VARCHAR(100)")
-    private String manufacture;
-
-    @OneToMany(mappedBy = "equipment")
-    @JsonBackReference
-    private List<PartListEquipmentEntity> partListEquipment;
+    @Column(name = "quantity", columnDefinition = "INTEGER")
+    private Integer quantity;
 }

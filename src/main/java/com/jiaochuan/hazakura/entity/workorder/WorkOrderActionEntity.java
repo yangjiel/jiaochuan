@@ -16,6 +16,7 @@ public class WorkOrderActionEntity extends ActionEntity {
     @JoinColumn(name = "work_order_id", referencedColumnName = "id", nullable = false)
     @NonNull
     @JsonBackReference
+    @ToString.Exclude
     private WorkOrderEntity workOrder;
 
     @Column(name = "prev_status", columnDefinition = "VARCHAR(32)")

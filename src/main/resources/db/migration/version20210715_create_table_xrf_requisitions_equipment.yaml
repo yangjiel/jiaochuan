@@ -1,15 +1,15 @@
 databaseChangeLog:
   - changeSet:
-      id: 4c4b1d37-3c3d-4e4e-a28f-051f09edf8a8
+      id: b71fa1ca-c7fc-4e7b-99c3-4b1023707908
       author: jasonliuengr@gmail.com
       changes:
         - sql: |
-            CREATE TABLE xrf_part_list_equipment (
+            CREATE TABLE xrf_requisitions_equipment (
                 id INTEGER AUTO_INCREMENT PRIMARY KEY,
-                part_list_id INTEGER NOT NULL,
+                requisitions_id INTEGER NOT NULL,
                 equipment_id INTEGER NOT NULL,
-                FOREIGN KEY (part_list_id) REFERENCES part_list(id) ON DELETE CASCADE,
+                FOREIGN KEY (requisitions_id) REFERENCES requisitions(id) ON DELETE CASCADE,
                 FOREIGN KEY (equipment_id) REFERENCES equipment(id)
             );
           rollback: |
-            DROP TABLE xrf_part_list_equipment;
+            DROP TABLE xrf_requisitions_equipment;

@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: a4fd0ebd-5689-4ddd-b342-75fcef00405a
+      author: jasonliuengr@gmail.com
+      changes:
+        - sql: |
+            CREATE TABLE requisitions_action (
+                id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                requisitions_id INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                prev_status VARCHAR(32) NOT NULL,
+                status VARCHAR(32) NOT NULL,
+                comment VARCHAR(256),
+                date DATETIME NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES user(id),
+                FOREIGN KEY (requisitions_id) REFERENCES requisitions(id) ON DELETE CASCADE
+            );
+          rollback: |
+            DROP TABLE action;

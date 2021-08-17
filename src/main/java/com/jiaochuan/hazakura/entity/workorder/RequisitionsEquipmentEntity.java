@@ -6,21 +6,23 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Table(name = "xrf_part_list_equipment")
+
+@Table(name = "xrf_requisitions_equipment")
 @Entity
 @Data
 @EqualsAndHashCode(callSuper = true)
 @RequiredArgsConstructor
-@AllArgsConstructor
-public class PartListEquipmentEntity extends AbstractEntity {
+public class RequisitionsEquipmentEntity extends AbstractEntity {
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "part_list_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "requisitions_id", referencedColumnName = "id", nullable = false)
     @JsonBackReference
+    @NonNull
     @ToString.Exclude
-    private PartListEntity partList;
+    private RequisitionsEntity requisitions;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "equipment_id", referencedColumnName = "id", nullable = false)
     @JsonBackReference
+    @NonNull
     private EquipmentEntity equipment;
 }
