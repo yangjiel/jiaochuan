@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: 5a3bb880-518e-462f-bf3d-890a4d3afef3
+      author: jasonliuengr@gmail.com
+      changes:
+        - sql: |
+            CREATE TABLE department (
+                id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(64) NOT NULL,
+                leader_id INTEGER NOT NULL,
+                FOREIGN KEY (leader_id) REFERENCES user(id)
+            );
+          rollback: |
+            DROP TABLE department;

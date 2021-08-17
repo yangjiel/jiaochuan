@@ -37,9 +37,9 @@ public class EquipmentController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
-                                            "    \"deviceName\": \"数控机床轴承\",\n" +
-                                            "    \"deviceModel\": \"8*8\",\n" +
-                                            "    \"manufacture\": \"四川轴承有限公司\",\n" +
+                                            "    \"equipment\": \"数控机床轴承\",\n" +
+                                            "    \"model\": \"8*8\",\n" +
+                                            "    \"quantity\": \"5\",\n" +
                                             "}")
                     }
             )

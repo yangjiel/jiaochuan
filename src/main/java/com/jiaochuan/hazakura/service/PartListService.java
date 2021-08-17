@@ -8,10 +8,7 @@ import com.jiaochuan.hazakura.entity.workorder.*;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.User.UserRepository;
-import com.jiaochuan.hazakura.jpa.WorkOrder.PartListActionRepository;
-import com.jiaochuan.hazakura.jpa.WorkOrder.PartListEquipmentRepository;
-import com.jiaochuan.hazakura.jpa.WorkOrder.PartListRepository;
-import com.jiaochuan.hazakura.jpa.WorkOrder.WorkOrderRepository;
+import com.jiaochuan.hazakura.jpa.WorkOrder.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,6 +34,9 @@ public class PartListService {
     private WorkOrderRepository workOrderRepository;
 
     @Autowired
+    private EquipmentRepository equipmentRepository;
+
+    @Autowired
     private PartListActionRepository partListActionRepository;
 
     @Autowired
@@ -50,12 +50,12 @@ public class PartListService {
 
         WorkOrderEntity workOrderEntity = workOrderRepository.findById(dto.getWorkOrderId()).orElse(null);
         if (workOrderEntity == null) {
-            throw new UserException(String.format("ID为%s的工单不存在。", dto.getWorkOrderId()));
+            throw new UserException(String.format("ID为%s的工单不存在！", dto.getWorkOrderId()));
         }
 
         UserEntity workerEntity = userRepository.findById(dto.getWorkerId()).orElse(null);
         if (workerEntity == null) {
-            throw new UserException(String.format("ID为%s的用户不存在。", dto.getWorkerId()));
+            throw new UserException(String.format("ID为%s的用户不存在！", dto.getWorkerId()));
         }
         if (dto.getUsage().length() > 200) {
             throw new UserException("领料单备注长度不能大于200个字符！");
@@ -86,10 +86,12 @@ public class PartListService {
         List<PartListEquipmentEntity> xrfList = new ArrayList<>();
         if (equipments != null) {
             for (EquipmentDto equipmentPair : equipments) {
-                String equipment = equipmentPair.getEquipment();
-                String model = equipmentPair.getModel();
-                Integer quantity = equipmentPair.getQuantity();
-                PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipment, model, quantity);
+                EquipmentEntity equipmentEntity = new EquipmentEntity(
+                        equipmentPair.getEquipment(),
+                        equipmentPair.getModel(),
+                        equipmentPair.getQuantity());
+                equipmentRepository.save(equipmentEntity);
+                PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipmentEntity);
                 partListEquipmentRepository.save(xrf);
                 xrfList.add(xrf);
             }
@@ -122,7 +124,7 @@ public class PartListService {
                 dto.getPartListStatus() != PartListStatus.APPROVED) ||
                 (user.getRole() == Role.STAFF_INVENTORY &&
                         dto.getPartListStatus() != PartListStatus.READY)) {
-            throw new UserException("该用户无权设置该领料单状态");
+            throw new UserException("该用户无权设置该领料单状态！");
         }
         if (dto.getPartListStatus() != null) {
             PartListActionEntity partListActionEntity = new PartListActionEntity(partListEntity,

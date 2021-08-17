@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: 715c4c0c-67a7-4a88-b59f-4fee1acb2bf3
+      author: jasonliuengr@gmail.com
+      changes:
+        - sql: |
+            CREATE TABLE requisitions (
+                id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                department_id INTEGER NOT NULL,
+                creator_id INTEGER NOT NULL,
+                purchaser_id INTEGER,
+                work_order_id INTEGER NOT NULL,
+                purchase_order_id INTEGER,
+                created_date DATETIME NOT NULL,
+                supplier VARCHAR(128),
+                status VARCHAR(32) NOT NULL,
+                purchase_date DATETIME,
+                FOREIGN KEY (creator_id) REFERENCES user(id),
+                FOREIGN KEY (purchaser_id) REFERENCES user(id),
+                FOREIGN KEY (department_id) REFERENCES department(id)
+            );
+          rollback: |
+            DROP TABLE requisitions;
