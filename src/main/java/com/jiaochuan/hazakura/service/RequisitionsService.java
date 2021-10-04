@@ -11,9 +11,15 @@ import com.jiaochuan.hazakura.jpa.User.DepartmentRepository;
 import com.jiaochuan.hazakura.jpa.User.UserRepository;
 import com.jiaochuan.hazakura.jpa.WorkOrder.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +47,9 @@ public class RequisitionsService {
 
     @Autowired
     private RequisitionsActionRepository requisitionsActionRepository;
+
+    @Autowired
+    private EntityManager em;
 
     @Transactional
     public RequisitionsEntity createRequisitions(RequisitionsDto dto) throws AppException, UserException {
@@ -91,6 +100,53 @@ public class RequisitionsService {
         requisitionsEntity.setActions(requisitionsActionEntityList);
         requisitionsRepository.save(requisitionsEntity);
         return requisitionsEntity;
+    }
+
+    public List<RequisitionsEntity> getRequisitions(int page,
+                                                    int size,
+                                                    UserEntity creator,
+                                                    UserEntity purchaser,
+                                                    UserEntity worker,
+                                                    LocalDateTime datetime,
+                                                    RequisitionsStatus status,
+                                                    String orderBy) throws UserException {
+        if (page < 0 || size < 0) {
+            throw new UserException("分页设置不能小于0。");
+        }
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<RequisitionsEntity> cq = cb.createQuery(RequisitionsEntity.class);
+
+        Root<RequisitionsEntity> requisitionsEntityRoot = cq.from(RequisitionsEntity.class);
+        List<Predicate> predicates = new ArrayList<>();
+        if (creator != null) {
+            predicates.add(cb.equal(requisitionsEntityRoot.get("creator"), creator));
+        }
+        if (purchaser != null) {
+            predicates.add(cb.equal(requisitionsEntityRoot.get("purchaser"), purchaser));
+        }
+        if (worker != null) {
+            predicates.add(cb.equal(requisitionsEntityRoot.get("worker"), worker));
+        }
+        if (datetime != null) {
+            predicates.add(cb.equal(requisitionsEntityRoot.get("createdDate"), datetime));
+        }
+        if (status != null) {
+            predicates.add(cb.equal(requisitionsEntityRoot.get("status"), status));
+        }
+
+        switch (orderBy != null ? orderBy : "") {
+            case "timeAsc":
+                cq.orderBy(cb.asc(requisitionsEntityRoot.get("id")));
+                break;
+            default:
+                cq.orderBy(cb.desc(requisitionsEntityRoot.get("id")));
+        }
+        cq.where(predicates.toArray(new Predicate[0]));
+        List<RequisitionsEntity> list = em.createQuery(cq).getResultList();
+        PagedListHolder<RequisitionsEntity> pagedListHolder = new PagedListHolder<>(list);
+        pagedListHolder.setPageSize(size);
+        pagedListHolder.setPage(page);
+        return list;
     }
 
     @Transactional
