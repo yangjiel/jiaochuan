@@ -509,7 +509,7 @@ public class UserController {
                             examples = {
                                     @ExampleObject(value =
                                             "{\n" +
-                                                    "    \"status\": \"登录失败，请检查用户名或密码。\",\n" +
+                                                    "    \"status\": \"请求出错，请检查调用参数。\",\n" +
                                                     "    \"users\": null" +
                                                     "}")
                             }

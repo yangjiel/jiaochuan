@@ -12,3 +12,5 @@ server:
       timeout: 2h
 springdoc:
   packages-to-scan: com.jiaochuan.hazakura
+  swagger-ui:
+    disable-swagger-default-url: false
