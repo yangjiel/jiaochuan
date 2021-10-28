@@ -72,6 +72,7 @@ public class RequisitionsService {
                 workOrderEntity,
                 RequisitionsStatus.PENDING_PURCHASE,
                 LocalDateTime.now());
+        requisitionsEntity.setDepartment(departmentEntity);
         requisitionsEntity.setDepartment(departmentRepository.findById(dto.getDepartmentId()).orElse(null));
         List<RequisitionsEquipmentEntity> xrfList = new ArrayList<>();
         if (dto.getEquipments() != null) {
@@ -100,9 +101,9 @@ public class RequisitionsService {
 
     public List<RequisitionsEntity> getRequisitions(int page,
                                                     int size,
-                                                    UserEntity creator,
-                                                    UserEntity purchaser,
-                                                    UserEntity worker,
+                                                    Long creator,
+                                                    Long purchaser,
+                                                    Long worker,
                                                     LocalDateTime datetime,
                                                     RequisitionsStatus status,
                                                     String orderBy) throws UserException {

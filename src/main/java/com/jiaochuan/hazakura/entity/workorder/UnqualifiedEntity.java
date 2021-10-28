@@ -1,6 +1,5 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.jiaochuan.hazakura.entity.AbstractEntity;

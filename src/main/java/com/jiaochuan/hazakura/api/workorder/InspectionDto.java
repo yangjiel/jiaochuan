@@ -1,7 +1,6 @@
 package com.jiaochuan.hazakura.api.workorder;
 
 import com.jiaochuan.hazakura.entity.workorder.InspectionStatus;
-import com.jiaochuan.hazakura.service.InspectionService;
 import lombok.Data;
 
 @Data

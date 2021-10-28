@@ -48,9 +48,6 @@ public class UnqualifiedService {
         Helper.checkFields(UnqualifiedDto.class, dto, mandatoryFieldsSet);
 
         UserEntity userEntity = userRepository.findById(dto.getCreatorId()).orElse(null);
-        UserEntity responsiblePerson = userRepository.findById(dto.getResponsiblePersonId()).orElse(null);
-        UserEntity inspector = userRepository.findById(dto.getReworkInspectorId()).orElse(null);
-        UserEntity operator = userRepository.findById(dto.getOperatorId()).orElse(null);
         if (userEntity == null) {
             throw new UserException(String.format("ID为%s的用户不存在！", dto.getCreatorId()));
         }
@@ -64,22 +61,8 @@ public class UnqualifiedService {
                 inspectionActionEntity,
                 userEntity,
                 LocalDateTime.now());
-        unqualifiedRepository.save(unqualifiedEntity);
-        unqualifiedEntity.setDepartment(departmentRepository.findById(dto.getDepartmentId()).orElse(null));
-        unqualifiedEntity.setResponsiblePerson(responsiblePerson);
-        unqualifiedEntity.setReworkInspector(inspector);
-        unqualifiedEntity.setOperator(operator);
-        unqualifiedEntity.setUnqualifiedLevel(dto.getUnqualifiedLevel());
-        unqualifiedEntity.setInfluence(dto.getInfluence());
-        unqualifiedEntity.setAcceptanceDetails(dto.getAcceptanceDetails());
-        unqualifiedEntity.setStandardOfAcceptance(dto.getStandardOfAcceptance());
-        unqualifiedEntity.setReworkQuantity(dto.getReworkQuantity());
-        unqualifiedEntity.setReworkDetails(dto.getReworkDetails());
-        unqualifiedEntity.setReworkInspection(dto.getReworkInspection());
-        unqualifiedEntity.setNoReworkQuantity(dto.getNoReworkQuantity());
-        unqualifiedEntity.setReworkAcceptedQuantity(dto.getReworkAcceptedQuantity());
-        unqualifiedEntity.setNoReworkAcceptedQuantity(dto.getNoReworkAcceptedQuantity());
-        unqualifiedEntity.setRejectedQuantity(dto.getRejectedQuantity());
+
+        persistUnqualifiedHelper(unqualifiedEntity, dto);
 
         unqualifiedRepository.save(unqualifiedEntity);
         return unqualifiedEntity;
@@ -87,8 +70,8 @@ public class UnqualifiedService {
 
     public List<UnqualifiedEntity> getUnqualified(int page,
                                                  int size,
-                                                 UserEntity creator,
-                                                 InspectionEntity inspectionEntity,
+                                                 Long creator,
+                                                 Long inspectionEntity,
                                                  LocalDateTime dateTime,
                                                  String orderBy) throws UserException {
         if (page < 0 || size < 0) {
@@ -132,6 +115,13 @@ public class UnqualifiedService {
             throw new UserException(String.format("ID为%s的不合格单不存在！", dto.getUnqualifiedId()));
         }
 
+        persistUnqualifiedHelper(unqualifiedEntity, dto);
+
+        unqualifiedRepository.save(unqualifiedEntity);
+        return unqualifiedEntity;
+    }
+
+    private void persistUnqualifiedHelper(UnqualifiedEntity unqualifiedEntity, UnqualifiedDto dto) {
         UserEntity responsiblePerson = userRepository.findById(dto.getResponsiblePersonId()).orElse(null);
         UserEntity inspector = userRepository.findById(dto.getReworkInspectorId()).orElse(null);
         UserEntity operator = userRepository.findById(dto.getOperatorId()).orElse(null);
@@ -159,8 +149,5 @@ public class UnqualifiedService {
         unqualifiedEntity.setReworkAcceptedQuantity(dto.getReworkAcceptedQuantity());
         unqualifiedEntity.setNoReworkAcceptedQuantity(dto.getNoReworkAcceptedQuantity());
         unqualifiedEntity.setRejectedQuantity(dto.getRejectedQuantity());
-
-        unqualifiedRepository.save(unqualifiedEntity);
-        return unqualifiedEntity;
     }
 }

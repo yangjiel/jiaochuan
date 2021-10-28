@@ -71,19 +71,8 @@ public class InspectionService {
                 LocalDateTime.now());
 
         inspectionEntity.setDepartment(departmentRepository.findById(dto.getDepartmentId()).orElse(null));
-        inspectionEntity.setProductName(dto.getProductName());
-        inspectionEntity.setModel(dto.getModel());
-        inspectionEntity.setSerialNumber(dto.getSerialNumber());
-        inspectionEntity.setQuantity(dto.getQuantity());
-        inspectionEntity.setUnit(dto.getUnit());
-        inspectionEntity.setManufacturer(dto.getManufacturer());
-        inspectionEntity.setSizeFit(dto.getSizeFit());
-        inspectionEntity.setQualityCertificate(dto.getQualityCertificate());
-        inspectionEntity.setExterior(dto.getExterior());
-        inspectionEntity.setLogo(dto.getLogo());
-        inspectionEntity.setPackaging(dto.getPackaging());
-        inspectionEntity.setNote(dto.getNote());
-        inspectionEntity.setSamplingMethod(dto.getSamplingMethod());
+
+        persistInspectionHelper(inspectionEntity, dto);
 
         InspectionActionEntity inspectionActionEntity = new InspectionActionEntity(
                 inspectionEntity,
@@ -102,8 +91,8 @@ public class InspectionService {
 
     public List<InspectionEntity> getInspections(int page,
                                                  int size,
-                                                 UserEntity creator,
-                                                 RequisitionsEntity requisitionsEntity,
+                                                 Long creator,
+                                                 Long requisitionsEntity,
                                                  LocalDateTime dateTime,
                                                  InspectionStatus inspectionStatus,
                                                  String orderBy) throws UserException {
@@ -157,17 +146,26 @@ public class InspectionService {
             throw new UserException("用户不存在！");
         }
 
-        InspectionActionEntity inspectionActionEntity = new InspectionActionEntity(
-                inspectionEntity,
-                inspectionEntity.getStatus(),
-                dto.getStatus());
-        inspectionActionEntity.setUser(userEntity);
-        inspectionActionEntity.setDate(LocalDateTime.now());
-        inspectionActionRepository.save(inspectionActionEntity);
-        List<InspectionActionEntity> inspectionActionEntityList = inspectionEntity.getActions();
-        inspectionActionEntityList.add(inspectionActionEntity);
-        inspectionEntity.setActions(inspectionActionEntityList);
+        if (dto.getStatus() != null) {
+            InspectionActionEntity inspectionActionEntity = new InspectionActionEntity(
+                    inspectionEntity,
+                    inspectionEntity.getStatus(),
+                    dto.getStatus());
+            inspectionActionEntity.setUser(userEntity);
+            inspectionActionEntity.setDate(LocalDateTime.now());
+            inspectionActionRepository.save(inspectionActionEntity);
+            List<InspectionActionEntity> inspectionActionEntityList = inspectionEntity.getActions();
+            inspectionActionEntityList.add(inspectionActionEntity);
+            inspectionEntity.setActions(inspectionActionEntityList);
+        }
 
+        persistInspectionHelper(inspectionEntity, dto);
+
+        inspectionRepository.save(inspectionEntity);
+        return inspectionEntity;
+    }
+
+    private void persistInspectionHelper(InspectionEntity inspectionEntity, InspectionDto dto) {
         inspectionEntity.setProductName(dto.getProductName());
         inspectionEntity.setModel(dto.getModel());
         inspectionEntity.setSerialNumber(dto.getSerialNumber());
@@ -181,8 +179,5 @@ public class InspectionService {
         inspectionEntity.setPackaging(dto.getPackaging());
         inspectionEntity.setNote(dto.getNote());
         inspectionEntity.setSamplingMethod(dto.getSamplingMethod());
-
-        inspectionRepository.save(inspectionEntity);
-        return inspectionEntity;
     }
 }

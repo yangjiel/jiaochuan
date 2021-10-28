@@ -18,7 +18,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -35,7 +34,7 @@ public class InspectionController {
     ObjectMapper objectMapper;
 
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "JSON形式的WorkOrderEntity",
+            description = "JSON形式的InspectionEntity",
             content = @Content(
                     schema = @Schema(implementation = String.class),
                     mediaType = "application/json",
@@ -218,7 +217,7 @@ public class InspectionController {
             @ApiResponse(
                     responseCode = "200",
                     description = "成功，response body将返回已经分页的检验单信息。" +
-                            "注意，只有销售主管和副总可以浏览所有记录，销售员工只能查阅自己提交的工单",
+                            "注意，只有销售主管和副总可以浏览所有记录，销售员工只能查阅自己提交的检验单",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = List.class),
@@ -287,9 +286,8 @@ public class InspectionController {
                             schema = @Schema(implementation = List.class),
                             examples = {
                                     @ExampleObject(value =
-                                            "{\n" +
-                                                    "    \"workOrders\": null" +
-                                                    "}")
+                                            "[\n" +
+                                                    "]")
                             }
                     )
             ),
@@ -301,9 +299,8 @@ public class InspectionController {
                             schema = @Schema(implementation = List.class),
                             examples = {
                                     @ExampleObject(value =
-                                            "{\n" +
-                                                    "    \"workOrders\": null" +
-                                                    "}")
+                                            "[\n" +
+                                                    "]")
                             }
                     )
             )
@@ -317,11 +314,11 @@ public class InspectionController {
             Role.Constants.ENGINEER_AFTER_SALES,
             Role.Constants.VICE_PRESIDENT})
     public ResponseEntity<String> getInspections(
-            @AuthenticationPrincipal UserEntity user,
+            Authentication authentication,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size,
-            @RequestParam(required = false) UserEntity creator,
-            @RequestParam(required = false) RequisitionsEntity requisitionsEntity,
+            @RequestParam(required = false) Long creator,
+            @RequestParam(required = false) Long requisitionsEntity,
             @RequestParam(required = false) LocalDateTime datetime,
             @RequestParam(required = false) InspectionStatus status,
             @RequestParam(required = false) String orderBy
@@ -336,6 +333,7 @@ public class InspectionController {
 //        Collection<String> grantedAuthorityList = user.getAuthorityNames();
 
         try {
+            UserEntity user = (UserEntity) authentication.getPrincipal();
             List<InspectionEntity> inspectionListPage;
 //            if (grantedAuthorityList.contains(Role.Constants.MANAGER_AFTER_SALES) ||
 //                grantedAuthorityList.contains(Role.Constants.DIRECTOR_AFTER_SALES) ||
@@ -355,7 +353,7 @@ public class InspectionController {
                 inspectionListPage = inspectionService.getInspections(
                         page,
                         size,
-                        creator,
+                        user.getId(),
                         requisitionsEntity,
                         datetime,
                         status,
@@ -376,7 +374,7 @@ public class InspectionController {
     }
 
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
-            description = "JSON形式的WorkOrderEntity",
+            description = "JSON形式的InspectionEntity",
             content = @Content(
                     schema = @Schema(implementation = String.class),
                     mediaType = "application/json",
@@ -384,8 +382,6 @@ public class InspectionController {
                             @ExampleObject(value =
                                     "{\n" +
                                             "    \"inspectionId\": \"1\",\n" +
-                                            "    \"creatorId\": \"1\",\n" +
-                                            "    \"inspectorId\": \"2\",\n" +
                                             "    \"departmentId\": \"null\",\n" +
                                             "    \"productName\": \"电钻\",\n" +
                                             "    \"model\": \"8x8\",\n" +
@@ -400,7 +396,6 @@ public class InspectionController {
                                             "    \"packaging\": \"1\",\n" +
                                             "    \"note\": \"...\",\n" +
                                             "    \"samplingMethod\": \"取平均\",\n" +
-                                            "    \"requisitions\": \"5\",\n" +
                                             "}")
                     }
             )

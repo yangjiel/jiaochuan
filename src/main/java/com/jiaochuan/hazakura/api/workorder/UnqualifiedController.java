@@ -3,7 +3,6 @@ package com.jiaochuan.hazakura.api.workorder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
-import com.jiaochuan.hazakura.entity.workorder.InspectionEntity;
 import com.jiaochuan.hazakura.entity.workorder.UnqualifiedEntity;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.UnqualifiedService;
@@ -18,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
@@ -452,12 +451,12 @@ public class UnqualifiedController {
             Role.Constants.MANAGER_AFTER_SALES,
             Role.Constants.ENGINEER_AFTER_SALES,
             Role.Constants.VICE_PRESIDENT})
-    public ResponseEntity<String> getUnqualifieds(
-            @AuthenticationPrincipal UserEntity user,
+    public ResponseEntity<String> getUnqualified(
+            Authentication authentication,
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size,
-            @RequestParam(required = false) UserEntity creator,
-            @RequestParam(required = false) InspectionEntity inspectionEntity,
+            @RequestParam(required = false) Long creator,
+            @RequestParam(required = false) Long inspectionEntity,
             @RequestParam(required = false) LocalDateTime datetime,
             @RequestParam(required = false) String orderBy
     ) {
@@ -471,6 +470,7 @@ public class UnqualifiedController {
 //        Collection<String> grantedAuthorityList = user.getAuthorityNames();
 
         try {
+            UserEntity user = (UserEntity) authentication.getPrincipal();
             List<UnqualifiedEntity> inspectionListPage;
 //            if (grantedAuthorityList.contains(Role.Constants.MANAGER_AFTER_SALES) ||
 //                grantedAuthorityList.contains(Role.Constants.DIRECTOR_AFTER_SALES) ||
@@ -491,7 +491,7 @@ public class UnqualifiedController {
                 inspectionListPage = unqualifiedService.getUnqualified(
                         page,
                         size,
-                        creator,
+                        user.getId(),
                         inspectionEntity,
                         datetime,
                         orderBy);
@@ -518,9 +518,8 @@ public class UnqualifiedController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
-                                            "    \"unqualified\": \"1\",\n" +
+                                            "    \"unqualifiedId\": \"1\",\n" +
                                             "    \"inspectionId\": \"1\",\n" +
-                                            "    \"creatorId\": \"1\",\n" +
                                             "    \"departmentId\": \"1\",\n" +
                                             "    \"responsiblePersonId\": \"1\",\n" +
                                             "    \"unqualifiedLevel\": \"轻微\",\n" +
