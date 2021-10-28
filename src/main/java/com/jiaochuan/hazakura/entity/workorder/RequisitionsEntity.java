@@ -37,8 +37,7 @@ public class RequisitionsEntity extends AbstractEntity {
     private WorkOrderEntity workOrder;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "department_id", referencedColumnName = "id", nullable = false)
-    @NonNull
+    @JoinColumn(name = "department_id", referencedColumnName = "id")
     @JsonBackReference
     private DepartmentEntity department;
 

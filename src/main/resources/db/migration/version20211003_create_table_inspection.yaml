@@ -1,0 +1,33 @@
+databaseChangeLog:
+  - changeSet:
+      id: 6ccd3645-fc07-43f5-ac26-06fe6b53bc09
+      author: jasonliuengr@gmail.com
+      changes:
+        - sql: |
+            CREATE TABLE inspection (
+                id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                department_id INTEGER,
+                creator_id INTEGER NOT NULL,
+                product_name VARCHAR(256),
+                model VARCHAR(256),
+                serial_number VARCHAR(256),
+                quantity INTEGER,
+                unit VARCHAR(8),
+                manufacturer VARCHAR(256),
+                size_fit TINYINT,
+                quality_certificate TINYINT,
+                exterior TINYINT,
+                logo TINYINT,
+                packaging TINYINT,
+                note VARCHAR(512),
+                sampling_method VARCHAR(512),
+                inspector_id INTEGER,
+                requisitions_id INTEGER NOT NULL,
+                created_date DATETIME NOT NULL,
+                status VARCHAR(32) NOT NULL,
+                FOREIGN KEY (creator_id) REFERENCES user(id),
+                FOREIGN KEY (inspector_id) REFERENCES user(id),
+                FOREIGN KEY (requisitions_id) REFERENCES requisitions(id)
+            );
+          rollback: |
+            DROP TABLE requisitions;
