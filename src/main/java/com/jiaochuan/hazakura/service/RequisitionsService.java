@@ -62,10 +62,6 @@ public class RequisitionsService {
             throw new UserException(String.format("ID为%s的工单不存在！", dto.getWorkOrderId()));
         }
 
-        if (departmentEntity == null) {
-            throw new UserException(String.format("ID为%s的部门不存在！", dto.getDepartmentId()));
-        }
-
         UserEntity creatorEntity = userRepository.findById(dto.getCreatorId()).orElse(null);
         if (creatorEntity == null) {
             throw new UserException(String.format("ID为%s的用户不存在！", dto.getCreatorId()));
@@ -74,9 +70,9 @@ public class RequisitionsService {
         RequisitionsEntity requisitionsEntity = new RequisitionsEntity(
                 creatorEntity,
                 workOrderEntity,
-                departmentEntity,
                 RequisitionsStatus.PENDING_PURCHASE,
                 LocalDateTime.now());
+        requisitionsEntity.setDepartment(departmentRepository.findById(dto.getDepartmentId()).orElse(null));
         List<RequisitionsEquipmentEntity> xrfList = new ArrayList<>();
         if (dto.getEquipments() != null) {
             for (EquipmentDto equipmentPair : dto.getEquipments()) {

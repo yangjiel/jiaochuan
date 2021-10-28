@@ -6,7 +6,7 @@ databaseChangeLog:
         - sql: |
             CREATE TABLE requisitions (
                 id INTEGER AUTO_INCREMENT PRIMARY KEY,
-                department_id INTEGER NOT NULL,
+                department_id INTEGER,
                 creator_id INTEGER NOT NULL,
                 purchaser_id INTEGER,
                 work_order_id INTEGER NOT NULL,
