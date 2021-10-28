@@ -16,4 +16,4 @@ databaseChangeLog:
                 FOREIGN KEY (requisitions_id) REFERENCES requisitions(id) ON DELETE CASCADE
             );
           rollback: |
-            DROP TABLE action;
+            DROP TABLE requisitions_action;

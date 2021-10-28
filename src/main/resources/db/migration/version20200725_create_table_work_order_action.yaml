@@ -16,4 +16,4 @@ databaseChangeLog:
                 FOREIGN KEY (work_order_id) REFERENCES work_order(id) ON DELETE CASCADE
             );
           rollback: |
-            DROP TABLE action;
+            DROP TABLE work_order_action;

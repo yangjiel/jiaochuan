@@ -1,0 +1,35 @@
+databaseChangeLog:
+  - changeSet:
+      id: ec6edcab-a46b-446a-af0e-f6275829a021
+      author: jasonliuengr@gmail.com
+      changes:
+        - sql: |
+            CREATE TABLE unqualified (
+                id INTEGER AUTO_INCREMENT PRIMARY KEY,
+                inspection_id INTEGER NOT NULL,
+                creator_id INTEGER NOT NULL,
+                created_date DATETIME NOT NULL,
+                responsible_person_id INTEGER,
+                unqualified_level VARCHAR(32),
+                responsible_department_id INTEGER,
+                rework_quantity INTEGER,
+                rework_details VARCHAR(256),
+                operator_id INTEGER,
+                rework_inspection VARCHAR(512),
+                rework_inspector_id INTEGER,
+                no_rework_quantity INTEGER,
+                rework_accepted_quantity INTEGER,
+                no_rework_accepted_quantity INTEGER,
+                rejected_quantity INTEGER,
+                influence VARCHAR(256),
+                acceptance_details VARCHAR(256),
+                standard_of_acceptance VARCHAR(256),
+                FOREIGN KEY (inspection_id) REFERENCES inspection(id),
+                FOREIGN KEY (creator_id) REFERENCES user(id),
+                FOREIGN KEY (responsible_person_id) REFERENCES user(id),
+                FOREIGN KEY (responsible_department_id) REFERENCES department(id),
+                FOREIGN KEY (operator_id) REFERENCES user(id),
+                FOREIGN KEY (rework_inspector_id) REFERENCES user(id)
+            );
+          rollback: |
+            DROP TABLE unqualified;

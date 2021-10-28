@@ -137,8 +137,8 @@ public class RequisitionsController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.TEXT_PLAIN_VALUE
     )
-    @RolesAllowed({Role.Constants.STAFF_CLIENT_SERVICE,
-            Role.Constants.MANAGER_AFTER_SALES,
+    @RolesAllowed({Role.Constants.STAFF_INVENTORY,
+            Role.Constants.STAFF_PROCUREMENT,
             Role.Constants.ENGINEER_AFTER_SALES,
             Role.Constants.VICE_PRESIDENT})
     public ResponseEntity<String> createRequisitions(@RequestBody RequisitionsDto dto) {
@@ -302,7 +302,7 @@ public class RequisitionsController {
             )
     })
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @RolesAllowed({Role.Constants.STAFF_CLIENT_SERVICE,
+    @RolesAllowed({Role.Constants.MANAGER_PROCUREMENT,
             Role.Constants.STAFF_INVENTORY,
             Role.Constants.STAFF_PROCUREMENT,
             Role.Constants.DIRECTOR_AFTER_SALES,

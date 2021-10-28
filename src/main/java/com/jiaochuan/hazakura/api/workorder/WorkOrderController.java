@@ -261,7 +261,7 @@ public class WorkOrderController {
                     description = "查询关于该员工id的工单。"
             ),
             @Parameter(
-                    name = "date",
+                    name = "datetime",
                     required = false,
                     schema = @Schema(type = "String"),
                     description = "查询该日期的工单。"
