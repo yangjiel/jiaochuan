@@ -99,7 +99,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-security</artifactId>
-            <version>1.4.8</version>
+            <version>1.5.12</version>
         </dependency>
     </dependencies>
 
