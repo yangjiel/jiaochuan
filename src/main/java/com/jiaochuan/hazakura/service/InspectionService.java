@@ -62,10 +62,15 @@ public class InspectionService {
             throw new UserException(String.format("ID为%s的采购单不存在！", dto.getRequisitionsId()));
         }
 
+        if (dto.getType() == null) {
+            throw new UserException("请提供申请检验单类别！");
+        }
+
         InspectionStatus status = dto.getStatus() == null ? InspectionStatus.PENDING_APPROVAL : dto.getStatus();
 
         InspectionEntity inspectionEntity = new InspectionEntity(
                 userEntity,
+                dto.getType(),
                 requisitionsEntity,
                 status,
                 LocalDateTime.now());

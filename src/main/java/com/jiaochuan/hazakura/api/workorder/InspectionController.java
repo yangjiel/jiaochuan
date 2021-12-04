@@ -79,11 +79,11 @@ public class InspectionController {
                                                     "    \"quantity\": 10,\n" +
                                                     "    \"unit\": \"件\",\n" +
                                                     "    \"manufacturer\": \"四川电气集团\",\n" +
-                                                    "    \"sizeFit\": \"0\",\n" +
-                                                    "    \"qualityCertificate\": \"1\",\n" +
-                                                    "    \"exterior\": \"1\",\n" +
-                                                    "    \"logo\": \"1\",\n" +
-                                                    "    \"packaging\": \"1\",\n" +
+                                                    "    \"sizeFit\": 0,\n" +
+                                                    "    \"qualityCertificate\": 1,\n" +
+                                                    "    \"exterior\": 1,\n" +
+                                                    "    \"logo\": 1,\n" +
+                                                    "    \"packaging\": 1,\n" +
                                                     "    \"note\": \"...\",\n" +
                                                     "    \"samplingMethod\": \"取平均\",\n" +
                                                     "    \"status\": \"PENDING_APPROVAL\",\n" +
@@ -232,11 +232,11 @@ public class InspectionController {
                                                     "        \"quantity\": 10,\n" +
                                                     "        \"unit\": \"件\",\n" +
                                                     "        \"manufacturer\": \"四川电气集团\",\n" +
-                                                    "        \"sizeFit\": \"0\",\n" +
-                                                    "        \"q ualityCertificate\": \"1\",\n" +
-                                                    "        \"exterior\": \"1\",\n" +
-                                                    "        \"logo\": \"1\",\n" +
-                                                    "        \"packaging\": \"1\",\n" +
+                                                    "        \"sizeFit\": 0,\n" +
+                                                    "        \"q ualityCertificate\": 1,\n" +
+                                                    "        \"exterior\": 1,\n" +
+                                                    "        \"logo\": 1,\n" +
+                                                    "        \"packaging\": 1,\n" +
                                                     "        \"note\": \"...\",\n" +
                                                     "        \"samplingMethod\": \"取平均\",\n" +
                                                     "        \"status\": \"PENDING_APPROVAL\",\n" +
@@ -417,11 +417,11 @@ public class InspectionController {
                                                     "    \"quantity\": 10,\n" +
                                                     "    \"unit\": \"件\",\n" +
                                                     "    \"manufacturer\": \"四川电气集团\",\n" +
-                                                    "    \"sizeFit\": \"0\",\n" +
-                                                    "    \"qualityCertificate\": \"1\",\n" +
-                                                    "    \"exterior\": \"1\",\n" +
-                                                    "    \"logo\": \"1\",\n" +
-                                                    "    \"packaging\": \"1\",\n" +
+                                                    "    \"sizeFit\": 0,\n" +
+                                                    "    \"qualityCertificate\": 1,\n" +
+                                                    "    \"exterior\": 1,\n" +
+                                                    "    \"logo\": 1,\n" +
+                                                    "    \"packaging\": 1,\n" +
                                                     "    \"note\": \"...\",\n" +
                                                     "    \"samplingMethod\": \"取平均\",\n" +
                                                     "    \"status\": \"PENDING_APPROVAL\",\n" +

@@ -1,11 +1,10 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: root
-    url: jdbc:mysql://b1fa897a7fee63:00571fbf@us-cdbr-east-03.cleardb.com/heroku_74f731083d3313e?reconnect=true&useUnicode=yes&characterEncoding=UTF-8
-logging:
-  level:
+    username: edw7tk0quska0chz
+    password: dsqyzn6v9l783vem
+    url: jdbc:mysql://dcrhg4kh56j13bnu.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/ein8lddp2557gv5n?useUnicode=yes&characterEncoding=UTF-8
+level:
     org:
       hibernate:
         SQL: DEBUG
