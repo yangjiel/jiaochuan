@@ -33,6 +33,10 @@ public class InspectionEntity extends AbstractEntity {
     @JsonBackReference
     private DepartmentEntity department;
 
+    @Column(name = "type", columnDefinition = "TINYINT")
+    @NonNull
+    private InspectionType type;
+
     @Column(name = "product_name", columnDefinition = "VARCHAR(256)")
     private String productName;
 
@@ -52,19 +56,19 @@ public class InspectionEntity extends AbstractEntity {
     private String manufacturer;
 
     @Column(name = "size_fit", columnDefinition = "TINYINT")
-    private String sizeFit;
+    private Byte sizeFit;
 
     @Column(name = "quality_certificate", columnDefinition = "TINYINT")
-    private String qualityCertificate;
+    private Byte qualityCertificate;
 
     @Column(name = "exterior", columnDefinition = "TINYINT")
-    private String exterior;
+    private Byte exterior;
 
     @Column(name = "logo", columnDefinition = "TINYINT")
-    private String logo;
+    private Byte logo;
 
     @Column(name = "packaging", columnDefinition = "TINYINT")
-    private String packaging;
+    private Byte packaging;
 
     @Column(name = "note", columnDefinition = "VARCHAR(512)")
     private String note;
