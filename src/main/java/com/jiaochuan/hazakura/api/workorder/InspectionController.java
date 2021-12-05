@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -44,6 +45,7 @@ public class InspectionController {
                                             "    \"creatorId\": \"1\",\n" +
                                             "    \"inspectorId\": \"2\",\n" +
                                             "    \"departmentId\": \"null\",\n" +
+                                            "    \"type\": \"PERIPHERAL\",\n" +
                                             "    \"productName\": \"电钻\",\n" +
                                             "    \"model\": \"8x8\",\n" +
                                             "    \"serialNumber\": \"12345\",\n" +
@@ -73,6 +75,7 @@ public class InspectionController {
                                     @ExampleObject(value =
                                             "{\n" +
                                                     "    \"id\": 3,\n" +
+                                                    "    \"type\": \"PERIPHERAL\",\n" +
                                                     "    \"productName\": \"电钻\",\n" +
                                                     "    \"model\": \"8x8\",\n" +
                                                     "    \"serialNumber\": \"12345\",\n" +
@@ -226,6 +229,7 @@ public class InspectionController {
                                             "[\n" +
                                                     "    {\n" +
                                                     "        \"id\": 3,\n" +
+                                                    "        \"type\": \"PERIPHERAL\",\n" +
                                                     "        \"productName\": \"电钻\",\n" +
                                                     "        \"model\": \"8x8\",\n" +
                                                     "        \"serialNumber\": \"12345\",\n" +
@@ -383,6 +387,7 @@ public class InspectionController {
                                     "{\n" +
                                             "    \"inspectionId\": \"1\",\n" +
                                             "    \"departmentId\": \"null\",\n" +
+                                            "    \"type\": \"PERIPHERAL\",\n" +
                                             "    \"productName\": \"电钻\",\n" +
                                             "    \"model\": \"8x8\",\n" +
                                             "    \"serialNumber\": \"12345\",\n" +
@@ -411,6 +416,7 @@ public class InspectionController {
                                     @ExampleObject(value =
                                             "{\n" +
                                                     "    \"id\": 3,\n" +
+                                                    "    \"type\": \"PERIPHERAL\",\n" +
                                                     "    \"productName\": \"电钻\",\n" +
                                                     "    \"model\": \"8x8\",\n" +
                                                     "    \"serialNumber\": \"12345\",\n" +
@@ -503,5 +509,91 @@ public class InspectionController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage());
         }
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "返回系统里所有的status。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(value = "" +
+                                            "[\n" +
+                                            "    {\n" +
+                                            "        \"statusId\": \"PENDING_APPROVAL\", \n" +
+                                            "        \"statusName\": \"待审批\"\n" +
+                                            "    }, \n" +
+                                            "    ...\n" +
+                                            "]"
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "没有访问权限，用户没登录，登录状态已过期或者该用户无权访问。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "Forbidden")
+                            }
+                    )
+            ),
+    })
+    @GetMapping(
+            path = "/all-status",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<GetStatusResponseDto>> getAllStatus() {
+        List<GetStatusResponseDto> responseList = new ArrayList<>();
+        for (InspectionStatus status : InspectionStatus.values()) {
+            responseList.add(new GetStatusResponseDto(status.name(), status.statusDescription));
+        }
+        return ResponseEntity.ok(responseList);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "返回系统里所有的status。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(value = "" +
+                                            "[\n" +
+                                            "    {\n" +
+                                            "        \"statusId\": \"PERIPHERAL\", \n" +
+                                            "        \"statusName\": \"外协件\"\n" +
+                                            "    }, \n" +
+                                            "    ...\n" +
+                                            "]"
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "没有访问权限，用户没登录，登录状态已过期或者该用户无权访问。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "Forbidden")
+                            }
+                    )
+            ),
+    })
+    @GetMapping(
+            path = "/all-types",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<GetTypesResponseDto>> getAllTypes() {
+        List<GetTypesResponseDto> responseList = new ArrayList<>();
+        for (InspectionType type : InspectionType.values()) {
+            responseList.add(new GetTypesResponseDto(type.name(), type.typeDescription));
+        }
+        return ResponseEntity.ok(responseList);
     }
 }

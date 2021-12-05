@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
+import com.jiaochuan.hazakura.entity.workorder.PartListStatus;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.PartListService;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -19,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -298,5 +300,48 @@ public class PartListController {
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("服务器出现错误，请与管理员联系。内部错误：" + e.getMessage());
         }
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "返回系统里所有的status。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = {
+                                    @ExampleObject(value = "" +
+                                            "[\n" +
+                                            "    {\n" +
+                                            "        \"statusId\": \"PENDING_FINALIZE\", \n" +
+                                            "        \"statusName\": \"待确定\"\n" +
+                                            "    }, \n" +
+                                            "    ...\n" +
+                                            "]"
+                                    )
+                            }
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "403",
+                    description = "没有访问权限，用户没登录，登录状态已过期或者该用户无权访问。",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = List.class),
+                            examples = {
+                                    @ExampleObject(value = "Forbidden")
+                            }
+                    )
+            ),
+    })
+    @GetMapping(
+            path = "/all-status",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<List<GetStatusResponseDto>> getAllStatus() {
+        List<GetStatusResponseDto> responseList = new ArrayList<>();
+        for (PartListStatus status : PartListStatus.values()) {
+            responseList.add(new GetStatusResponseDto(status.name(), status.statusDescription));
+        }
+        return ResponseEntity.ok(responseList);
     }
 }
