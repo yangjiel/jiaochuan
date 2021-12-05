@@ -173,6 +173,7 @@ public class InspectionService {
     private void persistInspectionHelper(InspectionEntity inspectionEntity, InspectionDto dto) {
         inspectionEntity.setProductName(dto.getProductName());
         inspectionEntity.setModel(dto.getModel());
+        inspectionEntity.setType(dto.getType());
         inspectionEntity.setSerialNumber(dto.getSerialNumber());
         inspectionEntity.setQuantity(dto.getQuantity());
         inspectionEntity.setUnit(dto.getUnit());
