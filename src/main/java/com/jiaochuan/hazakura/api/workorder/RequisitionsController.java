@@ -369,9 +369,8 @@ public class RequisitionsController {
                     examples = {
                             @ExampleObject(value =
                                     "{\n" +
-                                            "    \"creatorId\": \"1\",\n" +
-                                            "    \"departmentId\": \"1\",\n" +
-                                            "    \"workOrderId\": \"1\",\n" +
+                                            "    \"requisitionsId\": \"1\",\n" +
+                                            "    \"purchaserId\": \"1\",\n" +
                                             "    \"purchaseOrderId\": \"1\",\n" +
                                             "    \"supplier\": \"四川省成都市工业产品有限公司\",\n" +
                                             "    \"purchaseDate\": \"2022-02-04 22:24:45\",\n" +
