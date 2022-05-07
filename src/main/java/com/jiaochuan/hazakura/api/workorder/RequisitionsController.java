@@ -265,7 +265,7 @@ public class RequisitionsController {
                                                     "        \"createDate\": \"2020-04-30\",\n" +
                                                     "        \"supplier\": \"四川省成都市工业产品有限公司\",\n" +
                                                     "        \"status\": \"PENDING_PURCHASE\",\n" +
-                                                    "        \"purchaseDate\": null,\n" +
+                                                    "        \"purchaseDate\": 2022-02-04 22:24:45,\n" +
                                                     "        \"actions\": []\n" +
                                                     "    }\n" +
                                                     "    ...\n" +
@@ -372,6 +372,10 @@ public class RequisitionsController {
                                             "    \"creatorId\": \"1\",\n" +
                                             "    \"departmentId\": \"1\",\n" +
                                             "    \"workOrderId\": \"1\",\n" +
+                                            "    \"purchaseOrderId\": \"1\",\n" +
+                                            "    \"supplier\": \"四川省成都市工业产品有限公司\",\n" +
+                                            "    \"purchaseDate\": \"2022-02-04 22:24:45\",\n" +
+                                            "    \"status\": \"PENDING_PURCHASE\",\n" +
                                             "    \"equipments\": [ \n" +
                                             "        {\n" +
                                             "            \"equipment\": \"机床\",\n" +
@@ -438,7 +442,7 @@ public class RequisitionsController {
                                                     "    \"createDate\": \"2020-04-30\",\n" +
                                                     "    \"supplier\": \"四川省成都市工业产品有限公司\",\n" +
                                                     "    \"status\": \"PENDING_PURCHASE\",\n" +
-                                                    "    \"purchaseDate\": null,\n" +
+                                                    "    \"purchaseDate\": 2022-02-04 22:24:45,\n" +
                                                     "    \"actions\": []\n" +
                                                     "}")
                             }
