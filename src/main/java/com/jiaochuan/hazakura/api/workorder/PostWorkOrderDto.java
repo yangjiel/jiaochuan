@@ -1,6 +1,6 @@
 package com.jiaochuan.hazakura.api.workorder;
 
-import com.jiaochuan.hazakura.entity.workorder.Status;
+import com.jiaochuan.hazakura.entity.workorder.WorkOrderStatus;
 import lombok.Data;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public class PostWorkOrderDto {
     private Long workerId;
     private Long engineerId;
     private String address;
-    private Status status;
+    private WorkOrderStatus status;
     private String description;
     private String comment;
     private String serviceItem;
