@@ -33,7 +33,7 @@ public class WorkOrderEntity extends AbstractEntity {
     private UserEntity engineer;
 
     @Column(name = "status", columnDefinition = "VARCHAR(32)", nullable = false)
-    private Status status;
+    private WorkOrderStatus status;
 
     @Column(name = "create_date", columnDefinition = "DATETIME", nullable = false)
     @NonNull

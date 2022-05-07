@@ -39,12 +39,6 @@ public class WorkOrderService extends PartListService {
     private PartListRepository partListRepository;
 
     @Autowired
-    private EquipmentRepository equipmentRepository;
-
-    @Autowired
-    private PartListEquipmentRepository partListEquipmentRepository;
-
-    @Autowired
     private WorkOrderActionRepository workOrderActionRepository;
 
     @Autowired
@@ -84,7 +78,7 @@ public class WorkOrderService extends PartListService {
             workOrderEntity.setEngineer(engineerEntity);
         }
         workOrderEntity.setAddress(dto.getAddress());
-        workOrderEntity.setStatus(dto.getStatus() != null ? dto.getStatus() : Status.PENDING_FIRST_APPROVAL);
+        workOrderEntity.setStatus(dto.getStatus() != null ? dto.getStatus() : WorkOrderStatus.PENDING_FIRST_APPROVAL);
         workOrderEntity.setDescription(dto.getDescription());
         workOrderEntity.setServiceItem(dto.getServiceItem());
         WorkOrderActionEntity workOrderActionEntity = new WorkOrderActionEntity(workOrderEntity,
@@ -114,7 +108,7 @@ public class WorkOrderService extends PartListService {
                                                ClientEntity client,
                                                UserEntity worker,
                                                LocalDateTime datetime,
-                                               Status status,
+                                               WorkOrderStatus workOrderStatus,
                                                PartListStatus partListStatus,
                                                String orderBy) throws UserException {
         if (page < 0 || size < 0) {
@@ -136,8 +130,8 @@ public class WorkOrderService extends PartListService {
         if (datetime != null) {
             predicates.add(cb.equal(workOrder.get("createDate"), datetime));
         }
-        if (status != null) {
-            predicates.add(cb.equal(workOrder.get("status"), status));
+        if (workOrderStatus != null) {
+            predicates.add(cb.equal(workOrder.get("status"), workOrderStatus));
         }
         if (partListStatus != null) {
             predicates.add(cb.equal(workOrder.join("partLists").get("partListStatus"), partListStatus));
@@ -182,7 +176,7 @@ public class WorkOrderService extends PartListService {
             throw new UserException("用户不存在！");
         }
 //        if ((user.getRole() == Role.DIRECTOR_AFTER_SALES &&
-//                input.getStatus() != Status.PENDING_FINAL_APPROVAL)) {
+//                input.getWorkOrderStatus() != WorkOrderStatus.PENDING_FINAL_APPROVAL)) {
 //            throw new UserException("该用户无权设置该工单状态");
 //        }
         UserEntity engineerEntity = null;
@@ -205,17 +199,19 @@ public class WorkOrderService extends PartListService {
         workOrderActionEntityList.add(workOrderActionEntity);
         workOrderEntity.setActions(workOrderActionEntityList);
         workOrderEntity.setStatus(dto.getStatus());
-        if (dto.getStatus() == Status.PENDING_FINAL_APPROVAL) {
-            PartListEntity partListEntity = workOrderEntity.getPartLists().get(0);
-            partListEntity.setWorker(user);
-            partListEntity.setCreateDate(LocalDateTime.now());
-            partListRepository.save(partListEntity);
-        } else if (dto.getStatus() == Status.APPROVED) {
+        if (dto.getStatus() == WorkOrderStatus.PENDING_FINAL_APPROVAL) {
             for (PartListEntity partListEntity : workOrderEntity.getPartLists()) {
-                if (partListEntity.getPartListStatus() == PartListStatus.PENDING_FINALIZE) {
-                    partListEntity.setPartListStatus(PartListStatus.PENDING_APPROVAL);
-                    partListRepository.save(partListEntity);
-                }
+                addActionHistory(partListEntity, PartListStatus.PENDING_APPROVAL, user, "");
+                partListEntity.setWorker(user);
+                partListEntity.setPartListStatus(PartListStatus.PENDING_APPROVAL);
+                partListEntity.setCreateDate(LocalDateTime.now());
+                partListRepository.save(partListEntity);
+            }
+        } else if (dto.getStatus() == WorkOrderStatus.APPROVED) {
+            for (PartListEntity partListEntity : workOrderEntity.getPartLists()) {
+                addActionHistory(partListEntity, PartListStatus.APPROVED, user, "");
+                partListEntity.setPartListStatus(PartListStatus.APPROVED);
+                partListRepository.save(partListEntity);
             }
         }
         workOrderRepository.save(workOrderEntity);

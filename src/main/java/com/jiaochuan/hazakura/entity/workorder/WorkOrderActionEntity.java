@@ -21,9 +21,9 @@ public class WorkOrderActionEntity extends ActionEntity {
 
     @Column(name = "prev_status", columnDefinition = "VARCHAR(32)")
     @NonNull
-    private Status prevStatus;
+    private WorkOrderStatus prevStatus;
 
     @Column(name = "status", columnDefinition = "VARCHAR(32)")
     @NonNull
-    private Status status;
+    private WorkOrderStatus status;
 }
