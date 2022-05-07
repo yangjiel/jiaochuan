@@ -1,6 +1,6 @@
 package com.jiaochuan.hazakura.entity.workorder;
 
-public enum Status {
+public enum WorkOrderStatus {
     PENDING_FIRST_APPROVAL("待初审", 0),
     PENDING_FINAL_APPROVAL("待终审", 1),
     APPROVED("已批准", 2),
@@ -35,7 +35,7 @@ public enum Status {
     public final String statusDescription;
     public final Integer value;
 
-    private Status(String statusDescription, Integer value) {
+    private WorkOrderStatus(String statusDescription, Integer value) {
         this.statusDescription = statusDescription;
         this.value = value;
     }

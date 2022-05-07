@@ -5,7 +5,7 @@ import com.jiaochuan.hazakura.entity.user.ClientEntity;
 import com.jiaochuan.hazakura.entity.user.Role;
 import com.jiaochuan.hazakura.entity.user.UserEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListStatus;
-import com.jiaochuan.hazakura.entity.workorder.Status;
+import com.jiaochuan.hazakura.entity.workorder.WorkOrderStatus;
 import com.jiaochuan.hazakura.entity.workorder.WorkOrderEntity;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.service.WorkOrderService;
@@ -463,7 +463,10 @@ public class WorkOrderController {
             Role.Constants.STAFF_INVENTORY,
             Role.Constants.STAFF_PROCUREMENT,
             Role.Constants.DIRECTOR_AFTER_SALES,
+            Role.Constants.DIRECTOR_TECHNICAL,
             Role.Constants.MANAGER_AFTER_SALES,
+            Role.Constants.MANAGER_PROCUREMENT,
+            Role.Constants.MANAGER_QUALITY_CONTROL,
             Role.Constants.ENGINEER_AFTER_SALES,
             Role.Constants.VICE_PRESIDENT})
     public ResponseEntity<String> getWorkOrders(
@@ -473,7 +476,7 @@ public class WorkOrderController {
             @RequestParam(required = false) ClientEntity client,
             @RequestParam(required = false) UserEntity worker,
             @RequestParam(required = false) LocalDateTime datetime,
-            @RequestParam(required = false) Status status,
+            @RequestParam(required = false) WorkOrderStatus status,
             @RequestParam(required = false) PartListStatus partListStatus,
             @RequestParam(required = false) String orderBy
     ) {
