@@ -24,9 +24,6 @@ public class PartListService {
     private PartListRepository partListRepository;
 
     @Autowired
-    private PartListEquipmentRepository partListEquipmentRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -95,7 +92,7 @@ public class PartListService {
                                                List<EquipmentDto> equipments) {
 
         PartListEntity partListEntity = new PartListEntity(workerEntity, workOrderEntity, status);
-        List<PartListEquipmentEntity> xrfList = new ArrayList<>();
+        List<EquipmentEntity> equipmentEntityList = new ArrayList<>();
         if (equipments != null) {
             for (EquipmentDto equipmentPair : equipments) {
                 EquipmentEntity equipmentEntity = new EquipmentEntity(
@@ -103,9 +100,7 @@ public class PartListService {
                         equipmentPair.getModel(),
                         equipmentPair.getQuantity());
                 equipmentRepository.save(equipmentEntity);
-                PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipmentEntity);
-                partListEquipmentRepository.save(xrf);
-                xrfList.add(xrf);
+                equipmentEntityList.add(equipmentEntity);
             }
         }
         PartListActionEntity partListActionEntity = new PartListActionEntity(partListEntity,
@@ -116,7 +111,7 @@ public class PartListService {
         List<PartListActionEntity> partListActionEntityList = new ArrayList<>();
         partListActionEntityList.add(partListActionEntity);
         partListEntity.setActions(partListActionEntityList);
-        partListEntity.setPartListEquipments(xrfList);
+        partListEntity.setEquipments(equipmentEntityList);
         partListRepository.save(partListEntity);
         return partListEntity;
     }

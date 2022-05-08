@@ -42,9 +42,9 @@ public class PartListEntity extends AbstractEntity {
     @Column(name = "usage", columnDefinition = "VARCHAR(200)")
     private String usage;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "partList")
+    @OneToMany(orphanRemoval = true)
     @JsonManagedReference
-    private List<PartListEquipmentEntity> partListEquipments;
+    private List<EquipmentEntity> equipments;
 
     @JsonProperty("partListActions")
     @OneToMany(orphanRemoval = true, mappedBy = "partList")
