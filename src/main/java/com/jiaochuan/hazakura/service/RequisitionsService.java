@@ -34,9 +34,6 @@ public class RequisitionsService {
     private EquipmentRepository equipmentRepository;
 
     @Autowired
-    private RequisitionsEquipmentRepository requisitionsEquipmentRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -74,20 +71,17 @@ public class RequisitionsService {
                 LocalDateTime.now());
         requisitionsEntity.setDepartment(departmentEntity);
         requisitionsEntity.setDepartment(departmentRepository.findById(dto.getDepartmentId()).orElse(null));
-        List<RequisitionsEquipmentEntity> xrfList = new ArrayList<>();
+        List<EquipmentEntity> equipmentEntityList = new ArrayList<>();
         if (dto.getEquipments() != null) {
             for (EquipmentDto equipmentPair : dto.getEquipments()) {
                 String equipment = equipmentPair.getEquipment();
                 String model = equipmentPair.getModel();
                 Integer quantity = equipmentPair.getQuantity();
                 EquipmentEntity equipmentEntity = new EquipmentEntity(equipment, model, quantity);
-                RequisitionsEquipmentEntity xrf = new RequisitionsEquipmentEntity(requisitionsEntity, equipmentEntity);
-                equipmentRepository.save(equipmentEntity);
-                requisitionsEquipmentRepository.save(xrf);
-                xrfList.add(xrf);
+                equipmentEntityList.add(equipmentEntity);
             }
         }
-        requisitionsEntity.setEquipments(xrfList);
+        requisitionsEntity.setEquipments(equipmentEntityList);
         RequisitionsActionEntity requisitionsActionEntity = new RequisitionsActionEntity(requisitionsEntity,
                 RequisitionsStatus.PENDING_PURCHASE, RequisitionsStatus.PENDING_PURCHASE);
         requisitionsActionEntity.setUser(creatorEntity);

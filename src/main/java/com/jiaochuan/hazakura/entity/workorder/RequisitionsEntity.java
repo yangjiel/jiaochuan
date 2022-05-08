@@ -60,9 +60,9 @@ public class RequisitionsEntity extends AbstractEntity {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime purchaseDate;
 
-    @OneToMany(orphanRemoval = true, mappedBy = "requisitions")
+    @OneToMany(orphanRemoval = true)
     @JsonManagedReference
-    private List<RequisitionsEquipmentEntity> equipments;
+    private List<EquipmentEntity> equipments;
 
     @JsonProperty("requisitionsActions")
     @OneToMany(orphanRemoval = true, mappedBy = "requisitions")
