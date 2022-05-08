@@ -4,11 +4,9 @@ import com.jiaochuan.hazakura.api.workorder.EquipmentDto;
 import com.jiaochuan.hazakura.api.workorder.PostPartListDto;
 import com.jiaochuan.hazakura.entity.workorder.EquipmentEntity;
 import com.jiaochuan.hazakura.entity.workorder.PartListEntity;
-import com.jiaochuan.hazakura.entity.workorder.PartListEquipmentEntity;
 import com.jiaochuan.hazakura.exception.AppException;
 import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.WorkOrder.EquipmentRepository;
-import com.jiaochuan.hazakura.jpa.WorkOrder.PartListEquipmentRepository;
 import com.jiaochuan.hazakura.jpa.WorkOrder.PartListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,15 +23,12 @@ public class EquipmentService {
     @Autowired
     private EquipmentRepository equipmentRepository;
 
-    @Autowired
-    private PartListEquipmentRepository partListEquipmentRepository;
-
     @Transactional
     public PartListEntity createEquipment(PostPartListDto dto) throws AppException, UserException {
         // Check if required fields are not empty
         PartListEntity partListEntity = partListRepository.findById(dto.getPartListId()).orElse(null);
         if (partListEntity != null) {
-            List<PartListEquipmentEntity> xrfList = new ArrayList<>();
+            List<EquipmentEntity> equipmentEntityList = new ArrayList<>();
             if (dto.getEquipments() != null) {
                 for (EquipmentDto equipmentPair : dto.getEquipments()) {
                     EquipmentEntity equipmentEntity = new EquipmentEntity(
@@ -41,12 +36,10 @@ public class EquipmentService {
                             equipmentPair.getModel(),
                             equipmentPair.getQuantity());
                     equipmentRepository.save(equipmentEntity);
-                    PartListEquipmentEntity xrf = new PartListEquipmentEntity(partListEntity, equipmentEntity);
-                    partListEquipmentRepository.save(xrf);
-                    xrfList.add(xrf);
+                    equipmentEntityList.add(equipmentEntity);
                 }
             }
-            partListEntity.setPartListEquipments(xrfList);
+            partListEntity.setEquipments(equipmentEntityList);
             partListRepository.save(partListEntity);
         }
 
