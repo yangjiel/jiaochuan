@@ -6,6 +6,9 @@ spring:
       hibernate:
         globally_quoted_identifiers: true
         dialect: com.jiaochuan.hazakura.service.CustomMariaDB53Dialect
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 server:
   servlet:
     session:
