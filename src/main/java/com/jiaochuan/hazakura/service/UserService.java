@@ -8,6 +8,7 @@ import com.jiaochuan.hazakura.exception.UserException;
 import com.jiaochuan.hazakura.jpa.User.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.support.PagedListHolder;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,7 +32,7 @@ public class UserService implements UserDetailsService {
     private UserRepository userRepository;
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
+    private @Lazy PasswordEncoder passwordEncoder;
 
     @Autowired
     private EntityManager em;
